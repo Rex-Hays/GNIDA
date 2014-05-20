@@ -58,11 +58,9 @@
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.Log = new System.Windows.Forms.ListBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
@@ -79,12 +77,15 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Funclist = new System.Windows.Forms.ListBox();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.listView3 = new System.Windows.Forms.ListView();
             this.hexBox1 = new Be.Windows.Forms.HexBox();
+            this.Log = new System.Windows.Forms.ListBox();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
@@ -323,24 +324,6 @@
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.Log);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 238);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(640, 100);
-            this.panel1.TabIndex = 3;
-            // 
-            // Log
-            // 
-            this.Log.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.Log.FormattingEnabled = true;
-            this.Log.Location = new System.Drawing.Point(0, 5);
-            this.Log.Name = "Log";
-            this.Log.Size = new System.Drawing.Size(640, 95);
-            this.Log.TabIndex = 0;
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -349,22 +332,23 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.splitter2);
-            this.panel2.Controls.Add(this.tabControl1);
-            this.panel2.Controls.Add(this.Funclist);
+            this.panel2.Controls.Add(this.panel3);
+            this.panel2.Controls.Add(this.splitter1);
+            this.panel2.Controls.Add(this.listView3);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 49);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(640, 189);
+            this.panel2.Size = new System.Drawing.Size(640, 246);
             this.panel2.TabIndex = 7;
             // 
-            // splitter2
+            // panel3
             // 
-            this.splitter2.Location = new System.Drawing.Point(155, 0);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 189);
-            this.splitter2.TabIndex = 2;
-            this.splitter2.TabStop = false;
+            this.panel3.Controls.Add(this.tabControl1);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(124, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(516, 246);
+            this.panel3.TabIndex = 8;
             // 
             // tabControl1
             // 
@@ -374,11 +358,11 @@
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(155, 0);
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(485, 189);
-            this.tabControl1.TabIndex = 1;
+            this.tabControl1.Size = new System.Drawing.Size(516, 246);
+            this.tabControl1.TabIndex = 6;
             // 
             // tabPage1
             // 
@@ -386,7 +370,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(477, 163);
+            this.tabPage1.Size = new System.Drawing.Size(508, 220);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "View-A";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -395,6 +379,7 @@
             // 
             this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
             this.fastColoredTextBox1.BackBrush = null;
+            this.fastColoredTextBox1.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fastColoredTextBox1.CharHeight = 14;
             this.fastColoredTextBox1.CharWidth = 8;
             this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -402,11 +387,15 @@
             this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastColoredTextBox1.IsReplaceMode = false;
             this.fastColoredTextBox1.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fastColoredTextBox1.LeftBracket = '(';
+            this.fastColoredTextBox1.LeftBracket2 = '{';
             this.fastColoredTextBox1.Location = new System.Drawing.Point(3, 3);
             this.fastColoredTextBox1.Name = "fastColoredTextBox1";
             this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
+            this.fastColoredTextBox1.RightBracket = ')';
+            this.fastColoredTextBox1.RightBracket2 = '}';
             this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fastColoredTextBox1.Size = new System.Drawing.Size(471, 157);
+            this.fastColoredTextBox1.Size = new System.Drawing.Size(502, 214);
             this.fastColoredTextBox1.TabIndex = 1;
             this.fastColoredTextBox1.Text = "fastColoredTextBox1";
             this.fastColoredTextBox1.Zoom = 100;
@@ -417,7 +406,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(477, 163);
+            this.tabPage2.Size = new System.Drawing.Size(508, 131);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "HEX View-A";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -426,7 +415,7 @@
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(477, 163);
+            this.tabPage3.Size = new System.Drawing.Size(508, 131);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Structures";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -436,7 +425,7 @@
             this.tabPage4.Controls.Add(this.listView2);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(477, 163);
+            this.tabPage4.Size = new System.Drawing.Size(508, 131);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Imports";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -451,7 +440,7 @@
             this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView2.Location = new System.Drawing.Point(0, 0);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(477, 163);
+            this.listView2.Size = new System.Drawing.Size(508, 131);
             this.listView2.TabIndex = 0;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -479,7 +468,7 @@
             this.tabPage5.Controls.Add(this.listView1);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(477, 163);
+            this.tabPage5.Size = new System.Drawing.Size(508, 131);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Exports";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -493,7 +482,7 @@
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(477, 163);
+            this.listView1.Size = new System.Drawing.Size(508, 131);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -513,14 +502,24 @@
             this.columnHeader3.Text = "Ordinal";
             this.columnHeader3.Width = 100;
             // 
-            // Funclist
+            // splitter1
             // 
-            this.Funclist.Dock = System.Windows.Forms.DockStyle.Left;
-            this.Funclist.FormattingEnabled = true;
-            this.Funclist.Location = new System.Drawing.Point(0, 0);
-            this.Funclist.Name = "Funclist";
-            this.Funclist.Size = new System.Drawing.Size(155, 189);
-            this.Funclist.TabIndex = 0;
+            this.splitter1.Location = new System.Drawing.Point(121, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 246);
+            this.splitter1.TabIndex = 7;
+            this.splitter1.TabStop = false;
+            // 
+            // listView3
+            // 
+            this.listView3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.listView3.Location = new System.Drawing.Point(0, 0);
+            this.listView3.Name = "listView3";
+            this.listView3.Size = new System.Drawing.Size(121, 246);
+            this.listView3.TabIndex = 6;
+            this.listView3.UseCompatibleStateImageBehavior = false;
+            this.listView3.View = System.Windows.Forms.View.List;
+            this.listView3.DoubleClick += new System.EventHandler(this.Funclist_DoubleClick);
             // 
             // hexBox1
             // 
@@ -530,32 +529,50 @@
             this.hexBox1.Location = new System.Drawing.Point(3, 3);
             this.hexBox1.Name = "hexBox1";
             this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexBox1.Size = new System.Drawing.Size(471, 157);
+            this.hexBox1.Size = new System.Drawing.Size(502, 125);
             this.hexBox1.StringViewVisible = true;
             this.hexBox1.TabIndex = 0;
             this.hexBox1.UseFixedBytesPerLine = true;
             this.hexBox1.VScrollBarVisible = true;
+            // 
+            // Log
+            // 
+            this.Log.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.Log.FormattingEnabled = true;
+            this.Log.Location = new System.Drawing.Point(0, 295);
+            this.Log.Name = "Log";
+            this.Log.Size = new System.Drawing.Size(640, 43);
+            this.Log.TabIndex = 8;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter2.Location = new System.Drawing.Point(0, 292);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(640, 3);
+            this.splitter2.TabIndex = 9;
+            this.splitter2.TabStop = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 360);
+            this.Controls.Add(this.splitter2);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.Log);
+            this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "GNIDA v1.0";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
@@ -572,33 +589,14 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.ListBox Log;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.ListBox Funclist;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.Splitter splitter2;
-        private System.Windows.Forms.ListView listView2;
-        private System.Windows.Forms.ColumnHeader Adress;
-        private System.Windows.Forms.ColumnHeader Ordinal;
-        private System.Windows.Forms.ColumnHeader Name_;
-        private System.Windows.Forms.ColumnHeader Library;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -618,8 +616,28 @@
         private System.Windows.Forms.ToolStripButton toolStripButton5;
         private System.Windows.Forms.ToolStripButton toolStripButton6;
         private System.Windows.Forms.ToolStripMenuItem cmmListingToolStripMenuItem;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
         private FastColoredTextBoxNS.FastColoredTextBox fastColoredTextBox1;
+        private System.Windows.Forms.TabPage tabPage2;
         private Be.Windows.Forms.HexBox hexBox1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.ListView listView2;
+        private System.Windows.Forms.ColumnHeader Adress;
+        private System.Windows.Forms.ColumnHeader Ordinal;
+        private System.Windows.Forms.ColumnHeader Name_;
+        private System.Windows.Forms.ColumnHeader Library;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.ListView listView3;
+        private System.Windows.Forms.ListBox Log;
+        private System.Windows.Forms.Splitter splitter2;
 
     }
 }

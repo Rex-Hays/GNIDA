@@ -30,17 +30,24 @@ namespace GNIDA
 
         public void AddFuncEvent1(object sender, TFunc func)
         {
-            Funclist.Items.Add(func.FName);
+            ListViewItem itm1 = new ListViewItem();
+            itm1.Text = func.FName;
+            itm1.Tag = func;
+            listView3.Items.Add(itm1);
             if (func.type == 2)//Export
             {
-                ListViewItem itm = new ListViewItem(func.FName);
+                ListViewItem itm = new ListViewItem();
+                itm.Text = func.FName;
+                itm.Tag = func;
                 itm.SubItems.Add(func.Addr.ToString("X8"));
                 itm.SubItems.Add(func.Ordinal.ToString("X"));
                 listView1.Items.Add(itm);
             }
             if (func.type == 3)//Import
             {
-                ListViewItem itm = new ListViewItem(func.Addr.ToString("X8"));
+                ListViewItem itm = new ListViewItem();
+                itm.Text = func.Addr.ToString("X8");
+                itm.Tag = func;
                 itm.SubItems.Add(func.Ordinal.ToString("X"));
                 itm.SubItems.Add(func.FName);
                 itm.SubItems.Add(func.LibraryName);
@@ -60,8 +67,12 @@ namespace GNIDA
         {
             if (this.fastColoredTextBox1.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(AddText);
-                 this.Invoke(d, new object[] { text });
+                try
+                {
+                    SetTextCallback d = new SetTextCallback(AddText);
+                    this.Invoke(d, new object[] { text });
+                }
+                catch (System.ObjectDisposedException e){}
             }
             else
             {
@@ -123,11 +134,10 @@ namespace GNIDA
                 proc.WaitForExit();
             }
         }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void Funclist_DoubleClick(object sender, EventArgs e)
         {
-            //MyGNIDA.bw.CancelAsync();
-            //MyGNIDA.bw = null;
+            TFunc Func = (TFunc)listView3.SelectedItems[0].Tag;
+            Console.WriteLine(Func.Addr.ToString("X8"));
         }
     }
 
