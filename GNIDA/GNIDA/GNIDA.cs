@@ -43,7 +43,7 @@ namespace GNIDA
     class GNIDA
     {
         public static Win32Assembly assembly;
-        private BackgroundWorker bw = new BackgroundWorker();
+        public BackgroundWorker bw = new BackgroundWorker();
         public void StopWork()
         {
             bw.CancelAsync();
