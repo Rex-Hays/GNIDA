@@ -65,8 +65,8 @@
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.hexBox1 = new Be.Windows.Forms.HexBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.listView2 = new System.Windows.Forms.ListView();
@@ -80,17 +80,17 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Funclist = new System.Windows.Forms.ListBox();
-            this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.hexBox1 = new Be.Windows.Forms.HexBox();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -391,6 +391,26 @@
             this.tabPage1.Text = "View-A";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // fastColoredTextBox1
+            // 
+            this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
+            this.fastColoredTextBox1.BackBrush = null;
+            this.fastColoredTextBox1.CharHeight = 14;
+            this.fastColoredTextBox1.CharWidth = 8;
+            this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastColoredTextBox1.IsReplaceMode = false;
+            this.fastColoredTextBox1.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fastColoredTextBox1.Location = new System.Drawing.Point(3, 3);
+            this.fastColoredTextBox1.Name = "fastColoredTextBox1";
+            this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
+            this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fastColoredTextBox1.Size = new System.Drawing.Size(471, 157);
+            this.fastColoredTextBox1.TabIndex = 1;
+            this.fastColoredTextBox1.Text = "fastColoredTextBox1";
+            this.fastColoredTextBox1.Zoom = 100;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.hexBox1);
@@ -401,20 +421,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "HEX View-A";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // hexBox1
-            // 
-            this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.hexBox1.LineInfoVisible = true;
-            this.hexBox1.Location = new System.Drawing.Point(3, 3);
-            this.hexBox1.Name = "hexBox1";
-            this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexBox1.Size = new System.Drawing.Size(471, 157);
-            this.hexBox1.StringViewVisible = true;
-            this.hexBox1.TabIndex = 3;
-            this.hexBox1.UseFixedBytesPerLine = true;
-            this.hexBox1.VScrollBarVisible = true;
             // 
             // tabPage3
             // 
@@ -516,24 +522,19 @@
             this.Funclist.Size = new System.Drawing.Size(155, 189);
             this.Funclist.TabIndex = 0;
             // 
-            // fastColoredTextBox1
+            // hexBox1
             // 
-            this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
-            this.fastColoredTextBox1.BackBrush = null;
-            this.fastColoredTextBox1.CharHeight = 14;
-            this.fastColoredTextBox1.CharWidth = 8;
-            this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fastColoredTextBox1.IsReplaceMode = false;
-            this.fastColoredTextBox1.Location = new System.Drawing.Point(3, 3);
-            this.fastColoredTextBox1.Name = "fastColoredTextBox1";
-            this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
-            this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fastColoredTextBox1.Size = new System.Drawing.Size(471, 157);
-            this.fastColoredTextBox1.TabIndex = 1;
-            this.fastColoredTextBox1.Text = "fastColoredTextBox1";
-            this.fastColoredTextBox1.Zoom = 100;
+            this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.hexBox1.LineInfoVisible = true;
+            this.hexBox1.Location = new System.Drawing.Point(3, 3);
+            this.hexBox1.Name = "hexBox1";
+            this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hexBox1.Size = new System.Drawing.Size(471, 157);
+            this.hexBox1.StringViewVisible = true;
+            this.hexBox1.TabIndex = 0;
+            this.hexBox1.UseFixedBytesPerLine = true;
+            this.hexBox1.VScrollBarVisible = true;
             // 
             // MainForm
             // 
@@ -557,10 +558,10 @@
             this.panel2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
