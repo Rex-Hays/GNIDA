@@ -14,10 +14,10 @@ using TUP.AsmResolver;
 
 namespace GNIDA
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         GNIDA MyGNIDA = new GNIDA();
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }

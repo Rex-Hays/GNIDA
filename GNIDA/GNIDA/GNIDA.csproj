@@ -103,6 +103,7 @@
     <Content Include="media\Gnida.ico" />
     <Content Include="media\nxt.jpg" />
     <Content Include="media\open.jpg" />
+    <Content Include="media\rh1.jpg" />
     <Content Include="media\save.jpg" />
     <Content Include="media\saveall.jpg" />
   </ItemGroup>
