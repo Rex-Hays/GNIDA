@@ -93,7 +93,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Stiv_Makkonnell_-_Sovershenny_kod_2-e_izdanie.pdf" />
+    <None Include="Docs\Stiv_Makkonnell_-_Sovershenny_kod_2-e_izdanie.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
