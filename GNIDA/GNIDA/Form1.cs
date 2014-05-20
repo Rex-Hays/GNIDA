@@ -139,6 +139,16 @@ namespace GNIDA
             TFunc Func = (TFunc)listView3.SelectedItems[0].Tag;
             Console.WriteLine(Func.Addr.ToString("X8"));
         }
+
+
+        private void fastColoredTextBox1_ToolTipNeeded(object sender, FastColoredTextBoxNS.ToolTipNeededEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.HoveredWord))
+            {
+                e.ToolTipTitle = e.HoveredWord;
+                e.ToolTipText = "This is tooltip for '" + e.HoveredWord + "'";
+            }
+        }
     }
 
 }

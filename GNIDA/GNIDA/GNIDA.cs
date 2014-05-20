@@ -10,7 +10,7 @@ using System.ComponentModel;
 namespace GNIDA
 {   public static class X86Extensions
     {
-        public static string ToAsmString2(this x86Instruction inst, uint ImageBase)
+        public static string ToCmmString(this x86Instruction inst, uint ImageBase)
         {
             //uint val = inst.OperandBytes[0];
             if (inst.OpCode.OpCodeBytes[0] == 0x74) return "$JZ Loc_" + inst.Operand1.ToString(true);
@@ -55,29 +55,6 @@ namespace GNIDA
         {
             return assembly.NTHeader.Sections;
         }
-        public string HexDump(uint Start, uint Length)
-        {
-            string tmp = "";
-            byte[] chr = new byte[16];
-            for (uint a = 0; a < Length; a++)
-            {
-                string str = (assembly.NTHeader.OptionalHeader.ImageBase + Start + a * 16).ToString("X8") + " ";
-                chr = assembly.Image.ReadBytes(Start + a * 16, 16);
-                for (int i = 0; i < 16; i++)
-                {
-                    str += " " + chr[i].ToString("X2");
-                }
-                str += " ";
-                for (int i = 0; i < 16; i++)
-                {
-                    if (chr[i] > 20) str += (char)chr[i];
-                    else
-                        str += ".";
-                }
-                tmp += str + '\n';
-            }
-            return tmp;
-        }
         public class Stroka
         {
             public uint addr;
@@ -98,7 +75,7 @@ namespace GNIDA
             {
                 string tmp = "";
                 if (Label != "") tmp = "/*" + (Inst.Offset.Rva + assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
-                tmp += "/*" + (Inst.Offset.Rva + assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/  " + Inst.ToAsmString2((uint)assembly.NTHeader.OptionalHeader.ImageBase);
+                tmp += "/*" + (Inst.Offset.Rva + assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/  " + Inst.ToCmmString((uint)assembly.NTHeader.OptionalHeader.ImageBase);
                 if (Comment != "") tmp += "// " + Comment;
                 tmp += "\n";
                 if (SubComment != "") tmp += "/*" + (Inst.Offset.Rva + assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ // " + SubComment + "\n";

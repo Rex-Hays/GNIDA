@@ -65,6 +65,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.hexBox1 = new Be.Windows.Forms.HexBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.listView2 = new System.Windows.Forms.ListView();
@@ -79,7 +80,6 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.listView3 = new System.Windows.Forms.ListView();
-            this.hexBox1 = new Be.Windows.Forms.HexBox();
             this.Log = new System.Windows.Forms.ListBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.menuStrip1.SuspendLayout();
@@ -385,6 +385,7 @@
             this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fastColoredTextBox1.IsReplaceMode = false;
             this.fastColoredTextBox1.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fastColoredTextBox1.LeftBracket = '(';
@@ -395,9 +396,11 @@
             this.fastColoredTextBox1.RightBracket = ')';
             this.fastColoredTextBox1.RightBracket2 = '}';
             this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fastColoredTextBox1.ShowFoldingLines = true;
             this.fastColoredTextBox1.Size = new System.Drawing.Size(502, 214);
             this.fastColoredTextBox1.TabIndex = 1;
             this.fastColoredTextBox1.Zoom = 100;
+            this.fastColoredTextBox1.ToolTipNeeded += new System.EventHandler<FastColoredTextBoxNS.ToolTipNeededEventArgs>(this.fastColoredTextBox1_ToolTipNeeded);
             // 
             // tabPage2
             // 
@@ -409,6 +412,20 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "HEX View-A";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // hexBox1
+            // 
+            this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.hexBox1.LineInfoVisible = true;
+            this.hexBox1.Location = new System.Drawing.Point(3, 3);
+            this.hexBox1.Name = "hexBox1";
+            this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hexBox1.Size = new System.Drawing.Size(502, 214);
+            this.hexBox1.StringViewVisible = true;
+            this.hexBox1.TabIndex = 0;
+            this.hexBox1.UseFixedBytesPerLine = true;
+            this.hexBox1.VScrollBarVisible = true;
             // 
             // tabPage3
             // 
@@ -519,20 +536,6 @@
             this.listView3.UseCompatibleStateImageBehavior = false;
             this.listView3.View = System.Windows.Forms.View.List;
             this.listView3.DoubleClick += new System.EventHandler(this.Funclist_DoubleClick);
-            // 
-            // hexBox1
-            // 
-            this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.hexBox1.LineInfoVisible = true;
-            this.hexBox1.Location = new System.Drawing.Point(3, 3);
-            this.hexBox1.Name = "hexBox1";
-            this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexBox1.Size = new System.Drawing.Size(502, 214);
-            this.hexBox1.StringViewVisible = true;
-            this.hexBox1.TabIndex = 0;
-            this.hexBox1.UseFixedBytesPerLine = true;
-            this.hexBox1.VScrollBarVisible = true;
             // 
             // Log
             // 

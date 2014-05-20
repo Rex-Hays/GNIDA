@@ -91,6 +91,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="cmm\STARTUP.H--" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,6 +107,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="cmm\c--.exe" />
     <Content Include="media\back.jpg" />
     <Content Include="media\Gnida.ico" />
     <Content Include="media\nxt.jpg" />
