@@ -39,18 +39,32 @@ namespace GNIDA
             else FName = "Func_" + Addr.ToString("X8");
         }
     }
-
     class GNIDA
     {
+        class MyDictionary : Dictionary<uint, TFunc>
+        {
+            public GNIDA Parent;
+            public void AddFunc(TFunc value)
+            {
+                if (!this.ContainsKey(value.Addr))
+                {
+                    this.Add(value.Addr, value);
+                    Parent.RaiseAddFuncEvent(this, value);
+                    if (value.type != 3)
+                        if ((!Parent.ToDisasmFuncList.ContainsKey(value.Addr))
+                          || (!Parent.DisasmedFuncList.ContainsKey(value.Addr))) Parent.ToDisasmFuncList.Add(value.Addr, value);
+                }
+            }
+        }
         public static Win32Assembly assembly;
         public BackgroundWorker bw = new BackgroundWorker();
+        MyDictionary FullProcList = new MyDictionary();
+        MyDictionary ToDisasmFuncList = new MyDictionary();
+        MyDictionary DisasmedFuncList = new MyDictionary();
         public void StopWork()
         {
             bw.CancelAsync();
         }
-        public List<TFunc> FullFuncList = new List<TFunc>();
-        public List<TFunc> ToDisasmFuncList = new List<TFunc>();
-        public List<TFunc> DisasmedFuncList = new List<TFunc>();
         public List<Section> Sections()
         {
             return assembly.NTHeader.Sections;
@@ -128,7 +142,7 @@ namespace GNIDA
         {
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);
-
+            FullProcList.Parent = this;
             int i = 0;
             foreach (Section sect in assembly.NTHeader.Sections)
             {
@@ -137,24 +151,19 @@ namespace GNIDA
             }
 
             TFunc fnc = new TFunc((uint)assembly.NTHeader.OptionalHeader.ImageBase + assembly.NTHeader.OptionalHeader.Entrypoint.Rva, 0, 0, "main");
-            FullFuncList.Add(fnc);
-            ToDisasmFuncList.Add(fnc);
-            RaiseAddFuncEvent(this, fnc);
+            FullProcList.AddFunc(fnc);
             foreach (ExportMethod func in assembly.LibraryExports)
             {
                 
                 TFunc tmpfunc = new TFunc((uint)assembly.NTHeader.OptionalHeader.ImageBase + func.RVA, 2, func.Ordinal, func.Name);
-                FullFuncList.Add(tmpfunc);
-                ToDisasmFuncList.Add(tmpfunc);
-                RaiseAddFuncEvent(this, tmpfunc);
+                FullProcList.AddFunc(tmpfunc);
             }
             foreach (LibraryReference lib in assembly.LibraryImports)
             {
                 foreach (ImportMethod func in lib.ImportMethods)
                 {
                     TFunc tmpfunc = new TFunc((uint)assembly.NTHeader.OptionalHeader.ImageBase + func.RVA, 3, func.Ordinal, func.Name, lib.LibraryName);
-                    FullFuncList.Add(tmpfunc);
-                    RaiseAddFuncEvent(this, tmpfunc);
+                    FullProcList.AddFunc(tmpfunc);
                 }
             }
             bw.WorkerSupportsCancellation = true;
@@ -176,29 +185,28 @@ namespace GNIDA
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            while (ToDisasmFuncList.Count > 0)
-            {
+            foreach(KeyValuePair<uint, TFunc> dct in ToDisasmFuncList)
+            { 
                 if ((worker.CancellationPending == true))
                 {
                     e.Cancel = true;
                     break;
                 }
 
-                RaiseAddStrEvent(this, "/*" + ToDisasmFuncList[0].Addr.ToString("X8") +"*/ void " + ToDisasmFuncList[0].FName + "(){\n");
-                List<Stroka> tmp = DisasmFunc(RVA2FO(ToDisasmFuncList[0].Addr));
+                RaiseAddStrEvent("/*" + dct.Key.ToString("X8") + "*/ void " + dct.Value.FName + "(){\n");
+                List<Stroka> tmp = DisasmFunc(RVA2FO(dct.Key));
                 foreach(Stroka t in tmp)
                 {
-                    RaiseAddStrEvent(this, t.ToAsmString());
+                    RaiseAddStrEvent(t.ToAsmString());
                 }
-                DisasmedFuncList.Add(ToDisasmFuncList[0]);
-                RaiseAddStrEvent(this, "};//" + ToDisasmFuncList[0].FName + "\n");
-                ToDisasmFuncList.Remove(ToDisasmFuncList[0]);
-                //worker.ReportProgress((10));
+                DisasmedFuncList.Add(dct.Key, dct.Value);
+                RaiseAddStrEvent("};//" + dct.Value.FName + "\n");
+                //ToDisasmFuncList.Remove(dct.Key);
             }
         }
         public delegate void LogEvent(object sender, string LogStr);
         public delegate void AddFuncEvent(object sender, TFunc Func);
-        public delegate void AddStrEvent(object sender, string Str);
+        public delegate void AddStrEvent(string Str);
         public event LogEvent OnLogEvent;
         public event AddFuncEvent OnAddFunc;
         public event AddStrEvent OnAddStr;
@@ -210,9 +218,9 @@ namespace GNIDA
         {
             if (OnAddFunc != null) OnAddFunc(sender, Func);
         }
-        private void RaiseAddStrEvent(object sender, string Str)
+        private void RaiseAddStrEvent( string Str)
         {
-            if (OnAddStr != null) OnAddStr(sender, Str);
+            if (OnAddStr != null) OnAddStr(Str);
         }
         
     }

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using TUP.AsmResolver;
 using Be.Windows.Forms;
-
+using FastColoredTextBoxNS;
 
 namespace GNIDA
 {
@@ -18,9 +18,17 @@ namespace GNIDA
     {
         GNIDA MyGNIDA = new GNIDA();
         DynamicFileByteProvider dynamicFileByteProvider;
+        TextStyle blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        Dictionary<char, bool> dictionary;
+        Dictionary<int, string> dictionary2 = new Dictionary<int, string>();
         public MainForm()
         {
             InitializeComponent();
+            dictionary2.Add(2, "cat");
+            if(dictionary2.ContainsKey(2))
+            {   
+                Console.WriteLine(dictionary2[2]);
+            }
         }
 
         private void openToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -58,9 +66,26 @@ namespace GNIDA
         {
             Log.Items.Add(LogStr);
         }
-        public void AddStr1(object sender, string Str)
+        private void AppendText(string text)
         {
-            AddText(Str);
+            //some stuffs for best performance
+            fastColoredTextBox1.BeginUpdate();
+            fastColoredTextBox1.Selection.BeginUpdate();
+            //remember user selection
+            var userSelection = fastColoredTextBox1.Selection.Clone();
+            //add text with predefined style
+            fastColoredTextBox1.AppendText(text);
+            //restore user selection
+            if (!userSelection.IsEmpty || userSelection.Start.iLine < fastColoredTextBox1.LinesCount - 2)
+            {
+                fastColoredTextBox1.Selection.Start = userSelection.Start;
+                fastColoredTextBox1.Selection.End = userSelection.End;
+            }
+            else
+                fastColoredTextBox1.GoEnd();//scroll to end of the text
+            //
+            fastColoredTextBox1.Selection.EndUpdate();
+            fastColoredTextBox1.EndUpdate();
         }
         delegate void SetTextCallback(string text);
         private void AddText(string text)
@@ -76,14 +101,14 @@ namespace GNIDA
             }
             else
             {
-                this.fastColoredTextBox1.Text += text;
+                AppendText(text);
             }
         }
         private void openFileDialog1_FileOk_1(object sender, CancelEventArgs e)
         {
             MyGNIDA.OnLogEvent += OnLogEvent1;
             MyGNIDA.OnAddFunc += AddFuncEvent1;
-            MyGNIDA.OnAddStr += AddStr1;
+            MyGNIDA.OnAddStr += AddText;
             MyGNIDA.LoadFile(openFileDialog1.FileName);
 
             dynamicFileByteProvider = new DynamicFileByteProvider(openFileDialog1.FileName, true);
@@ -148,6 +173,13 @@ namespace GNIDA
                 e.ToolTipTitle = e.HoveredWord;
                 e.ToolTipText = "This is tooltip for '" + e.HoveredWord + "'";
             }
+        }
+
+        private void fastColoredTextBox1_TextChangedDelayed(object sender, TextChangedEventArgs e)
+        {
+            e.ChangedRange.ClearStyle(blueStyle);
+            //e.ChangedRange.SetStyle(blueStyle, @"(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?");
+            e.ChangedRange.SetStyle(blueStyle, @"Loc_[\dA-Fa-f]+");
         }
     }
 
