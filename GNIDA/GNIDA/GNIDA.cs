@@ -37,7 +37,7 @@ namespace GNIDA
                     Offset x = (Offset)inst.Operand1.Value;
                     if (Parent.FullProcList.ContainsKey(x.Va)) return Parent.FullProcList[x.Va].FName + "();";
                     TFunc tmpfunc = new TFunc(x.Va, 1);
-                    NewSubs.Add(x.Va, tmpfunc);
+                    if (!NewSubs.ContainsKey(x.Va)) NewSubs.Add(x.Va, tmpfunc);
                     return "Sub_" + x.Va.ToString("X") + "()";
                 }
             if (inst.OpCode.OpCodeBytes[0] == 0xFF)
@@ -48,7 +48,7 @@ namespace GNIDA
                         //Parent.FullProcList
                         if (Parent.FullProcList.ContainsKey(x.Va)) return Parent.FullProcList[x.Va].FName + "();";
                         TFunc tmpfunc = new TFunc(x.Va, 1);
-                        NewSubs.Add(x.Va, tmpfunc);
+                        if (!NewSubs.ContainsKey(x.Va)) NewSubs.Add(x.Va, tmpfunc);
                         return "Sub_" + x.Va.ToString("X") + "()";
                     }
             string str = inst.ToAsmString();
