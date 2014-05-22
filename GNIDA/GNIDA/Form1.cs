@@ -19,16 +19,9 @@ namespace GNIDA
         GNIDA MyGNIDA = new GNIDA();
         DynamicFileByteProvider dynamicFileByteProvider;
         TextStyle blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        Dictionary<char, bool> dictionary;
-        Dictionary<int, string> dictionary2 = new Dictionary<int, string>();
         public MainForm()
         {
             InitializeComponent();
-            dictionary2.Add(2, "cat");
-            if(dictionary2.ContainsKey(2))
-            {   
-                Console.WriteLine(dictionary2[2]);
-            }
         }
 
         private void openToolStripMenuItem_Click_1(object sender, EventArgs e)
