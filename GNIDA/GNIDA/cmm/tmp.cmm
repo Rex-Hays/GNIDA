@@ -5,10 +5,11 @@
 //|                         Writed AS IS                                |
 //+---------------------------------------------------------------------+
 #pragma option W32
-#include "Windows.h--";
+#jumptomain NONE
+#include "Windows.h";
+/*00402000*/ void main(){
 dword dword_00401004;
 dword dword_00401000;
-/*00402000*/ void main(){
 /*00402000*/  $CLD 
 /*00402001*/  $PUSH 00
 /*00402003*/  GetModuleHandleA();
@@ -20,23 +21,8 @@ dword dword_00401000;
 /*0040201F*/  ExitProcess();
 };//main
 /*00402030*/ void Sub_00402030(){
-/*00402030*/  $PUSH EBP 
-/*00402031*/  $MOV EBP, ESP
-/*00402033*/  $PUSH EBX 
-/*00402034*/  $PUSH ESI 
-/*00402035*/  $PUSH EDI 
-/*00402036*/  $TEST ESI, ESI
-/*00402038*/  $CMP ESI, 01
-/*0040203B*/  $CMP ESI, 02
-/*0040203E*/  $TEST EAX, EAX
-/*00402040*/  $PUSH EDI 
-/*00402041*/  $PUSH ESI 
-/*00402042*/  $PUSH EBX 
-/*00402043*/  $TEST EAX, EAX
-/*00402045*/  $PUSH EDI 
-/*00402046*/  $PUSH ESI 
-/*00402047*/  $PUSH EBX 
-/*00402048*/  $TEST EAX, EAX
-/*0040204A*/  $XOR EAX, EAX
-/*0040204C*/  $RET
+/*00402030*/  $PUSH 0040203F
+/*00402035*/  printf();
+/*0040203B*/  $ADD ESP, 04
+/*0040203E*/  $RET
 };//Sub_00402030

@@ -17,6 +17,7 @@ namespace GNIDA
     public partial class MainForm : Form
     {
         GNIDA MyGNIDA;
+        int VarLine = 0;
         DynamicFileByteProvider dynamicFileByteProvider;
         TextStyle blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
         public MainForm()
@@ -32,8 +33,9 @@ namespace GNIDA
         delegate void InsTextCallback(string text);
         private void InsText(string text)
         {
-            fastColoredTextBox1.Navigate(8);
+            fastColoredTextBox1.Navigate(VarLine);
             fastColoredTextBox1.InsertText(text);
+            VarLine++;
         }
 
         public void AddVarEvent1(object sender, TVar Var)
@@ -147,7 +149,9 @@ namespace GNIDA
                               "\n//|                         Writed AS IS                                |" +
                               "\n//+---------------------------------------------------------------------+\n"+
                               "#pragma option W32\n"+
-                              "#include \"Windows.h--\";\n";
+                              "#jumptomain NONE\n" +
+                              "#include \"Windows.h\";\n";
+            VarLine = fastColoredTextBox1.LinesCount-1;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -207,6 +211,11 @@ namespace GNIDA
             e.ChangedRange.ClearStyle(blueStyle);
             //e.ChangedRange.SetStyle(blueStyle, @"(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?");
             e.ChangedRange.SetStyle(blueStyle, @"Loc_[\dA-Fa-f]+");
+        }
+
+        private void renameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //fastColoredTextBox1
         }
     }
 

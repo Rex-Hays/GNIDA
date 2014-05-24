@@ -10,15 +10,22 @@ using System.ComponentModel;
 namespace GNIDA
 {
     /*
+    public class CmmDisassembler : x86Disassembler
+    {
+        public CmmDisassembler()
+        {
+            LoadOpCodes();
+        }
+    }
+     * */
     public static class stringExt
     {
         static object obj;
-        public static void str(this string ss)
+        public static void SetObj(this string ss, object Obj)
         {
-
-            //obj = ss;
+            obj = Obj;
         }
-    }*/
+    }
     public class VarDictionary : Dictionary<ulong, TVar>
     {
         public GNIDA Parent;
@@ -151,8 +158,12 @@ namespace GNIDA
         }
     }
     public class GNIDA
-    {        
+    {
         public static Win32Assembly assembly;
+        public static x86Disassembler xMy()
+        {
+            return new x86Disassembler(assembly);
+        }
         public BackgroundWorker bw = new BackgroundWorker();
         public MyDictionary FullProcList = new MyDictionary();
         public MyDictionary ToDisasmFuncList = new MyDictionary();
@@ -160,6 +171,8 @@ namespace GNIDA
         public VarDictionary VarDict = new VarDictionary();
         public GNIDA()
         {
+            //assembly = new Win32Assembly();
+            //assembly.Disassembler = new CmmDisassembler();
             FullProcList.Parent = this;
             VarDict.Parent = this;
         }

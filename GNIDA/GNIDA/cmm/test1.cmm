@@ -1,0 +1,8 @@
+#pragma option W32
+#include "windows.h--"
+#include "msvcrt.h--"
+
+void main(void)
+{
+ printf("Test OK");
+}

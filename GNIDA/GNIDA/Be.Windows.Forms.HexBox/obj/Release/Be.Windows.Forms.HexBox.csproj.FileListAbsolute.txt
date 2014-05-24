@@ -1,0 +1,5 @@
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\bin\Release\Be.Windows.Forms.HexBox.dll
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.resources
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.Properties.Resources.resources
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.csproj.GenerateResource.Cache
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.dll
