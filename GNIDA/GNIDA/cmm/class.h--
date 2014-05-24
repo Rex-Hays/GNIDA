@@ -1,0 +1,37 @@
+#define class struct
+
+#ifdef __TLS__
+#include "windows.h--"
+#include "winbase.h--"
+
+//#define GMEM_FIXED          0x0000
+//extern WINAPI "kernel32.dll"
+//  {
+//    dword  GlobalAlloc();
+//  }
+:dword fastcall __new(EAX)
+{
+        return GlobalAlloc(GMEM_FIXED,EAX);
+}
+
+:dword fastcall __delete(EAX)
+{
+        IF(EAX)GlobalFree(EAX);
+}
+
+#endif
+
+#ifdef __MSDOS__
+#include "alloc.h--"
+
+:word fastcall __new(AX)
+{
+        return MALLOC(AX);
+}
+
+:word fastcall __delete(AX)
+{
+        IF(AX)FREE(AX);
+}
+
+#endif

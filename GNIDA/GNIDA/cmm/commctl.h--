@@ -1,0 +1,89 @@
+extern WINAPI "comctl32.dll" {
+        void DrawStatusTextA(HDC hDC,dword lprc,LPCSTR pszText,UINT uFlags);
+        void DrawStatusTextW(HDC hDC,dword lprc,LPCWSTR pszText,UINT uFlags);
+        HWND CreateStatusWindowA(LONG style,LPCSTR lpszText,HWND hwndParent,UINT wID);
+        HWND CreateStatusWindowW(LONG style,LPCWSTR lpszText,HWND hwndParent,UINT wID);
+        void InitCommonControls(void);
+}
+#define CreateStatusWindow      CreateStatusWindowA
+#define DrawStatusText          DrawStatusTextA
+
+// begin_r_commctrl
+#define TTS_ALWAYSTIP           0x01
+#define TTS_NOPREFIX            0x02
+#define TTS_NOANIMATE           0x10
+#define TTS_NOFADE              0x20
+#define TTS_BALLOON             0x40
+#define TTS_CLOSE               0x80
+// end_r_commctrl
+#define LVM_FIRST               0x1000      // ListView messages
+#define TV_FIRST                0x1100      // TreeView messages
+#define HDM_FIRST               0x1200      // Header messages
+#define TCM_FIRST               0x1300      // Tab control messages
+#define PGM_FIRST               0x1400      // Pager control messages
+#define ECM_FIRST               0x1500      // Edit control messages
+#define BCM_FIRST               0x1600      // Button control messages
+#define CBM_FIRST               0x1700      // Combobox control messages
+#define CCM_FIRST               0x2000      // Common control shared messages
+#define CCM_LAST                CCM_FIRST + 0x200
+#define CCM_SETBKCOLOR          CCM_FIRST + 1 // lParam is bkColor
+
+#define LVM_INSERTITEMA         LVM_FIRST + 7
+#define LVM_INSERTITEMW         LVM_FIRST + 77
+#ifdef UNICODE
+#define LVM_INSERTITEM          LVM_INSERTITEMW
+#else
+#define LVM_INSERTITEM          LVM_INSERTITEMA
+#endif
+
+#define LV_ITEMA LVITEMA
+#define LV_ITEMW LVITEMW
+
+struct LVITEM
+{
+  UINT mask;
+  int iItem;
+  int iSubItem;
+  UINT state;
+  UINT stateMask;
+  LPSTR pszText;
+  int cchTextMax;
+  int iImage;
+  LPARAM lParam;
+#if (_WIN32_IE >= 0x0300)
+  int iIndent;
+#endif
+#if (_WIN32_WINNT >= 0x501)
+  int iGroupId;
+  UINT cColumns; // tile view columns
+  PUINT puColumns;
+#endif
+};
+
+#define LVITEM_V1_SIZE CCSIZEOF_STRUCT(LVITEM,lParam)
+#define LV_ITEM LVITEM
+#define LVITEMW    LVITEM
+#define LVITEMW_V1_SIZE LVITEM_V1_SIZE
+#define LVITEMA    LVITEM
+#define LVITEMA_V1_SIZE LVITEM_V1_SIZE
+
+#define LVIF_TEXT               0x0001
+#define LVIF_IMAGE              0x0002
+#define LVIF_PARAM              0x0004
+#define LVIF_STATE              0x0008
+#define LVIF_INDENT             0x0010
+#define LVIF_NORECOMPUTE        0x0800
+#define LVIF_GROUPID            0x0100
+#define LVIF_COLUMNS            0x0200
+
+#define LVIS_FOCUSED            0x0001
+#define LVIS_SELECTED           0x0002
+#define LVIS_CUT                0x0004
+#define LVIS_DROPHILITED        0x0008
+#define LVIS_GLOW               0x0010
+#define LVIS_ACTIVATING         0x0020
+
+#define LVIS_OVERLAYMASK        0x0F00
+#define LVIS_STATEIMAGEMASK     0xF000
+
+#define INDEXTOSTATEIMAGEMASK(i) i<<12

@@ -1,0 +1,40 @@
+#define CreateFontIndirect  CreateFontIndirectA
+
+extern WINAPI "gdi32.dll"{
+        int AddFontResourceA(LPCSTR);
+        int AddFontResourceW(LPCWSTR);
+        BOOL AnimatePalette(HPALETTE,UINT,UINT,dword);
+        BOOL Arc(HDC,int,int,int,int,int,int,int,int);
+        BOOL BitBlt(HDC,int,int,int,int,HDC,int,int,DWORD);
+        BOOL CancelDC(HDC);
+        BOOL Chord(HDC,int,int,int,int,int,int,int,int);
+        int ChoosePixelFormat(HDC,dword);
+        HMETAFILE CloseMetaFile(HDC);
+        int CombineRgn(HRGN,HRGN,HRGN,int);
+        HMETAFILE CopyMetaFileA(HMETAFILE,LPCSTR);
+        HMETAFILE CopyMetaFileW(HMETAFILE,LPCWSTR);
+        HBITMAP CreateBitmap(int,int,UINT,UINT,dword);
+        HBITMAP CreateBitmapIndirect(dword);
+        HBRUSH CreateBrushIndirect(dword);
+        HBITMAP CreateCompatibleBitmap(HDC,int,int);
+        HBITMAP CreateDiscardableBitmap(HDC,int,int);
+        HDC CreateCompatibleDC(HDC);
+        HDC CreateDCA(LPCSTR,LPCSTR,LPCSTR,dword);
+        HDC CreateDCW(LPCWSTR,LPCWSTR,LPCWSTR,dword);
+        HBITMAP CreateDIBitmap(HDC,dword,DWORD,dword,dword,UINT);
+        HBRUSH CreateDIBPatternBrush(HGLOBAL,UINT);
+        HBRUSH CreateDIBPatternBrushPt(dword,UINT);
+        HRGN CreateEllipticRgn(int,int,int,int);
+        HRGN CreateEllipticRgnIndirect(dword);
+        HFONT CreateFontIndirectA(dword);
+        HFONT CreateFontIndirectW(dword);
+        HFONT CreateFontA(int,int,int,int,int,DWORD,DWORD,DWORD,DWORD,DWORD,DWORD,
+          DWORD,DWORD,LPCSTR);
+        HFONT CreateFontW(int,int,int,int,int,DWORD,DWORD,DWORD,DWORD,DWORD,DWORD,
+          DWORD,DWORD,LPCWSTR);
+        HBRUSH CreateSolidBrush(COLORREF);
+        BOOL DeleteDC(HDC);
+        BOOL DeleteMetaFile(HMETAFILE);
+        BOOL DeleteObject(HGDIOBJ);
+        int DescribePixelFormat(HDC,int,UINT,dword);
+}

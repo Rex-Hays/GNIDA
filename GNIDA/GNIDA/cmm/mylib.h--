@@ -1,0 +1,21 @@
+?include "windows.h--"
+?include "winbase.h--"
+:dword RandSeed;
+:void Randomize(void)
+{
+  GetTickCount();
+  $rdtsc
+  RandSeed = EAX;
+}
+
+:dword Rand(dword range)
+{
+	$mov EDI, EDX
+	EAX = RandSeed;
+	$mov EDX, 0x8088405
+	$mul EDX
+	RandSeed = EAX+1;
+	$mul range
+	EAX = EDX;
+	EDX = EDI;
+}

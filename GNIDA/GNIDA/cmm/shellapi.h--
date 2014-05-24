@@ -1,0 +1,58 @@
+extern WINAPI "shell32.dll"{
+        INT ShellAboutA(HWND hWnd,LPCSTR szApp,LPCSTR szOtherStuff,HICON hIcon);
+        INT ShellAboutW(HWND hWnd,LPCWSTR szApp,LPCWSTR szOtherStuff,HICON hIcon);
+}
+struct DRAGINFO{
+  UINT uSize;                 /* init with sizeof(DRAGINFO) */
+  POINT pt;
+  BOOL fNC;
+  LPSTR   lpFileList;
+  DWORD grfKeyState;
+};
+#define DRAGINFOW DRAGINFO
+#define DRAGINFOA DRAGINFO
+#define ShellAbout  ShellAboutW
+#define ShellAbout  ShellAboutA
+
+////
+//// AppBar stuff
+////
+#define ABM_NEW           0x00000000
+#define ABM_REMOVE        0x00000001
+#define ABM_QUERYPOS      0x00000002
+#define ABM_SETPOS        0x00000003
+#define ABM_GETSTATE      0x00000004
+#define ABM_GETTASKBARPOS 0x00000005
+#define ABM_ACTIVATE      0x00000006  // lParam == TRUE/FALSE means activate/deactivate
+#define ABM_GETAUTOHIDEBAR 0x00000007
+#define ABM_SETAUTOHIDEBAR 0x00000008  // this can fail at any time.  MUST check the result
+                                        // lParam = TRUE/FALSE  Set/Unset
+                                        // uEdge = what edge
+#define ABM_WINDOWPOSCHANGED 0x0000009
+#define ABM_SETSTATE      0x0000000a
+
+// these are put in the wparam of callback messages
+#define ABN_STATECHANGE    0x0000000
+#define ABN_POSCHANGED     0x0000001
+#define ABN_FULLSCREENAPP  0x0000002
+#define ABN_WINDOWARRANGE  0x0000003 // lParam == TRUE means hide
+
+// flags for get state
+#define ABS_AUTOHIDE    0x0000001
+#define ABS_ALWAYSONTOP 0x0000002
+
+#define ABE_LEFT        0
+#define ABE_TOP         1
+#define ABE_RIGHT       2
+#define ABE_BOTTOM      3
+
+struct APPBARDATA
+{
+  DWORD cbSize;
+  HWND hWnd;
+  UINT uCallbackMessage;
+  UINT uEdge;
+  RECT rc;
+  LPARAM lParam; // message specific
+};
+
