@@ -32,7 +32,7 @@ namespace GNIDA
         delegate void InsTextCallback(string text);
         private void InsText(string text)
         {
-            fastColoredTextBox1.Navigate(7);
+            fastColoredTextBox1.Navigate(8);
             fastColoredTextBox1.InsertText(text);
         }
 
@@ -87,6 +87,7 @@ namespace GNIDA
         public void OnLogEvent1(object sender, string LogStr)
         {
             Log.Items.Add(LogStr);
+            //Log.SelectedIndex = Log.Items.Count-1;
         }
         private void AppendText(string text)
         {
@@ -145,7 +146,8 @@ namespace GNIDA
                               "\n//|                          Free 4 use                                 |" +
                               "\n//|                         Writed AS IS                                |" +
                               "\n//+---------------------------------------------------------------------+\n"+
-                              "#pragma option W32\n";
+                              "#pragma option W32\n"+
+                              "#include \"Windows.h--\";\n";
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

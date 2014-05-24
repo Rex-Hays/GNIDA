@@ -338,7 +338,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 49);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(640, 246);
+            this.panel2.Size = new System.Drawing.Size(640, 207);
             this.panel2.TabIndex = 7;
             // 
             // panel3
@@ -347,7 +347,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(124, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(516, 246);
+            this.panel3.Size = new System.Drawing.Size(516, 207);
             this.panel3.TabIndex = 8;
             // 
             // tabControl1
@@ -361,7 +361,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(516, 246);
+            this.tabControl1.Size = new System.Drawing.Size(516, 207);
             this.tabControl1.TabIndex = 6;
             // 
             // tabPage1
@@ -370,7 +370,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(508, 220);
+            this.tabPage1.Size = new System.Drawing.Size(508, 181);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "View-A";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -398,7 +398,7 @@
             this.fastColoredTextBox1.RightBracket2 = '}';
             this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fastColoredTextBox1.ShowFoldingLines = true;
-            this.fastColoredTextBox1.Size = new System.Drawing.Size(502, 214);
+            this.fastColoredTextBox1.Size = new System.Drawing.Size(502, 175);
             this.fastColoredTextBox1.TabIndex = 1;
             this.fastColoredTextBox1.Zoom = 100;
             this.fastColoredTextBox1.ToolTipNeeded += new System.EventHandler<FastColoredTextBoxNS.ToolTipNeededEventArgs>(this.fastColoredTextBox1_ToolTipNeeded);
@@ -410,7 +410,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(508, 220);
+            this.tabPage2.Size = new System.Drawing.Size(508, 181);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "HEX View-A";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -423,7 +423,7 @@
             this.hexBox1.Location = new System.Drawing.Point(3, 3);
             this.hexBox1.Name = "hexBox1";
             this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexBox1.Size = new System.Drawing.Size(502, 214);
+            this.hexBox1.Size = new System.Drawing.Size(502, 175);
             this.hexBox1.StringViewVisible = true;
             this.hexBox1.TabIndex = 0;
             this.hexBox1.UseFixedBytesPerLine = true;
@@ -433,7 +433,7 @@
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(508, 220);
+            this.tabPage3.Size = new System.Drawing.Size(508, 181);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Structures";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -443,7 +443,7 @@
             this.tabPage4.Controls.Add(this.listView2);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(508, 220);
+            this.tabPage4.Size = new System.Drawing.Size(508, 181);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Imports";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -458,7 +458,7 @@
             this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView2.Location = new System.Drawing.Point(0, 0);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(508, 220);
+            this.listView2.Size = new System.Drawing.Size(508, 181);
             this.listView2.TabIndex = 0;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -486,7 +486,7 @@
             this.tabPage5.Controls.Add(this.listView1);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(508, 220);
+            this.tabPage5.Size = new System.Drawing.Size(508, 181);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Exports";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -500,7 +500,7 @@
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(508, 220);
+            this.listView1.Size = new System.Drawing.Size(508, 181);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -524,7 +524,7 @@
             // 
             this.splitter1.Location = new System.Drawing.Point(121, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 246);
+            this.splitter1.Size = new System.Drawing.Size(3, 207);
             this.splitter1.TabIndex = 7;
             this.splitter1.TabStop = false;
             // 
@@ -533,7 +533,7 @@
             this.listView3.Dock = System.Windows.Forms.DockStyle.Left;
             this.listView3.Location = new System.Drawing.Point(0, 0);
             this.listView3.Name = "listView3";
-            this.listView3.Size = new System.Drawing.Size(121, 246);
+            this.listView3.Size = new System.Drawing.Size(121, 207);
             this.listView3.TabIndex = 6;
             this.listView3.UseCompatibleStateImageBehavior = false;
             this.listView3.View = System.Windows.Forms.View.List;
@@ -543,15 +543,16 @@
             // 
             this.Log.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.Log.FormattingEnabled = true;
-            this.Log.Location = new System.Drawing.Point(0, 295);
+            this.Log.Location = new System.Drawing.Point(0, 256);
             this.Log.Name = "Log";
-            this.Log.Size = new System.Drawing.Size(640, 43);
+            this.Log.ScrollAlwaysVisible = true;
+            this.Log.Size = new System.Drawing.Size(640, 82);
             this.Log.TabIndex = 8;
             // 
             // splitter2
             // 
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter2.Location = new System.Drawing.Point(0, 292);
+            this.splitter2.Location = new System.Drawing.Point(0, 253);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(640, 3);
             this.splitter2.TabIndex = 9;
