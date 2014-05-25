@@ -9,15 +9,6 @@ using System.ComponentModel;
 
 namespace GNIDA
 {
-    /*
-    public class CmmDisassembler : x86Disassembler
-    {
-        public CmmDisassembler()
-        {
-            LoadOpCodes();
-        }
-    }
-     * */
     public static class stringExt
     {
         static object obj;
@@ -85,13 +76,6 @@ namespace GNIDA
             }
         }
     }
-    public static class OperandExtensions
-    {
-        public static string ToString(this Operand Op)
-        {
-            return "0x" + Op.ToString(false);
-        }
-    }
     public static class X86Extensions
     {
         private static string AddProc(Offset x, MyDictionary ProcList, Dictionary<ulong, TFunc> NewSubs)
@@ -113,11 +97,10 @@ namespace GNIDA
                         {
                             VarDict.AddVar(Var1);
                         };
-                        return "$MOV " + VarDict[((Offset)inst.Operand1.Value).Va].FName + ", EAX";
+                        return VarDict[((Offset)inst.Operand1.Value).Va].FName + " = EAX;";
                     }
                 case 0x75: return "$JNZ Loc_" + inst.Operand1.ToString(true);
                 case 0xEB: return "$JMP Loc_" + inst.Operand1.ToString(true);
-                case 0xC3: return "$RET";
                 case 0xE8:
                     {
                         if (inst.Operand1.ValueType == OperandType.Normal)
@@ -135,8 +118,9 @@ namespace GNIDA
                     }break;
             }
             string str = inst.ToAsmString();
-            str = str.Replace(" PTR ", "");
-            return '$'+str;
+            if (str[0] != '$') str += ";";
+            //str = str.Replace(" PTR ", "");
+            return str;
         }
     }
     public class TFunc
@@ -223,7 +207,7 @@ namespace GNIDA
             {
                 assembly.Disassembler.CurrentOffset = (uint)Tasks[0];
                 Tasks.Remove(Tasks[0]);
-                x86Instruction instruction = assembly.Disassembler.DisassembleNextInstruction();
+                Myx86Instruction instruction = (Myx86Instruction)assembly.Disassembler.DisassembleNextInstruction();
                 lst.Add(new Stroka(this, instruction));
                 switch (instruction.OpCode.OpCodeBytes[0])
                 {
@@ -248,9 +232,6 @@ namespace GNIDA
                         }
                         continue;// Don't disasm after it
                     case 0xFF:
-                        Console.WriteLine("--");
-                        Console.WriteLine(instruction.OperandBytes[0].ToString("X2"));
-                        Console.WriteLine(instruction.OperandBytes[1].ToString("X2"));
                         if (instruction.OpCode.OpCodeBytes[1] == 0x15)//Call
                             {
                                 ulong a = ((Offset)instruction.Operand1.Value).Va;
@@ -273,10 +254,12 @@ namespace GNIDA
             }
             return lst;
         }
+
         public void LoadFile(string FName)
         {
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);
+            assembly.Disassembler = new CmmDisassembler(assembly);
             int i = 0;
             foreach (Section sect in assembly.NTHeader.Sections)
             {

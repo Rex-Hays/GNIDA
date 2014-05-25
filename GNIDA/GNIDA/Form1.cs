@@ -20,6 +20,7 @@ namespace GNIDA
         int VarLine = 0;
         DynamicFileByteProvider dynamicFileByteProvider;
         TextStyle blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        TextStyle funcStyle = new TextStyle(Brushes.LightSeaGreen, null, FontStyle.Regular);
         public MainForm()
         {
             InitializeComponent();
@@ -209,8 +210,12 @@ namespace GNIDA
         private void fastColoredTextBox1_TextChangedDelayed(object sender, TextChangedEventArgs e)
         {
             e.ChangedRange.ClearStyle(blueStyle);
-            //e.ChangedRange.SetStyle(blueStyle, @"(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?");
             e.ChangedRange.SetStyle(blueStyle, @"Loc_[\dA-Fa-f]+");
+            if(MyGNIDA!=null)
+            foreach(KeyValuePair<ulong, TFunc> fnc in MyGNIDA.FullProcList)
+            {
+                e.ChangedRange.SetStyle(funcStyle, ' '+fnc.Value.FName);
+            }
         }
 
         private void renameToolStripMenuItem_Click(object sender, EventArgs e)

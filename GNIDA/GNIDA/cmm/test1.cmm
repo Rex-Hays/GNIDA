@@ -4,5 +4,6 @@
 
 void main(void)
 {
+ EAX = 0x10203040;
  printf("Test OK");
 }

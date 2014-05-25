@@ -642,6 +642,7 @@
     <Compile Include="Be.Windows.Forms.HexBox\NativeMethods.cs" />
     <Compile Include="Be.Windows.Forms.HexBox\Properties\Resources.Designer.cs" />
     <Compile Include="Be.Windows.Forms.HexBox\Util.cs" />
+    <Compile Include="CmmDisassembler.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -649,6 +650,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GNIDA.cs" />
+    <Compile Include="Myx86Instruction.cs" />
+    <Compile Include="Myx86OpCodes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutBox1.resx">

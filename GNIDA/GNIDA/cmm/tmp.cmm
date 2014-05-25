@@ -7,22 +7,23 @@
 #pragma option W32
 #jumptomain NONE
 #include "Windows.h";
-/*00402000*/ void main(){
-dword dword_00401004;
 dword dword_00401000;
+dword dword_00401004;
+/*00402000*/ void main(){
 /*00402000*/  $CLD 
-/*00402001*/  $PUSH 00
+/*00402001*/  $PUSH 0x00
 /*00402003*/  GetModuleHandleA();
-/*00402009*/  $MOV dword_00401000, EAX
+/*00402009*/  dword_00401000 = EAX;
 /*0040200E*/  GetCommandLineA();
-/*00402014*/  $MOV dword_00401004, EAX
+/*00402014*/  dword_00401004 = EAX;
 /*00402019*/  Sub_00402030();
 /*0040201E*/  $PUSH EAX 
 /*0040201F*/  ExitProcess();
 };//main
 /*00402030*/ void Sub_00402030(){
-/*00402030*/  $PUSH 0040203F
-/*00402035*/  printf();
-/*0040203B*/  $ADD ESP, 04
-/*0040203E*/  $RET
+/*00402030*/  EAX = 0x10203040;
+/*00402035*/  $PUSH 0x00402044
+/*0040203A*/  printf();
+/*00402040*/  $ADD ESP, 0x04
+/*00402043*/  $RET 
 };//Sub_00402030
