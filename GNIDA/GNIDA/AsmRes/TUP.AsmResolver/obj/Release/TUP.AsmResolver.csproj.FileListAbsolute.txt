@@ -1,0 +1,7 @@
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.pdb
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.xml
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\obj\Release\TUP.AsmResolver.dll
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\obj\Release\TUP.AsmResolver.pdb
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll.CodeAnalysisLog.xml
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll.lastcodeanalysissucceeded

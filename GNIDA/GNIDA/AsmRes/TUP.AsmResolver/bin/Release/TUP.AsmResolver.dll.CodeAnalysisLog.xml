@@ -1,0 +1,586 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="12.0">
+ <Targets>
+  <Target Name="C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll">
+   <Modules>
+    <Module Name="tup.asmresolver.dll">
+     <Namespaces>
+      <Namespace Name="TUP.AsmResolver">
+       <Types>
+        <Type Name="ASMGlobals" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
+         <Members>
+          <Member Name="#IsEmptyStructure(System.Object)" Kind="Method" Static="True" Accessibility="Assembly" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver" File="ASMGlobals.cs" Line="62">Object 'stream' can be disposed more than once in method 'ASMGlobals.IsEmptyStructure(object)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 62</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#Wow64EnableWow64FsRedirection(System.Boolean)" Kind="Method" Static="True" Accessibility="Public" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="CriticalWarning">Because it is a P/Invoke method, 'ASMGlobals.Wow64EnableWow64FsRedirection(bool)' should be defined in a class named NativeMethods, SafeNativeMethods, or UnsafeNativeMethods.</Issue>
+            </Message>
+            <Message Id="0" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+             <Issue Name="Parameter" Certainty="95" Level="Error">As it is declared in your code, parameter 'Wow64FsEnableRedirection' of P/Invoke 'ASMGlobals.Wow64EnableWow64FsRedirection(bool)' will be 4 bytes wide on 32-bit platforms. This is not correct, as the actual native declaration of this API indicates it should be 1 bytes wide on 32-bit platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of 'bool'.</Issue>
+             <Issue Name="Parameter" Certainty="95" Level="Error">As it is declared in your code, parameter 'Wow64FsEnableRedirection' of P/Invoke 'ASMGlobals.Wow64EnableWow64FsRedirection(bool)' will be 4 bytes wide on 64-bit platforms. This is not correct, as the actual native declaration of this API indicates it should be 1 bytes wide on 64-bit platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of 'bool'.</Issue>
+            </Message>
+            <Message Id="return" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+             <Issue Name="Return" Certainty="95" Level="Error">As it is declared in your code, the return type of P/Invoke 'ASMGlobals.Wow64EnableWow64FsRedirection(bool)' will be 4 bytes wide on 32-bit platforms. This is not correct, as the actual native declaration of this API indicates it should be 1 bytes wide on 32-bit platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of 'bool'.</Issue>
+             <Issue Name="Return" Certainty="95" Level="Error">As it is declared in your code, the return type of P/Invoke 'ASMGlobals.Wow64EnableWow64FsRedirection(bool)' will be 4 bytes wide on 64-bit platforms. This is not correct, as the actual native declaration of this API indicates it should be 1 bytes wide on 64-bit platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of 'bool'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="Win32Assembly" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Provide an overridable implementation of Dispose(bool) on 'Win32Assembly' or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver" File="Win32Assembly.cs" Line="320">Modify 'Win32Assembly.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ReadingFinished" Kind="Event" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="Second" Certainty="95" Level="Error">Declare the second parameter of 'Win32Assembly.ReadingFinishedEventHandler' as an EventArgs, or an instance of a type that extends EventArgs, named 'e'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#ReadingProcessChanged" Kind="Event" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="Second" Certainty="95" Level="Error">Declare the second parameter of 'Win32Assembly.ReadingProcessChangedEventHandler' as an EventArgs, or an instance of a type that extends EventArgs, named 'e'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.ASM">
+       <Types>
+        <Type Name="x86Disassembler" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'x86Disassembler' because it creates members of the following IDisposable types: 'BinaryReader'. If 'x86Disassembler' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#.ctor()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalWarning" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\ASM" File="x86Disassembler.cs" Line="20">'x86Disassembler.x86Disassembler()' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;x86Disassembler..ctor()&#xD;&#xA;x86Disassembler.LoadOpCodes():Void</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.Exceptions">
+       <Types>
+        <Type Name="InvalidInstructionException" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+           <Issue Certainty="95" Level="Error">Add [Serializable] to 'InvalidInstructionException' as this type implements ISerializable.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="InvalidOpCodeException" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+           <Issue Certainty="95" Level="Error">Add [Serializable] to 'InvalidOpCodeException' as this type implements ISerializable.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ResolveException" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+           <Issue Certainty="95" Level="Error">Add [Serializable] to 'ResolveException' as this type implements ISerializable.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.NET">
+       <Types>
+        <Type Name="BlobHeap" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="BlobHeap.cs" Line="70">Modify 'BlobHeap.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+             <Issue Name="DisposeSignature" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="BlobHeap.cs" Line="70">Ensure that 'BlobHeap.Dispose()' is declared as public and sealed.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="GuidHeap" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="GuidHeap.cs" Line="70">Modify 'GuidHeap.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+             <Issue Name="DisposeSignature" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="GuidHeap.cs" Line="70">Ensure that 'GuidHeap.Dispose()' is declared as public and sealed.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MetaDataStream" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Provide an overridable implementation of Dispose(bool) on 'MetaDataStream' or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="MetaDataStream.cs" Line="122">Modify 'MetaDataStream.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+             <Issue Name="DisposeSignature" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="MetaDataStream.cs" Line="122">Ensure that 'MetaDataStream.Dispose()' is declared as public and sealed.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MetaDataTable" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Provide an overridable implementation of Dispose(bool) on 'MetaDataTable' or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="MetaDataTable.cs" Line="270">Modify 'MetaDataTable.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="NETHeader" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Provide an overridable implementation of Dispose(bool) on 'NETHeader' or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="NETHeader.cs" Line="262">Modify 'NETHeader.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="StringsHeap" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="StringsHeap.cs" Line="67">Modify 'StringsHeap.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+             <Issue Name="DisposeSignature" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="StringsHeap.cs" Line="67">Ensure that 'StringsHeap.Dispose()' is declared as public and sealed.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="TablesHeap" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="TableHeap.cs" Line="40">Modify 'TablesHeap.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+             <Issue Name="DisposeSignature" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="TableHeap.cs" Line="40">Ensure that 'TablesHeap.Dispose()' is declared as public and sealed.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="UserStringsHeap" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="UserStringsHeap.cs" Line="80">Modify 'UserStringsHeap.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+             <Issue Name="DisposeSignature" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET" File="UserStringsHeap.cs" Line="80">Ensure that 'UserStringsHeap.Dispose()' is declared as public and sealed.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.NET.Specialized">
+       <Types>
+        <Type Name="GenericInstanceType" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.Type" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.get_Type()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="GenericInstanceType.cs" Line="42">Make 'GenericInstanceType' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericContext.Type.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MetaDataMember" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="MetaDataMember.cs" Line="113">Modify 'MetaDataMember.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MethodReference" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.Method" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.get_Method()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="MethodReference.cs" Line="115">Make 'MethodReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericContext.Method.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.Type" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.get_Type()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="MethodReference.cs" Line="120">Make 'MethodReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericContext.Type.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericParamProvider.AddGenericParameter(TUP.AsmResolver.NET.Specialized.GenericParameter)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="MethodReference.cs" Line="130">Make 'MethodReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericParamProvider.AddGenericParameter(GenericParameter)' and is visible to derived classes.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericParamProvider.ParamType" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#TUP.AsmResolver.NET.Specialized.IGenericParamProvider.get_ParamType()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="MethodReference.cs" Line="125">Make 'MethodReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericParamProvider.ParamType.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="TypeReference" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.Method" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.get_Method()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="TypeReference.cs" Line="204">Make 'TypeReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericContext.Method.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.Type" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#TUP.AsmResolver.NET.Specialized.IGenericContext.get_Type()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="TypeReference.cs" Line="209">Make 'TypeReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericContext.Type.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericParamProvider.AddGenericParameter(TUP.AsmResolver.NET.Specialized.GenericParameter)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="TypeReference.cs" Line="219">Make 'TypeReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericParamProvider.AddGenericParameter(GenericParameter)' and is visible to derived classes.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#TUP.AsmResolver.NET.Specialized.IGenericParamProvider.ParamType" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#TUP.AsmResolver.NET.Specialized.IGenericParamProvider.get_ParamType()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\NET\Specialized" File="TypeReference.cs" Line="214">Make 'TypeReference' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'IGenericParamProvider.ParamType.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.NET.Specialized.MSIL">
+       <Types>
+        <Type Name="MSILDisassembler" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'MSILDisassembler' because it creates members of the following IDisposable types: 'BinaryReader'. If 'MSILDisassembler' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.PE">
+       <Types>
+        <Type Name="PeImage" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Provide an overridable implementation of Dispose(bool) on 'PeImage' or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#.ctor(System.String)" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\PE" File="PeImage.cs" Line="37">Object 'streamToRead' can be disposed more than once in method 'PeImage.PeImage(string)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 37</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\PE" File="PeImage.cs" Line="198">Modify 'PeImage.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.PE.Readers">
+       <Types>
+        <Type Name="NETTableReader" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
+         <Members>
+          <Member Name="#ReadMember(TUP.AsmResolver.NET.MetaDataTable,System.Int32)" Kind="Method" Static="False" Accessibility="Assembly" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\PE\Readers" File="NETTableReader.cs" Line="209">Object 'stream' can be disposed more than once in method 'NETTableReader.ReadMember(MetaDataTable, int)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 209</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ResourcesReader" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="NonBreaking">
+           <Issue Name="NonBreaking" Certainty="95" Level="CriticalError">Implement IDisposable on 'ResourcesReader' because it creates members of the following IDisposable types: 'BinaryReader'.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="TUP.AsmResolver.PE.Writers">
+       <Types>
+        <Type Name="MethodBodyTable" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Provide an overridable implementation of Dispose(bool) on 'MethodBodyTable' or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\PE\Writers" File="Structures.cs" Line="91">Modify 'MethodBodyTable.Dispose()' so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MsilMethodBuilder" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#SerializeMethodBody(TUP.AsmResolver.PE.Writers.Workspace,TUP.AsmResolver.NET.Specialized.MSIL.MethodBody)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\PE\Writers" File="MsilMethodBuilder.cs" Line="64">Object 'stream' can be disposed more than once in method 'MsilMethodBuilder.SerializeMethodBody(Workspace, MethodBody)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 64</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="OffsetSizeCalculator" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#CreateTextSection(TUP.AsmResolver.PE.Writers.Workspace)" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+             <Issue Certainty="75" Level="Warning" Path="c:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\PE\Writers" File="OffsetSizeCalculator.cs" Line="154">Object 'sectionStream' can be disposed more than once in method 'OffsetSizeCalculator.CreateTextSection(Workspace)'. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 154</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="PEConstructor" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'PEConstructor' because it creates members of the following IDisposable types: 'BinaryWriter'. If 'PEConstructor' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="Workspace" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2014-05-25 09:03:12Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implement IDisposable on 'Workspace' because it creates members of the following IDisposable types: 'MethodBodyTable', 'NETHeader'. If 'Workspace' has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="DeclareEventHandlersCorrectly" Category="Microsoft.Design" CheckId="CA1009">
+   <Name>Declare event handlers correctly</Name>
+   <Description>By convention, .NET events have two parameters that specify the event sender and event data. Event handler signatures should follow this form: void MyEventHandler(object sender, EventArgs e). The 'sender' parameter is always of type System.Object, even if it is possible to employ a more specific type. The 'e' parameter is always of type System.EventArgs. Events that do not provide event data should use the System.EventHandler delegate type. Event handlers return void so that they can send each event to multiple target methods. Any value returned by a target would be lost after the first call.</Description>
+   <Resolution Name="Second">Declare the second parameter of {0} as an EventArgs, or an instance of a type that extends EventArgs, named 'e'.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182133.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="designrules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="Do not dispose objects multiple times" Category="Microsoft.Usage" CheckId="CA2202">
+   <Name>Do not dispose objects multiple times</Name>
+   <Description>A correctly implemented Dispose method can be called multiple times without throwing an exception. However, this is not guaranteed and to avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.</Description>
+   <Resolution Name="Default">Object {0} can be disposed more than once in method {1}. To avoid generating a System.ObjectDisposedException you should not call Dispose more than one time on an object.: Lines: 37</Resolution>
+   <Owner>RuleOwner</Owner>
+   <Url>http://msdn.microsoft.com/library/ms182334.aspx</Url>
+   <Email />
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="dataflowrules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214">
+   <Name>Do not call overridable methods in constructors</Name>
+   <Description>Virtual methods defined on the class should not be called from constructors. If a derived class has overridden the method, the derived class version will be called (before the derived class constructor is called).</Description>
+   <Resolution Name="Default">{0} contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: {1}</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182331.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalWarning</MessageLevel>
+   <File Name="usagerules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063">
+   <Name>Implement IDisposable correctly</Name>
+   <Description>All IDisposable types should implement the Dispose pattern correctly.</Description>
+   <Resolution Name="DisposeImplementation">Modify {0} so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Resolution>
+   <Resolution Name="DisposeSignature">Ensure that {0} is declared as public and sealed.</Resolution>
+   <Resolution Name="ProvideDisposeBool">Provide an overridable implementation of Dispose(bool) on {0} or mark the type as sealed. A call to Dispose(false) should only clean up native resources. A call to Dispose(true) should clean up both managed and native resources.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms244737.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="designrules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
+   <Name>Interface methods should be callable by child types</Name>
+   <Description>Explicit method implementations are defined with private accessibility. Classes that derive from classes with explicit method implementations and choose to re-declare them on the class will not be able to call into the base class implementation unless the base class has provided an alternate method with appropriate accessibility. When overriding a base class method that has been hidden by explicit interface implementation, in order to call into the base class implementation, a derived class must cast the base pointer to the relevant interface. When calling through this reference, however, the derived class implementation will actually be invoked, resulting in recursion and an eventual stack overflow.</Description>
+   <Resolution Name="Default">Make {0} sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of {1} and is visible to derived classes.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182153.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="designrules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237">
+   <Name>Mark ISerializable types with SerializableAttribute</Name>
+   <Description>The System.Runtime.Serialization.ISerializable interface allows the type to customize its serialization, while the Serializable attribute enables the runtime to recognize the type as being serializable.</Description>
+   <Resolution Name="Default">Add [Serializable] to {0} as this type implements ISerializable.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182350.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="usagerules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060">
+   <Name>Move P/Invokes to NativeMethods class</Name>
+   <Description>This type contains members with the DllImport attribute. Members with the DllImport attribute should be contained in classes named NativeMethods, SafeNativeMethods, or UnsafeNativeMethods.</Description>
+   <Resolution Name="Default">Because it is a P/Invoke method, {0} should be defined in a class named NativeMethods, SafeNativeMethods, or UnsafeNativeMethods.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182161.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalWarning</MessageLevel>
+   <File Name="designrules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901">
+   <Name>P/Invoke declarations should be portable</Name>
+   <Description>.</Description>
+   <Resolution Name="Parameter">As it is declared in your code, parameter {0} of P/Invoke {1} will be {2} bytes wide on {3} platforms. This is not correct, as the actual native declaration of this API indicates it should be {4} bytes wide on {3} platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of {5}.</Resolution>
+   <Resolution Name="Return">As it is declared in your code, the return type of P/Invoke {0} will be {1} bytes wide on {2} platforms. This is not correct, as the actual native declaration of this API indicates it should be {3} bytes wide on {2} platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of {4}.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182284(VS.100).aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="portabilityrules.dll" Version="12.0.0.0" />
+  </Rule>
+  <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
+   <Name>Types that own disposable fields should be disposable</Name>
+   <Description>Types that declare disposable members should also implement IDisposable. If the type does not own any unmanaged resources, do not implement a finalizer on it.</Description>
+   <Resolution Name="DependsOnFix">Implement IDisposable on {0} because it creates members of the following IDisposable types: {1}. If {0} has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Resolution>
+   <Resolution Name="NonBreaking">Implement IDisposable on {0} because it creates members of the following IDisposable types: {1}.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182172.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="designrules.dll" Version="12.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+</FxCopReport>

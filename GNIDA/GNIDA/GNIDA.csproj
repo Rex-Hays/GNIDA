@@ -84,593 +84,241 @@
     <Compile Include="AboutBox1.Designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\ComboBoxDlg.cs">
+    <Compile Include="AsmRes\AsmResolver\ComboBoxDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\ComboBoxDlg.Designer.cs">
+    <Compile Include="AsmRes\AsmResolver\ComboBoxDlg.Designer.cs">
       <DependentUpon>ComboBoxDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\DisassemblerControl.cs">
+    <Compile Include="AsmRes\AsmResolver\DisassemblerControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\HexBoxControl.cs">
+    <Compile Include="AsmRes\AsmResolver\HexBoxControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\MainForm.cs">
+    <Compile Include="AsmRes\AsmResolver\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\MainForm.Designer.cs">
+    <Compile Include="AsmRes\AsmResolver\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\MethodDlg.cs">
+    <Compile Include="AsmRes\AsmResolver\MethodDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\MethodDlg.Designer.cs">
+    <Compile Include="AsmRes\AsmResolver\MethodDlg.Designer.cs">
       <DependentUpon>MethodDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\OffsetEditorDlg.cs">
+    <Compile Include="AsmRes\AsmResolver\OffsetEditorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\OffsetEditorDlg.Designer.cs">
+    <Compile Include="AsmRes\AsmResolver\OffsetEditorDlg.Designer.cs">
       <DependentUpon>OffsetEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\Program.cs" />
-    <Compile Include="AsmResolver\AsmResolver\Properties\Resources.Designer.cs" />
-    <Compile Include="AsmResolver\AsmResolver\Properties\Settings.Designer.cs" />
-    <Compile Include="AsmResolver\AsmResolver\PropertyGridDlg.cs">
+    <Compile Include="AsmRes\AsmResolver\Program.cs" />
+    <Compile Include="AsmRes\AsmResolver\Properties\AssemblyInfo.cs" />
+    <Compile Include="AsmRes\AsmResolver\Properties\Resources.Designer.cs" />
+    <Compile Include="AsmRes\AsmResolver\Properties\Settings.Designer.cs" />
+    <Compile Include="AsmRes\AsmResolver\PropertyGridDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\PropertyGridDlg.Designer.cs">
+    <Compile Include="AsmRes\AsmResolver\PropertyGridDlg.Designer.cs">
       <DependentUpon>PropertyGridDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\PropertyGridHexConverters.cs" />
-    <Compile Include="AsmResolver\AsmResolver\PropertyGridUIEditor.cs" />
-    <Compile Include="AsmResolver\AsmResolver\ResourceControl.cs">
+    <Compile Include="AsmRes\AsmResolver\PropertyGridHexConverters.cs" />
+    <Compile Include="AsmRes\AsmResolver\PropertyGridUIEditor.cs" />
+    <Compile Include="AsmRes\AsmResolver\ResourceControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\TablesControl.cs">
+    <Compile Include="AsmRes\AsmResolver\TablesControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AsmResolver\AsmResolver\TreeBuilder.cs" />
-    <Compile Include="AsmResolver\AsmResolver\TreeNodeTag.cs" />
-    <Compile Include="AsmResolver\AsmResolver\TreeNodeType.cs" />
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASMGlobals.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\InstructionCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\Operand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\OperandType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\x86Assembler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\x86Disassembler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\x86Instruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\x86OpCode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\x86OpCodes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\x86OperandType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ASM\x86Register.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\DataDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\DataDirectoryName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\Exceptions\InvalidInstructionException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\Exceptions\InvalidOpCodeException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\Exceptions\ResolveException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ExecutableFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ExportMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\FileHeader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ICacheProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\IDataDirectoryProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\IHeader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\IImageProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ImageSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\IMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ImportMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\IOptionalHeader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\LibraryFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\LibraryReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\Machine.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\MZHeader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NameDemangler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\AssemblyResolver.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\BlobHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\BlobSignatureReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\GuidHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MemberCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MemberRange.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MetaDataHeader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MetaDataResolver.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MetaDataRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MetaDataStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MetaDataTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MetaDataTableGroup.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\MetaDataTableType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\NETGlobals.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\NETHeader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\NETHeaderFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ArrayDimension.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ArrayType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\AssemblyAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\AssemblyDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\AssemblyHashAlgorithm.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\AssemblyReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ByReferenceType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ClassLayout.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\Constant.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\CustomAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\CustomAttributeArgument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\CustomAttributeSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ElementType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\EnCLog.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\EnCMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\EventAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\EventDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\EventMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ExportedType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldLayout.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldMarshal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldPtr.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldRVA.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FieldSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FileAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\FileReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\GenericInstanceType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\GenericParamConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\GenericParameter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\GenericParameterAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\IGenericContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\IGenericInstance.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\IGenericParamProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\IMemberSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\InterfaceImplementation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\IResolutionScope.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ISpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\IStreamProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ManifestResource.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ManifestResourceAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MemberReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MetaDataMember.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MetaDataTokenResolver.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodCallingConvention.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodImpl.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodImplAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodPtr.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodSemantics.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodSemanticsAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MethodSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ModifierType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ModuleDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ModuleReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\ExceptionHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\ExceptionHandlerType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MethodBody.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MethodBodySection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MSILAssembler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MSILCode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MSILDisassembler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MSILInstruction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MSILOpCode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\MSILOpCodes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\OperandType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\StackBehaviour.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\MSIL\VariableDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\NestedClass.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ObsoleteAssemblyTables.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ParameterAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ParameterDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ParameterReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\ParamPtr.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PinnedType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PInvokeImplAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PInvokeImplementation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PointerType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PropertyAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PropertyDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PropertyMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PropertyPtr.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\PropertySignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\SecurityDeclaration.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\StandAloneSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\TypeAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\TypeDefinition.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\TypeReference.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\TypeSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\Specialized\TypeSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\StringsHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\TableHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NET\UserStringsHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\NTHeader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="AsmResolver\TUP.AsmResolver\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="AsmResolver\TUP.AsmResolver\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Include="AsmResolver\TUP.AsmResolver\obj\Release\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="AsmResolver\TUP.AsmResolver\obj\Release\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="AsmResolver\TUP.AsmResolver\obj\Release\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
-    <Compile Include="AsmResolver\TUP.AsmResolver\Offset.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\OffsetConverter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\OptionalHeader32.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\OptionalHeader64.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\PeImage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Readers\ImportExportTableReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Readers\NETHeaderReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Readers\NETMethodReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Readers\NETTableReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Readers\PEHeaderReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Readers\ResourcesReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Structures.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\MetaDataBuilderTask.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\MetaDataWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\MsilMethodBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\OffsetSizeCalculator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\PEConstructor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\PreparationTask.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\RebuildingTask.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\PE\Writers\Structures.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ReadingParameters.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ResourceDataEntry.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ResourceDirectory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ResourceDirectoryEntry.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\ResourceDirectoryType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\Section.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\SectionFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\SubSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\Win32Assembly.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AsmResolver\TUP.AsmResolver\WritingParameters.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="AsmRes\AsmResolver\TreeBuilder.cs" />
+    <Compile Include="AsmRes\AsmResolver\TreeNodeTag.cs" />
+    <Compile Include="AsmRes\AsmResolver\TreeNodeType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASMGlobals.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\InstructionCollection.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\Operand.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\OperandType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\x86Assembler.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\x86Disassembler.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\x86Instruction.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\x86OpCode.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\x86OpCodes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\x86OperandType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ASM\x86Register.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\DataDirectory.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\DataDirectoryName.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Exceptions\InvalidInstructionException.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Exceptions\InvalidOpCodeException.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Exceptions\ResolveException.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ExecutableFlags.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ExportMethod.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\FileHeader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ICacheProvider.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\IDataDirectoryProvider.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\IHeader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\IImageProvider.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ImageSignature.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\IMethod.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ImportMethod.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\IOptionalHeader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\LibraryFlags.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\LibraryReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Machine.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\MZHeader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NameDemangler.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\AssemblyResolver.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\BlobHeap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\BlobSignatureReader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\GuidHeap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MemberCollection.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MemberRange.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MetaDataHeader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MetaDataResolver.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MetaDataRow.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MetaDataStream.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MetaDataTable.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MetaDataTableGroup.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\MetaDataTableType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\NETGlobals.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\NETHeader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\NETHeaderFlags.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ArrayDimension.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ArrayType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\AssemblyAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\AssemblyDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\AssemblyHashAlgorithm.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\AssemblyReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ByReferenceType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ClassLayout.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\Constant.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\CustomAttribute.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\CustomAttributeArgument.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\CustomAttributeSignature.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ElementType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\EnCLog.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\EnCMap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\EventAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\EventDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\EventMap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ExportedType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldLayout.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldMarshal.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldPtr.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldRVA.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FieldSignature.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FileAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\FileReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\GenericInstanceType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\GenericParamConstraint.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\GenericParameter.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\GenericParameterAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\IGenericContext.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\IGenericInstance.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\IGenericParamProvider.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\IMemberSignature.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\InterfaceImplementation.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\IResolutionScope.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ISpecification.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\IStreamProvider.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ManifestResource.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ManifestResourceAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MemberReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MetaDataMember.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MetaDataTokenResolver.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodCallingConvention.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodImpl.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodImplAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodPtr.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodSemantics.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodSemanticsAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodSignature.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MethodSpecification.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ModifierType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ModuleDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ModuleReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\ExceptionHandler.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\ExceptionHandlerType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MethodBody.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MethodBodySection.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MSILAssembler.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MSILCode.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MSILDisassembler.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MSILInstruction.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MSILOpCode.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\MSILOpCodes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\OperandType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\StackBehaviour.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\MSIL\VariableDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\NestedClass.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ObsoleteAssemblyTables.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ParameterAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ParameterDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ParameterReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\ParamPtr.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PinnedType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PInvokeImplAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PInvokeImplementation.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PointerType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PropertyAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PropertyDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PropertyMap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PropertyPtr.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\PropertySignature.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\SecurityDeclaration.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\StandAloneSignature.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\TypeAttributes.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\TypeDefinition.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\TypeReference.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\TypeSpecification.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\Specialized\TypeSystem.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\StringsHeap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\TableHeap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NET\UserStringsHeap.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\NTHeader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\obj\Release\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\obj\Release\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\obj\Release\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Offset.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\OffsetConverter.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\OptionalHeader32.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\OptionalHeader64.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\PeImage.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Readers\ImportExportTableReader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Readers\NETHeaderReader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Readers\NETMethodReader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Readers\NETTableReader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Readers\PEHeaderReader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Readers\ResourcesReader.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Structures.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\MetaDataBuilderTask.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\MetaDataWriter.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\MsilMethodBuilder.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\OffsetSizeCalculator.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\PEConstructor.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\PreparationTask.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\RebuildingTask.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\Structures.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Properties\AssemblyInfo.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ReadingParameters.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ResourceDataEntry.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ResourceDirectory.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ResourceDirectoryEntry.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\ResourceDirectoryType.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Section.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\SectionFlags.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\SubSystem.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\Win32Assembly.cs" />
+    <Compile Include="AsmRes\TUP.AsmResolver\WritingParameters.cs" />
     <Compile Include="Be.Windows.Forms.HexBox\BuiltInContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -694,72 +342,72 @@
     <Compile Include="Be.Windows.Forms.HexBox\Properties\Resources.Designer.cs" />
     <Compile Include="Be.Windows.Forms.HexBox\Util.cs" />
     <Compile Include="CmmDisassembler.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\AutocompleteItem.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\AutocompleteMenu.cs">
+    <Compile Include="FCTB\FastColoredTextBox\AutocompleteItem.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\AutocompleteMenu.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Bookmarks.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Char.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\CommandManager.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Commands.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\DocumentMap.cs">
+    <Compile Include="FCTB\FastColoredTextBox\Bookmarks.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\Char.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\CommandManager.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\Commands.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\DocumentMap.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\ExportToHTML.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\ExportToRTF.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\FastColoredTextBox.cs">
+    <Compile Include="FCTB\FastColoredTextBox\ExportToHTML.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\ExportToRTF.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\FastColoredTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\FileTextSource.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\FindForm.cs">
+    <Compile Include="FCTB\FastColoredTextBox\FileTextSource.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\FindForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\FindForm.Designer.cs">
+    <Compile Include="FCTB\FastColoredTextBox\FindForm.Designer.cs">
       <DependentUpon>FindForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\GoToForm.cs">
+    <Compile Include="FCTB\FastColoredTextBox\GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\GoToForm.Designer.cs">
+    <Compile Include="FCTB\FastColoredTextBox\GoToForm.Designer.cs">
       <DependentUpon>GoToForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Hints.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Hotkeys.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\HotkeysEditorForm.cs">
+    <Compile Include="FCTB\FastColoredTextBox\Hints.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\Hotkeys.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\HotkeysEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\HotkeysEditorForm.Designer.cs">
+    <Compile Include="FCTB\FastColoredTextBox\HotkeysEditorForm.Designer.cs">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\LimitedStack.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Line.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\LinesAccessor.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\MacrosManager.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Place.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\PlatformType.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Properties\AssemblyInfo.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Range.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\ReplaceForm.cs">
+    <Compile Include="FCTB\FastColoredTextBox\LimitedStack.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\Line.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\LinesAccessor.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\MacrosManager.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\Place.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\PlatformType.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\Properties\AssemblyInfo.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\Range.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\ReplaceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\ReplaceForm.Designer.cs">
+    <Compile Include="FCTB\FastColoredTextBox\ReplaceForm.Designer.cs">
       <DependentUpon>ReplaceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Ruler.cs">
+    <Compile Include="FCTB\FastColoredTextBox\Ruler.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Ruler.Designer.cs">
+    <Compile Include="FCTB\FastColoredTextBox\Ruler.Designer.cs">
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\Style.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\SyntaxDescriptor.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\SyntaxHighlighter.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\TextSource.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\TypeDescriptor.cs" />
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\UnfocusablePanel.cs">
+    <Compile Include="FCTB\FastColoredTextBox\Style.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\SyntaxDescriptor.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\SyntaxHighlighter.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\TextSource.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\TypeDescriptor.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\UnfocusablePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FastColoredTextBox\FastColoredTextBox\VisualMarker.cs" />
+    <Compile Include="FCTB\FastColoredTextBox\VisualMarker.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -776,20 +424,20 @@
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AsmResolver\AsmResolver\ComboBoxDlg.resx">
+    <EmbeddedResource Include="AsmRes\AsmResolver\ComboBoxDlg.resx">
       <DependentUpon>ComboBoxDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AsmResolver\AsmResolver\MainForm.resx">
+    <EmbeddedResource Include="AsmRes\AsmResolver\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AsmResolver\AsmResolver\MethodDlg.resx">
+    <EmbeddedResource Include="AsmRes\AsmResolver\MethodDlg.resx">
       <DependentUpon>MethodDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AsmResolver\AsmResolver\OffsetEditorDlg.resx">
+    <EmbeddedResource Include="AsmRes\AsmResolver\OffsetEditorDlg.resx">
       <DependentUpon>OffsetEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AsmResolver\AsmResolver\Properties\Resources.resx" />
-    <EmbeddedResource Include="AsmResolver\AsmResolver\PropertyGridDlg.resx">
+    <EmbeddedResource Include="AsmRes\AsmResolver\Properties\Resources.resx" />
+    <EmbeddedResource Include="AsmRes\AsmResolver\PropertyGridDlg.resx">
       <DependentUpon>PropertyGridDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Be.Windows.Forms.HexBox\HexBox.resx">
@@ -800,29 +448,29 @@
     <EmbeddedResource Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.resources" />
     <EmbeddedResource Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.Properties.Resources.resources" />
     <EmbeddedResource Include="Be.Windows.Forms.HexBox\Properties\Resources.resx" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\FastColoredTextBox.resx">
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\FastColoredTextBox.resx">
       <DependentUpon>FastColoredTextBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\FindForm.resx">
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\FindForm.resx">
       <DependentUpon>FindForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\GoToForm.resx">
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\GoToForm.resx">
       <DependentUpon>GoToForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\HotkeysEditorForm.resx">
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\HotkeysEditorForm.resx">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FastColoredTextBox.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FindForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.GoToForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.HotkeysEditorForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.ReplaceForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources" />
-    <EmbeddedResource Include="FastColoredTextBox\FastColoredTextBox\ReplaceForm.resx">
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FastColoredTextBox.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FindForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.GoToForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.HotkeysEditorForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.ReplaceForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources" />
+    <EmbeddedResource Include="FCTB\FastColoredTextBox\ReplaceForm.resx">
       <DependentUpon>ReplaceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
@@ -837,28 +485,29 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="AsmResolver\AsmResolver\App.config" />
-    <None Include="AsmResolver\AsmResolver\Properties\Settings.settings" />
-    <None Include="AsmResolver\TUP.AsmResolver\ClassDiagram1.cd" />
-    <None Include="AsmResolver\TUP.AsmResolver\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="AsmResolver\TUP.AsmResolver\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="AsmResolver\TUP.AsmResolver\obj\Release\TUP.AsmResolver.csprojResolveAssemblyReference.cache" />
-    <None Include="AsmResolver\TUP.AsmResolver\PE\Writers\Plan .NET Rebuilder" />
+    <None Include="AsmRes\AsmResolver\App.config" />
+    <None Include="AsmRes\AsmResolver\Properties\Settings.settings" />
+    <None Include="AsmRes\TestConsoleApplication\TestConsoleApplication.vcxproj" />
+    <None Include="AsmRes\TestConsoleApplication\TestConsoleApplication.vcxproj.filters" />
+    <None Include="AsmRes\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll.lastcodeanalysissucceeded" />
+    <None Include="AsmRes\TUP.AsmResolver\ClassDiagram1.cd" />
+    <None Include="AsmRes\TUP.AsmResolver\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="AsmRes\TUP.AsmResolver\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="AsmRes\TUP.AsmResolver\PE\Writers\Plan .NET Rebuilder" />
     <None Include="Be.Windows.Forms.HexBox\HexBox.snk" />
     <None Include="Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.csproj.GenerateResource.Cache" />
     <None Include="Be.Windows.Forms.HexBox\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.csproj.GenerateResource.Cache" />
     <None Include="Be.Windows.Forms.HexBox\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="cmm\STARTUP.H--" />
-    <None Include="FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll.lastcodeanalysissucceeded" />
-    <None Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.Cache" />
-    <None Include="FastColoredTextBox\FastColoredTextBox\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.Cache" />
-    <None Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojResolveAssemblyReference.cache" />
-    <None Include="FastColoredTextBox\FastColoredTextBox\SyntaxHighlighter.cs.old" />
-    <None Include="FastColoredTextBox\Help\FastColoredTextBox_Help.chm" />
-    <None Include="FastColoredTextBox\README.md" />
+    <None Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll.lastcodeanalysissucceeded" />
+    <None Include="FCTB\FastColoredTextBox\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.Cache" />
+    <None Include="FCTB\FastColoredTextBox\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.Cache" />
+    <None Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojResolveAssemblyReference.cache" />
+    <None Include="FCTB\FastColoredTextBox\SyntaxHighlighter.cs.old" />
+    <None Include="FCTB\Help\FastColoredTextBox_Help.chm" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -874,24 +523,32 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AsmResolver\AsmResolver\AsmResolver.csproj" />
-    <Content Include="AsmResolver\AsmResolver\Lib\Be.Windows.Forms.HexBox.dll" />
-    <Content Include="AsmResolver\TUP.AsmResolver\ASM\Notes.txt" />
-    <Content Include="AsmResolver\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.dll" />
-    <Content Include="AsmResolver\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.pdb" />
-    <Content Include="AsmResolver\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.xml" />
-    <Content Include="AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll" />
-    <Content Include="AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.pdb" />
-    <Content Include="AsmResolver\TUP.AsmResolver\bin\Release\TUP.AsmResolver.xml" />
-    <Content Include="AsmResolver\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.csproj.FileListAbsolute.txt" />
-    <Content Include="AsmResolver\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.dll" />
-    <Content Include="AsmResolver\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.pdb" />
-    <Content Include="AsmResolver\TUP.AsmResolver\obj\Release\TUP.AsmResolver.csproj.FileListAbsolute.txt" />
-    <Content Include="AsmResolver\TUP.AsmResolver\obj\Release\TUP.AsmResolver.dll" />
-    <Content Include="AsmResolver\TUP.AsmResolver\obj\Release\TUP.AsmResolver.pdb" />
-    <Content Include="AsmResolver\TUP.AsmResolver\PE\Writers\Notes.txt" />
-    <Content Include="AsmResolver\TUP.AsmResolver\TUP.AsmResolver.csproj" />
-    <Content Include="AsmResolver\TUP.AsmResolver\TUP.AsmResolver.xml" />
+    <Content Include="AsmRes\AsmResolver\AsmResolver.csproj" />
+    <Content Include="AsmRes\AsmResolver\Lib\Be.Windows.Forms.HexBox.dll" />
+    <Content Include="AsmRes\TestConsoleApplication\ReadMe.txt" />
+    <Content Include="AsmRes\TestConsoleApplication\stdafx.cpp" />
+    <Content Include="AsmRes\TestConsoleApplication\stdafx.h" />
+    <Content Include="AsmRes\TestConsoleApplication\targetver.h" />
+    <Content Include="AsmRes\TestConsoleApplication\TestConsoleApplication.cpp" />
+    <Content Include="AsmRes\TUP.AsmResolver.sln" />
+    <Content Include="AsmRes\TUP.AsmResolver\ASM\Notes.txt" />
+    <Content Include="AsmRes\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.dll" />
+    <Content Include="AsmRes\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.pdb" />
+    <Content Include="AsmRes\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.xml" />
+    <Content Include="AsmRes\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll" />
+    <Content Include="AsmRes\TUP.AsmResolver\bin\Release\TUP.AsmResolver.dll.CodeAnalysisLog.xml" />
+    <Content Include="AsmRes\TUP.AsmResolver\bin\Release\TUP.AsmResolver.pdb" />
+    <Content Include="AsmRes\TUP.AsmResolver\bin\Release\TUP.AsmResolver.xml" />
+    <Content Include="AsmRes\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.csproj.FileListAbsolute.txt" />
+    <Content Include="AsmRes\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.dll" />
+    <Content Include="AsmRes\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.pdb" />
+    <Content Include="AsmRes\TUP.AsmResolver\obj\Release\TUP.AsmResolver.csproj.FileListAbsolute.txt" />
+    <Content Include="AsmRes\TUP.AsmResolver\obj\Release\TUP.AsmResolver.dll" />
+    <Content Include="AsmRes\TUP.AsmResolver\obj\Release\TUP.AsmResolver.pdb" />
+    <Content Include="AsmRes\TUP.AsmResolver\PE\Writers\Notes.txt" />
+    <Content Include="AsmRes\TUP.AsmResolver\TUP.AsmResolver.csproj" />
+    <Content Include="AsmRes\TUP.AsmResolver\TUP.AsmResolver.csproj.user" />
+    <Content Include="AsmRes\TUP.AsmResolver\TUP.AsmResolver.xml" />
     <Content Include="Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj" />
     <Content Include="Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.xml" />
     <Content Include="Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll" />
@@ -905,29 +562,28 @@
     <Content Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.dll" />
     <Content Include="Be.Windows.Forms.HexBox\obj\Release\TempPE\Properties.Resources.Designer.cs.dll" />
     <Content Include="cmm\c--.exe" />
-    <Content Include="FastColoredTextBox\.gitignore" />
-    <Content Include="FastColoredTextBox\Binary\FastColoredTextBox.dll" />
-    <Content Include="FastColoredTextBox\Binary\FastColoredTextBox.xml" />
-    <Content Include="FastColoredTextBox\Binary\htmlDesc.xml" />
-    <Content Include="FastColoredTextBox\Binary\TabStrip.dll" />
-    <Content Include="FastColoredTextBox\Binary\Tester.exe" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox.sln" />
-    <Content Include="FastColoredTextBox\FastColoredTextBoxVS2008.sln" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll.CodeAnalysisLog.xml" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\FastColoredTextBox.csproj" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.FileListAbsolute.txt" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.FileListAbsolute.txt" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBox.dll" />
-    <Content Include="FastColoredTextBox\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb" />
-    <Content Include="FastColoredTextBox\license.txt" />
     <Content Include="favicon.ico" />
+    <Content Include="FCTB\Binary\FastColoredTextBox.dll" />
+    <Content Include="FCTB\Binary\FastColoredTextBox.xml" />
+    <Content Include="FCTB\Binary\htmlDesc.xml" />
+    <Content Include="FCTB\Binary\TabStrip.dll" />
+    <Content Include="FCTB\Binary\Tester.exe" />
+    <Content Include="FCTB\FastColoredTextBox.sln" />
+    <Content Include="FCTB\FastColoredTextBoxVS2008.sln" />
+    <Content Include="FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll" />
+    <Content Include="FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb" />
+    <Content Include="FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML" />
+    <Content Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll" />
+    <Content Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll.CodeAnalysisLog.xml" />
+    <Content Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb" />
+    <Content Include="FCTB\FastColoredTextBox\FastColoredTextBox.csproj" />
+    <Content Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.FileListAbsolute.txt" />
+    <Content Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll" />
+    <Content Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb" />
+    <Content Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.FileListAbsolute.txt" />
+    <Content Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.dll" />
+    <Content Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb" />
+    <Content Include="FCTB\license.txt" />
     <Content Include="mediana\dump.cpp" />
     <Content Include="mediana\mediana.cpp" />
     <Content Include="mediana\mediana.h" />
@@ -973,11 +629,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="AsmResolver\TUP.AsmResolver\obj\Debug\TempPE\" />
-    <Folder Include="AsmResolver\TUP.AsmResolver\obj\Release\TempPE\" />
-    <Folder Include="AsmResolver\TUP.AsmResolver\Properties\" />
-    <Folder Include="FastColoredTextBox\FastColoredTextBox\obj\Debug\TempPE\" />
-    <Folder Include="FastColoredTextBox\FastColoredTextBox\obj\Release\TempPE\" />
+    <Folder Include="AsmRes\TUP.AsmResolver\obj\Debug\TempPE\" />
+    <Folder Include="AsmRes\TUP.AsmResolver\obj\Release\TempPE\" />
+    <Folder Include="FCTB\FastColoredTextBox\obj\Debug\TempPE\" />
+    <Folder Include="FCTB\FastColoredTextBox\obj\Release\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

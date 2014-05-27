@@ -1,0 +1,5 @@
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.dll
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.pdb
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\bin\Debug\TUP.AsmResolver.xml
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.dll
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\AsmResolver\TUP.AsmResolver\obj\Debug\TUP.AsmResolver.pdb
