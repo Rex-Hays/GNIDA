@@ -4,3 +4,4 @@ C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.csproj.GenerateResource.Cache
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.dll
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.pdb
+C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.csprojResolveAssemblyReference.cache

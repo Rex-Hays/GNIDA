@@ -90,6 +90,7 @@ namespace GNIDA
             switch(inst.OpCode.OpCodeBytes[0])
             {
                 case 0x74: return "$JZ Loc_" + inst.Operand1.ToString(true);
+                case 0x75: return "$JNZ Loc_" + inst.Operand1.ToString(true);
                 case 0xA3://mov somevar, EAX
                     {
                         TVar Var1 = new TVar(((Offset)inst.Operand1.Value).Va, "", 4);
@@ -99,7 +100,6 @@ namespace GNIDA
                         };
                         return VarDict[((Offset)inst.Operand1.Value).Va].FName + " = EAX;";
                     }
-                case 0x75: return "$JNZ Loc_" + inst.Operand1.ToString(true);
                 case 0xEB: return "$JMP Loc_" + inst.Operand1.ToString(true);
                 case 0xE8:
                     {
@@ -107,7 +107,9 @@ namespace GNIDA
                         {
                             return AddProc((Offset)inst.Operand1.Value, ProcList, NewSubs);
                         }
-                    }break;
+                    } break;
+                case 0xE9://jmp;
+                    return "$JMP Loc_" + inst.Operand1.ToString(true);
                 case 0xFF:
                     {
                         if (inst.OpCode.OpCodeBytes[1] == 0x15)
@@ -143,11 +145,8 @@ namespace GNIDA
     }
     public class GNIDA
     {
-        public static Win32Assembly assembly;
-        public static x86Disassembler xMy()
-        {
-            return new x86Disassembler(assembly);
-        }
+        public Win32Assembly assembly;
+        public mediana MeDisasm;
         public BackgroundWorker bw = new BackgroundWorker();
         public MyDictionary FullProcList = new MyDictionary();
         public MyDictionary ToDisasmFuncList = new MyDictionary();
@@ -189,11 +188,11 @@ namespace GNIDA
             public string ToCmmString(Dictionary<ulong, TFunc> NewSubs)
             {
                 string tmp = "";
-                if (Label != "") tmp = "/*" + (Inst.Offset.Rva + assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
-                tmp += "/*" + (Inst.Offset.Rva + assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/  " + Inst.ToCmmString(Parent.FullProcList, Parent.VarDict, NewSubs);
+                if (Label != "") tmp = "/*" + (Inst.Offset.Rva + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
+                tmp += "/*" + (Inst.Offset.Rva + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/  " + Inst.ToCmmString(Parent.FullProcList, Parent.VarDict, NewSubs);
                 if (Comment != "") tmp += "// " + Comment;
                 tmp += "\n";
-                if (SubComment != "") tmp += "/*" + (Inst.Offset.Rva + assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ // " + SubComment + "\n";
+                if (SubComment != "") tmp += "/*" + (Inst.Offset.Rva + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ // " + SubComment + "\n";
                 return tmp;
             }
         }
@@ -206,12 +205,16 @@ namespace GNIDA
             for (uint i = 0; Tasks.Count > 0; i++)
             {
                 assembly.Disassembler.CurrentOffset = (uint)Tasks[0];
+                Console.WriteLine(((uint)Tasks[0]).ToString("X"));
                 Tasks.Remove(Tasks[0]);
                 Myx86Instruction instruction = (Myx86Instruction)assembly.Disassembler.DisassembleNextInstruction();
                 lst.Add(new Stroka(this, instruction));
+                Console.WriteLine(instruction.ToAsmString());
                 switch (instruction.OpCode.OpCodeBytes[0])
                 {
-                    case 0x74://Jxx
+                              //Jxx
+                    case 0x74://Jz
+                    case 0x75://Jnz
                         {
                             int val = instruction.OperandBytes[0] + (int)instruction.Offset.FileOffset + instruction.Size;
                             if (!LabelList.Contains(val))
@@ -229,6 +232,18 @@ namespace GNIDA
                         {
                             LabelList.Add(val1);
                             Tasks.Add((uint)val1);//Add jmp adress to disasm tasks
+                        }
+                        continue;// Don't disasm after it
+                    case 0xE9://jmp;
+                        int val2 = instruction.OperandBytes[0]
+                                    + instruction.OperandBytes[1] * 255
+                                    + instruction.OperandBytes[2] * 255 * 255
+                                    + instruction.OperandBytes[3] * 255 * 255 * 255
+                                    + (int)instruction.Offset.FileOffset + instruction.Size;
+                        if (!LabelList.Contains(val2))
+                        {
+                            LabelList.Add(val2);
+                            Tasks.Add((uint)val2);//Add jmp adress to disasm tasks
                         }
                         continue;// Don't disasm after it
                     case 0xFF:
@@ -260,6 +275,7 @@ namespace GNIDA
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);
             assembly.Disassembler = new CmmDisassembler(assembly);
+            MeDisasm = new mediana(assembly);
             int i = 0;
             foreach (Section sect in assembly.NTHeader.Sections)
             {

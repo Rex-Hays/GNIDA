@@ -80,7 +80,7 @@ namespace GNIDA
         public static readonly x86OpCode Xor_r32Ptr_r8 = new x86OpCode("XOR", new byte[] { 0x30, 0x0 }, 0, x86OperandType.Multiple32Or8Register, 1);
         public static readonly x86OpCode Xor_r32Ptr_r32 = new x86OpCode("XOR", new byte[] { 0x31, 0x0 }, 0, x86OperandType.Multiple32Register, 1);
         public static readonly x86OpCode Xor_r8_r32Ptr = new x86OpCode("XOR", new byte[] { 0x32, 0x0 }, 0, x86OperandType.Multiple32Or8Register | x86OperandType.OverrideOperandOrder, 1);
-        public static readonly x86OpCode Xor_r32_r32Ptr = new x86OpCode("XOR", new byte[] { 0x33, 0x0 }, 0, x86OperandType.Multiple32Register | x86OperandType.OverrideOperandOrder, 1);
+        public static readonly x86OpCode Xor_r32_r32Ptr = new x86OpCode("$XOR", new byte[] { 0x33, 0x0 }, 0, x86OperandType.Multiple32Register | x86OperandType.OverrideOperandOrder, 1);
         public static readonly x86OpCode Xor_Al_Byte = new x86OpCode("XOR AL,", new byte[] { 0x34 }, 1, x86OperandType.Byte);
         public static readonly x86OpCode Xor_Eax_Dword = new x86OpCode("XOR EAX,", new byte[] { 0x35 }, 4, x86OperandType.Dword);
 
@@ -119,13 +119,13 @@ namespace GNIDA
         public static readonly x86OpCode Dec_Edi = new x86OpCode("DEC EDI", new byte[] { 0x4F }, 0, x86OperandType.None);
 
         public static readonly x86OpCode Push_Eax = new x86OpCode("$PUSH EAX", new byte[] { 0x50 }, 0, x86OperandType.None);
-        public static readonly x86OpCode Push_Ecx = new x86OpCode("PUSH ECX", new byte[] { 0x51 }, 0, x86OperandType.None);
-        public static readonly x86OpCode Push_Edx = new x86OpCode("PUSH EDX", new byte[] { 0x52 }, 0, x86OperandType.None);
-        public static readonly x86OpCode Push_Ebx = new x86OpCode("PUSH EBX", new byte[] { 0x53 }, 0, x86OperandType.None);
-        public static readonly x86OpCode Push_Esp = new x86OpCode("PUSH ESP", new byte[] { 0x54 }, 0, x86OperandType.None);
-        public static readonly x86OpCode Push_Ebp = new x86OpCode("PUSH EBP", new byte[] { 0x55 }, 0, x86OperandType.None);
-        public static readonly x86OpCode Push_Esi = new x86OpCode("PUSH ESI", new byte[] { 0x56 }, 0, x86OperandType.None);
-        public static readonly x86OpCode Push_Edi = new x86OpCode("PUSH EDI", new byte[] { 0x57 }, 0, x86OperandType.None);
+        public static readonly x86OpCode Push_Ecx = new x86OpCode("$PUSH ECX", new byte[] { 0x51 }, 0, x86OperandType.None);
+        public static readonly x86OpCode Push_Edx = new x86OpCode("$PUSH EDX", new byte[] { 0x52 }, 0, x86OperandType.None);
+        public static readonly x86OpCode Push_Ebx = new x86OpCode("$PUSH EBX", new byte[] { 0x53 }, 0, x86OperandType.None);
+        public static readonly x86OpCode Push_Esp = new x86OpCode("$PUSH ESP", new byte[] { 0x54 }, 0, x86OperandType.None);
+        public static readonly x86OpCode Push_Ebp = new x86OpCode("$PUSH EBP", new byte[] { 0x55 }, 0, x86OperandType.None);
+        public static readonly x86OpCode Push_Esi = new x86OpCode("$PUSH ESI", new byte[] { 0x56 }, 0, x86OperandType.None);
+        public static readonly x86OpCode Push_Edi = new x86OpCode("$PUSH EDI", new byte[] { 0x57 }, 0, x86OperandType.None);
 
         public static readonly x86OpCode Pop_Eax = new x86OpCode("POP EAX", new byte[] { 0x58 }, 0, x86OperandType.None);
         public static readonly x86OpCode Pop_Ecx = new x86OpCode("POP ECX", new byte[] { 0x59 }, 0, x86OperandType.None);
@@ -214,20 +214,21 @@ namespace GNIDA
         public static readonly x86OpCode And_r32Or8_Byte = new x86OpCode("AND", new byte[] { 0x83, 0x0 }, 1, x86OperandType.Register32 | x86OperandType.Byte, 1);
         public static readonly x86OpCode Sub_r32Or8_Byte = new x86OpCode("SUB", new byte[] { 0x83, 0x0 }, 1, x86OperandType.Register32 | x86OperandType.Byte, 1);
         public static readonly x86OpCode Xor_r32Or8_Byte = new x86OpCode("XOR", new byte[] { 0x83, 0x0 }, 1, x86OperandType.Register32 | x86OperandType.Byte, 1);
-        public static readonly x86OpCode Cmp_r32Or8_Byte = new x86OpCode("CMP", new byte[] { 0x83, 0x0 }, 1, x86OperandType.Register32 | x86OperandType.Byte, 1);
+        public static readonly x86OpCode Cmp_r32Or8_Byte = new x86OpCode("$CMP", new byte[] { 0x83, 0x0 }, 1, x86OperandType.Register32 | x86OperandType.Byte, 1);
+        //public static readonly x86OpCode Cmp_BytePtr_Dword_Byte = new x86OpCode("$CMP", new byte[] { 0x83, 0x0 }, 4, x86OperandType.Dword | x86OperandType.Byte, 1);
 
 
         public static readonly x86OpCode Test_r32_r8 = new x86OpCode("TEST", new byte[] { 0x84, 0x0 }, 0, x86OperandType.Multiple32Or8Register, 1);
-        public static readonly x86OpCode Test_r32_r32 = new x86OpCode("TEST", new byte[] { 0x85, 0x0 }, 0, x86OperandType.Multiple32Register, 1);
+        public static readonly x86OpCode Test_r32_r32 = new x86OpCode("$TEST", new byte[] { 0x85, 0x0 }, 0, x86OperandType.Multiple32Register, 1);
 
         public static readonly x86OpCode TXchg_r32_r8 = new x86OpCode("XCHG", new byte[] { 0x86, 0x0 }, 0, x86OperandType.Multiple32Or8Register, 1);
         public static readonly x86OpCode TXchg_r32_r32 = new x86OpCode("XCHG", new byte[] { 0x87, 0x0 }, 0, x86OperandType.Multiple32Register, 1);
 
         public static readonly x86OpCode Mov_r32Or8 = new x86OpCode("MOV", new byte[] { 0x88, 0x0 }, 0, x86OperandType.Multiple32Or8Register, 1);
-        public static readonly x86OpCode Mov_r32Ptr_r32 = new x86OpCode("MOV", new byte[] { 0x89, 0x0 }, 0, x86OperandType.Multiple32Register, 1);
+        public static readonly x86OpCode Mov_r32Ptr_r32 = new x86OpCode("$MOV", new byte[] { 0x89, 0x0 }, 0, x86OperandType.Multiple32Register, 1);
 
         public static readonly x86OpCode Mov_r8_r32Or8Ptr = new x86OpCode("MOV", new byte[] { 0x8A, 0x0 }, 0, x86OperandType.Multiple32Register | x86OperandType.OverrideOperandOrder, 1);
-        public static readonly x86OpCode Mov_r32_r32Ptr = new x86OpCode("MOV", new byte[] { 0x8B, 0x0 }, 0, x86OperandType.Multiple32Register | x86OperandType.OverrideOperandOrder, 1);
+        public static readonly x86OpCode Mov_r32_r32Ptr = new x86OpCode("$MOV", new byte[] { 0x8B, 0x0 }, 0, x86OperandType.Multiple32Register | x86OperandType.OverrideOperandOrder, 1);
 
 
         /* 0x8C */
@@ -390,7 +391,7 @@ namespace GNIDA
         public static readonly x86OpCode Out_Byte_Eax = new x86OpCode("OUT %operand%,EAX", new byte[] { 0xE7 }, 1, x86OperandType.Byte);
 
         public static readonly x86OpCode Call = new x86OpCode("CALL", new byte[] { 0xE8 }, 4, x86OperandType.InstructionAddress);
-        public static readonly x86OpCode Jmp = new x86OpCode("JMP", new byte[] { 0xE9 }, 4, x86OperandType.InstructionAddress);
+        public static readonly x86OpCode Jmp = new x86OpCode("$JMP", new byte[] { 0xE9 }, 4, x86OperandType.InstructionAddress);
         public static readonly x86OpCode Jmp_Far = new x86OpCode("JMP FAR", new byte[] { 0xEA }, 6, x86OperandType.InstructionAddress);
         public static readonly x86OpCode Jmp_Short = new x86OpCode("JMP SHORT", new byte[] { 0xEB }, 1, x86OperandType.ShortInstructionAddress);
 

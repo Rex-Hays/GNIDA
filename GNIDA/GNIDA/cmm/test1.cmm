@@ -1,9 +1,33 @@
-#pragma option W32
+#pragma option W32C
 #include "windows.h--"
 #include "msvcrt.h--"
 
 void main(void)
 {
  EAX = 0x10203040;
+ if(ECX==3)goto _end;
+ for(EAX=0;EAX>100;EAX++)
+  {
+    EDX=ECX*10;
+    EBX=ECX+10;
+    ECX=EDX+EBX;
+    if(ECX==123)continue;
+    switch(EAX)
+      {
+       case 1:break;
+       case 2:
+       case 7:
+       case 22:
+       case 23:continue;
+      }
+    if(1==2)printf("Kewl");
+    nulsub();
+  }
+ nulsub();
+_end:
  printf("Test OK");
+}
+
+void nulsub(void)
+{
 }

@@ -7,6 +7,7 @@
 #pragma option W32
 #jumptomain NONE
 #include "Windows.h";
+#include "msvcrt.h--";
 dword dword_00401000;
 dword dword_00401004;
 /*00402000*/ void main(){
@@ -21,9 +22,8 @@ dword dword_00401004;
 /*0040201F*/  ExitProcess();
 };//main
 /*00402030*/ void Sub_00402030(){
-/*00402030*/  EAX = 0x10203040;
-/*00402035*/  $PUSH 0x00402044
-/*0040203A*/  printf();
-/*00402040*/  $ADD ESP, 0x04
-/*00402043*/  $RET 
+/*00402030*/  $PUSH 0x0040203F
+/*00402035*/  printf();
+/*0040203B*/  $ADD ESP, 0x04
+/*0040203E*/  $RET 
 };//Sub_00402030
