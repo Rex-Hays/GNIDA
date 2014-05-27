@@ -201,13 +201,14 @@ namespace GNIDA
             List<Stroka> lst = new List<Stroka>();
             List<ulong> Tasks = new List<ulong>();
             List<int> LabelList = new List<int>();
+            x86Instruction instruction;
             Tasks.Add(addr);
             for (uint i = 0; Tasks.Count > 0; i++)
             {
                 assembly.Disassembler.CurrentOffset = (uint)Tasks[0];
                 Console.WriteLine(((uint)Tasks[0]).ToString("X"));
                 Tasks.Remove(Tasks[0]);
-                Myx86Instruction instruction = (Myx86Instruction)assembly.Disassembler.DisassembleNextInstruction();
+                instruction = assembly.Disassembler.DisassembleNextInstruction();
                 lst.Add(new Stroka(this, instruction));
                 Console.WriteLine(instruction.ToAsmString());
                 switch (instruction.OpCode.OpCodeBytes[0])
@@ -272,9 +273,11 @@ namespace GNIDA
 
         public void LoadFile(string FName)
         {
+            mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
+            mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);
-            assembly.Disassembler = new CmmDisassembler(assembly);
+            //assembly.Disassembler = new CmmDisassembler(assembly);
             MeDisasm = new mediana(assembly);
             int i = 0;
             foreach (Section sect in assembly.NTHeader.Sections)
@@ -284,6 +287,9 @@ namespace GNIDA
             }
 
             TFunc fnc = new TFunc((uint)assembly.NTHeader.OptionalHeader.ImageBase + assembly.NTHeader.OptionalHeader.Entrypoint.Rva, 0, 0, "main");
+            
+            MeDisasm.medi_disassemble(fnc.Addr, instr1, param);
+
             FullProcList.AddFunc(fnc);
             foreach (ExportMethod func in assembly.LibraryExports)
             {

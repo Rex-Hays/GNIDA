@@ -96,588 +96,588 @@ namespace GNIDA
 * Instructions' IDs.
 ********************
 */
-static uint ID_NULL       = 0x0;
-static uint ID_SWITCH     = 0x1;
-static uint ID_0F         = 0x2;
-static uint ID_66         = 0x3;
-static uint ID_67         = 0x4;
-static uint ID_AAA        = 0x5;
-static uint ID_AAD        = 0x6;
-static uint ID_AAM        = 0x7;
-static uint ID_AAS        = 0x8;
-static uint ID_ADC        = 0x9;
-static uint ID_ADD        = 0xA;
-static uint ID_ADDPD      = 0xB;
-static uint ID_ADDPS      = 0xC;
-static uint ID_ADDSD      = 0xD;
-static uint ID_ADDSS      = 0xE;
-static uint ID_ADDSUBPD   = 0xF;
-static uint ID_ADDSUBPS   = 0x10;
-static uint ID_ALTER      = 0x11;
-static uint ID_AND        = 0x12;
-static uint ID_ANDNPD     = 0x13;
-static uint ID_ANDNPS     = 0x14;
-static uint ID_ANDPD      = 0x15;
-static uint ID_ANDPS      = 0x16;
-static uint ID_ARPL       = 0x17;
-static uint ID_BLENDPD    = 0x18;
-static uint ID_BLENDPS    = 0x19;
-static uint ID_BLENDVPD   = 0x1A;
-static uint ID_BLENDVPS   = 0x1B;
-static uint ID_BOUND      = 0x1C;
-static uint ID_BSF        = 0x1D;
-static uint ID_BSR        = 0x1E;
-static uint ID_BSWAP      = 0x1F;
-static uint ID_BT         = 0x20;
-static uint ID_BTC        = 0x21;
-static uint ID_BTR        = 0x22;
-static uint ID_BTS        = 0x23;
-static uint ID_CALL       = 0x24;
-static uint ID_CALLF      = 0x25;
-static uint ID_CBW        = 0x26;
-static uint ID_CLC        = 0x27;
-static uint ID_CLD        = 0x28;
-static uint ID_CLFLUSH    = 0x29;
-static uint ID_CLI        = 0x2A;
-static uint ID_CLTS       = 0x2B;
-static uint ID_CMC        = 0x2C;
-static uint ID_CMOVA      = 0x2D;
-static uint ID_CMOVAE     = 0x2E;
-static uint ID_CMOVB      = 0x2F;
-static uint ID_CMOVBE     = 0x30;
-static uint ID_CMOVG      = 0x31;
-static uint ID_CMOVGE     = 0x32;
-static uint ID_CMOVL      = 0x33;
-static uint ID_CMOVLE     = 0x34;
-static uint ID_CMOVNO     = 0x35;
-static uint ID_CMOVNP     = 0x36;
-static uint ID_CMOVNS     = 0x37;
-static uint ID_CMOVNZ     = 0x38;
-static uint ID_CMOVO      = 0x39;
-static uint ID_CMOVP      = 0x3A;
-static uint ID_CMOVS      = 0x3B;
-static uint ID_CMOVZ      = 0x3C;
-static uint ID_CMP        = 0x3D;
-static uint ID_CMPPD      = 0x3E;
-static uint ID_CMPPS      = 0x3F;
-static uint ID_CMPS       = 0x40;
-static uint ID_CMPSD      = 0x41;
-static uint ID_CMPSS      = 0x42;
-static uint ID_CMPXCHG    = 0x43;
-static uint ID_CMPXCHG8B  = 0x44;
-static uint ID_COMISD     = 0x45;
-static uint ID_COMISS     = 0x46;
-static uint ID_CPUID      = 0x47;
-static uint ID_CRC32      = 0x48;
-static uint ID_CS         = 0x49;
-static uint ID_CVTDQ2PD   = 0x4A;
-static uint ID_CVTDQ2PS   = 0x4B;
-static uint ID_CVTPD2DQ   = 0x4C;
-static uint ID_CVTPD2PI   = 0x4D;
-static uint ID_CVTPD2PS   = 0x4E;
-static uint ID_CVTPI2PD   = 0x4F;
-static uint ID_CVTPI2PS   = 0x50;
-static uint ID_CVTPS2DQ   = 0x51;
-static uint ID_CVTPS2PD   = 0x52;
-static uint ID_CVTPS2PI   = 0x53;
-static uint ID_CVTSD2SI   = 0x54;
-static uint ID_CVTSD2SS   = 0x55;
-static uint ID_CVTSI2SD   = 0x56;
-static uint ID_CVTSI2SS   = 0x57;
-static uint ID_CVTSS2SD   = 0x58;
-static uint ID_CVTSS2SI   = 0x59;
-static uint ID_CVTTPD2DQ  = 0x5A;
-static uint ID_CVTTPD2PI  = 0x5B;
-static uint ID_CVTTPS2DQ  = 0x5C;
-static uint ID_CVTTPS2PI  = 0x5D;
-static uint ID_CVTTSD2SI  = 0x5E;
-static uint ID_CVTTSS2SI  = 0x5F;
-static uint ID_CWD        = 0x60;
-static uint ID_DAA        = 0x61;
-static uint ID_DAS        = 0x62;
-static uint ID_DEC        = 0x63;
-static uint ID_DIV        = 0x64;
-static uint ID_DIVPD      = 0x65;
-static uint ID_DIVPS      = 0x66;
-static uint ID_DIVSD      = 0x67;
-static uint ID_DIVSS      = 0x68;
-static uint ID_DPPD       = 0x69;
-static uint ID_DPPS       = 0x6A;
-static uint ID_DS         = 0x6B;
-static uint ID_EMMS       = 0x6C;
-static uint ID_ENTER      = 0x6D;
-static uint ID_ES         = 0x6E;
-static uint ID_EXTRACTPS  = 0x6F;
-static uint ID_F2XM1      = 0x70;
-static uint ID_FABS       = 0x71;
-static uint ID_FADD       = 0x72;
-static uint ID_FADDP      = 0x73;
-static uint ID_FBLD       = 0x74;
-static uint ID_FBSTP      = 0x75;
-static uint ID_FCHS       = 0x76;
-static uint ID_FCMOVA     = 0x77;
-static uint ID_FCMOVB     = 0x78;
-static uint ID_FCMOVBE    = 0x79;
-static uint ID_FCMOVNB    = 0x7A;
-static uint ID_FCMOVNU    = 0x7B;
-static uint ID_FCMOVNZ    = 0x7C;
-static uint ID_FCMOVU     = 0x7D;
-static uint ID_FCMOVZ     = 0x7E;
-static uint ID_FCOM       = 0x7F;
-static uint ID_FCOM2      = 0x80;
-static uint ID_FCOMI      = 0x81;
-static uint ID_FCOMIP     = 0x82;
-static uint ID_FCOMP      = 0x83;
-static uint ID_FCOMP3     = 0x84;
-static uint ID_FCOMP5     = 0x85;
-static uint ID_FCOMPP     = 0x86;
-static uint ID_FCOS       = 0x87;
-static uint ID_FDECSTP    = 0x88;
-static uint ID_FDIV       = 0x89;
-static uint ID_FDIVP      = 0x8A;
-static uint ID_FDIVR      = 0x8B;
-static uint ID_FDIVRP     = 0x8C;
-static uint ID_FFREE      = 0x8D;
-static uint ID_FFREEP     = 0x8E;
-static uint ID_FIADD      = 0x8F;
-static uint ID_FICOM      = 0x90;
-static uint ID_FICOMP     = 0x91;
-static uint ID_FIDIV      = 0x92;
-static uint ID_FIDIVR     = 0x93;
-static uint ID_FILD       = 0x94;
-static uint ID_FIMUL      = 0x95;
-static uint ID_FINCSTP    = 0x96;
-static uint ID_FIST       = 0x97;
-static uint ID_FISTP      = 0x98;
-static uint ID_FISTTP     = 0x99;
-static uint ID_FISUB      = 0x9A;
-static uint ID_FISUBR     = 0x9B;
-static uint ID_FLD        = 0x9C;
-static uint ID_FLD1       = 0x9D;
-static uint ID_FLD2LE     = 0x9E;
-static uint ID_FLD2LT     = 0x9F;
-static uint ID_FLDCW      = 0xA0;
-static uint ID_FLDENV     = 0xA1;
-static uint ID_FLDLG2     = 0xA2;
-static uint ID_FLDLN2     = 0xA3;
-static uint ID_FLDPI      = 0xA4;
-static uint ID_FLDZ       = 0xA5;
-static uint ID_FMUL       = 0xA6;
-static uint ID_FMULP      = 0xA7;
-static uint ID_FNCLEX     = 0xA8;
-static uint ID_FNDISI     = 0xA9;
-static uint ID_FNENI      = 0xAA;
-static uint ID_FNINIT     = 0xAB;
-static uint ID_FNOP       = 0xAC;
-static uint ID_FNSAVE     = 0xAD;
-static uint ID_FNSETPM    = 0xAE;
-static uint ID_FNSTCW     = 0xAF;
-static uint ID_FNSTENV    = 0xB0;
-static uint ID_FNSTSW     = 0xB1;
-static uint ID_FPATAN     = 0xB2;
-static uint ID_FPREM      = 0xB3;
-static uint ID_FPREM1     = 0xB4;
-static uint ID_FPTAN      = 0xB5;
-static uint ID_FRNDINT    = 0xB6;
-static uint ID_FRSTOR     = 0xB7;
-static uint ID_FS         = 0xB8;
-static uint ID_FSCALE     = 0xB9;
-static uint ID_FSIN       = 0xBA;
-static uint ID_FSINCOS    = 0xBB;
-static uint ID_FSQRT      = 0xBC;
-static uint ID_FST        = 0xBD;
-static uint ID_FSTP       = 0xBE;
-static uint ID_FSTP1      = 0xBF;
-static uint ID_FSTP8      = 0xC0;
-static uint ID_FSTP9      = 0xC1;
-static uint ID_FSUB       = 0xC2;
-static uint ID_FSUBP      = 0xC3;
-static uint ID_FSUBR      = 0xC4;
-static uint ID_FSUBRP     = 0xC5;
-static uint ID_FTST       = 0xC6;
-static uint ID_FUCOM      = 0xC7;
-static uint ID_FUCOMI     = 0xC8;
-static uint ID_FUCOMIP    = 0xC9;
-static uint ID_FUCOMP     = 0xCA;
-static uint ID_FUCOMPP    = 0xCB;
-static uint ID_FWAIT      = 0xCC;
-static uint ID_FXAM       = 0xCD;
-static uint ID_FXCH       = 0xCE;
-static uint ID_FXCH4      = 0xCF;
-static uint ID_FXCH7      = 0xD0;
-static uint ID_FXRSTOR    = 0xD1;
-static uint ID_FXSAVE     = 0xD2;
-static uint ID_FXTRACT    = 0xD3;
-static uint ID_FYL2X      = 0xD4;
-static uint ID_FYL2XP1    = 0xD5;
-static uint ID_GETSEC     = 0xD6;
-static uint ID_GS         = 0xD7;
-static uint ID_HADDPD     = 0xD8;
-static uint ID_HADDPS     = 0xD9;
-static uint ID_HINTNOP    = 0xDA;
-static uint ID_HLT        = 0xDB;
-static uint ID_HSUBPD     = 0xDC;
-static uint ID_HSUBPS     = 0xDD;
-static uint ID_ICEBP      = 0xDE;
-static uint ID_IDIV       = 0xDF;
-static uint ID_IMUL       = 0xE0;
-static uint ID_IN         = 0xE1;
-static uint ID_INC        = 0xE2;
-static uint ID_INS        = 0xE3;
-static uint ID_INSERTPS   = 0xE4;
-static uint ID_INT        = 0xE5;
-static uint ID_INTO       = 0xE6;
-static uint ID_INVD       = 0xE7;
-static uint ID_INVEPT     = 0xE8;
-static uint ID_INVLPG     = 0xE9;
-static uint ID_INVVPID    = 0xEA;
-static uint ID_IRET       = 0xEB;
-static uint ID_JA         = 0xEC;
-static uint ID_JAE        = 0xED;
-static uint ID_JB         = 0xEE;
-static uint ID_JBE        = 0xEF;
-static uint ID_JCXZ       = 0xF0;
-static uint ID_JG         = 0xF1;
-static uint ID_JGE        = 0xF2;
-static uint ID_JL         = 0xF3;
-static uint ID_JLE        = 0xF4;
-static uint ID_JMP        = 0xF5;
-static uint ID_JMPE       = 0xF6;
-static uint ID_JMPF       = 0xF7;
-static uint ID_JNO        = 0xF8;
-static uint ID_JNP        = 0xF9;
-static uint ID_JNS        = 0xFA;
-static uint ID_JNZ        = 0xFB;
-static uint ID_JO         = 0xFC;
-static uint ID_JP         = 0xFD;
-static uint ID_JS         = 0xFE;
-static uint ID_JZ         = 0xFF;
-static uint ID_LAHF       = 0x100;
-static uint ID_LAR        = 0x101;
-static uint ID_LDDQU      = 0x102;
-static uint ID_LDMXCSR    = 0x103;
-static uint ID_LDS        = 0x104;
-static uint ID_LEA        = 0x105;
-static uint ID_LEAVE      = 0x106;
-static uint ID_LES        = 0x107;
-static uint ID_LFENCE     = 0x108;
-static uint ID_LFS        = 0x109;
-static uint ID_LGDT       = 0x10A;
-static uint ID_LGS        = 0x10B;
-static uint ID_LIDT       = 0x10C;
-static uint ID_LLDT       = 0x10D;
-static uint ID_LMSW       = 0x10E;
-static uint ID_LOADALL    = 0x10F;
-static uint ID_LOCK       = 0x110;
-static uint ID_LODS       = 0x111;
-static uint ID_LOOP       = 0x112;
-static uint ID_LOOPNZ     = 0x113;
-static uint ID_LOOPZ      = 0x114;
-static uint ID_LSL        = 0x115;
-static uint ID_LSS        = 0x116;
-static uint ID_LTR        = 0x117;
-static uint ID_MASKMOVDQU = 0x118;
-static uint ID_MASKMOVQ   = 0x119;
-static uint ID_MAXPD      = 0x11A;
-static uint ID_MAXPS      = 0x11B;
-static uint ID_MAXSD      = 0x11C;
-static uint ID_MAXSS      = 0x11D;
-static uint ID_MFENCE     = 0x11E;
-static uint ID_MINPD      = 0x11F;
-static uint ID_MINPS      = 0x120;
-static uint ID_MINSD      = 0x121;
-static uint ID_MINSS      = 0x122;
-static uint ID_MONITOR    = 0x123;
-static uint ID_MOV        = 0x124;
-static uint ID_MOVAPD     = 0x125;
-static uint ID_MOVAPS     = 0x126;
-static uint ID_MOVBE      = 0x127;
-static uint ID_MOVD       = 0x128;
-static uint ID_MOVDDUP    = 0x129;
-static uint ID_MOVDQ2Q    = 0x12A;
-static uint ID_MOVDQA     = 0x12B;
-static uint ID_MOVDQU     = 0x12C;
-static uint ID_MOVHLPS    = 0x12D;
-static uint ID_MOVHPD     = 0x12E;
-static uint ID_MOVHPS     = 0x12F;
-static uint ID_MOVLPD     = 0x130;
-static uint ID_MOVLPS     = 0x131;
-static uint ID_MOVMSKPD   = 0x132;
-static uint ID_MOVMSKPS   = 0x133;
-static uint ID_MOVNTDQ    = 0x134;
-static uint ID_MOVNTDQA   = 0x135;
-static uint ID_MOVNTI     = 0x136;
-static uint ID_MOVNTPD    = 0x137;
-static uint ID_MOVNTPS    = 0x138;
-static uint ID_MOVNTQ     = 0x139;
-static uint ID_MOVQ       = 0x13A;
-static uint ID_MOVQ2DQ    = 0x13B;
-static uint ID_MOVS       = 0x13C;
-static uint ID_MOVSD      = 0x13D;
-static uint ID_MOVSHDUP   = 0x13E;
-static uint ID_MOVSLDUP   = 0x13F;
-static uint ID_MOVSS      = 0x140;
-static uint ID_MOVSX      = 0x141;
-static uint ID_MOVSXD     = 0x142;
-static uint ID_MOVUPD     = 0x143;
-static uint ID_MOVUPS     = 0x144;
-static uint ID_MOVZX      = 0x145;
-static uint ID_MPSADBW    = 0x146;
-static uint ID_MUL        = 0x147;
-static uint ID_MULPD      = 0x148;
-static uint ID_MULPS      = 0x149;
-static uint ID_MULSD      = 0x14A;
-static uint ID_MULSS      = 0x14B;
-static uint ID_MWAIT      = 0x14C;
-static uint ID_NEG        = 0x14D;
-static uint ID_NOP        = 0x14E;
-static uint ID_NOT        = 0x14F;
-static uint ID_OR         = 0x150;
-static uint ID_ORPD       = 0x151;
-static uint ID_ORPS       = 0x152;
-static uint ID_OUT        = 0x153;
-static uint ID_OUTS       = 0x154;
-static uint ID_PABSB      = 0x155;
-static uint ID_PABSD      = 0x156;
-static uint ID_PABSW      = 0x157;
-static uint ID_PACKSSDW   = 0x158;
-static uint ID_PACKSSWB   = 0x159;
-static uint ID_PACKUSDW   = 0x15A;
-static uint ID_PACKUSWB   = 0x15B;
-static uint ID_PADDB      = 0x15C;
-static uint ID_PADDD      = 0x15D;
-static uint ID_PADDQ      = 0x15E;
-static uint ID_PADDSB     = 0x15F;
-static uint ID_PADDSW     = 0x160;
-static uint ID_PADDUSB    = 0x161;
-static uint ID_PADDUSW    = 0x162;
-static uint ID_PADDW      = 0x163;
-static uint ID_PALIGNR    = 0x164;
-static uint ID_PAND       = 0x165;
-static uint ID_PANDN      = 0x166;
-static uint ID_PAUSE      = 0x167;
-static uint ID_PAVGB      = 0x168;
-static uint ID_PAVGW      = 0x169;
-static uint ID_PBLENDVB   = 0x16A;
-static uint ID_PBLENDW    = 0x16B;
-static uint ID_PCMPEQB    = 0x16C;
-static uint ID_PCMPEQD    = 0x16D;
-static uint ID_PCMPEQQ    = 0x16E;
-static uint ID_PCMPEQW    = 0x16F;
-static uint ID_PCMPESTRI  = 0x170;
-static uint ID_PCMPESTRM  = 0x171;
-static uint ID_PCMPGTB    = 0x172;
-static uint ID_PCMPGTD    = 0x173;
-static uint ID_PCMPGTQ    = 0x174;
-static uint ID_PCMPGTW    = 0x175;
-static uint ID_PCMPISTRI  = 0x176;
-static uint ID_PCMPISTRM  = 0x177;
-static uint ID_PEXTRB     = 0x178;
-static uint ID_PEXTRQ     = 0x179;
-static uint ID_PEXTRW     = 0x17A;
-static uint ID_PHADDD     = 0x17B;
-static uint ID_PHADDSW    = 0x17C;
-static uint ID_PHADDW     = 0x17D;
-static uint ID_PHMINPOSUW = 0x17E;
-static uint ID_PHSUBD     = 0x17F;
-static uint ID_PHSUBSW    = 0x180;
-static uint ID_PHSUBW     = 0x181;
-static uint ID_PINSRB     = 0x182;
-static uint ID_PINSRQ     = 0x183;
-static uint ID_PINSRW     = 0x184;
-static uint ID_PMADDUBSW  = 0x185;
-static uint ID_PMADDWD    = 0x186;
-static uint ID_PMAXSB     = 0x187;
-static uint ID_PMAXSD     = 0x188;
-static uint ID_PMAXSW     = 0x189;
-static uint ID_PMAXUB     = 0x18A;
-static uint ID_PMAXUD     = 0x18B;
-static uint ID_PMAXUW     = 0x18C;
-static uint ID_PMINSB     = 0x18D;
-static uint ID_PMINSD     = 0x18E;
-static uint ID_PMINSW     = 0x18F;
-static uint ID_PMINUB     = 0x190;
-static uint ID_PMINUD     = 0x191;
-static uint ID_PMINUW     = 0x192;
-static uint ID_PMOVMSKB   = 0x193;
-static uint ID_PMOVSXBD   = 0x194;
-static uint ID_PMOVSXBQ   = 0x195;
-static uint ID_PMOVSXBW   = 0x196;
-static uint ID_PMOVSXDQ   = 0x197;
-static uint ID_PMOVSXWD   = 0x198;
-static uint ID_PMOVSXWQ   = 0x199;
-static uint ID_PMOVZXBD   = 0x19A;
-static uint ID_PMOVZXBQ   = 0x19B;
-static uint ID_PMOVZXBW   = 0x19C;
-static uint ID_PMOVZXDQ   = 0x19D;
-static uint ID_PMOVZXWD   = 0x19E;
-static uint ID_PMOVZXWQ   = 0x19F;
-static uint ID_PMULDQ     = 0x1A0;
-static uint ID_PMULHRSW   = 0x1A1;
-static uint ID_PMULHUW    = 0x1A2;
-static uint ID_PMULHW     = 0x1A3;
-static uint ID_PMULLD     = 0x1A4;
-static uint ID_PMULLW     = 0x1A5;
-static uint ID_PMULUDQ    = 0x1A6;
-static uint ID_POP        = 0x1A7;
-static uint ID_POPA       = 0x1A8;
-static uint ID_POPCNT     = 0x1A9;
-static uint ID_POPF       = 0x1AA;
-static uint ID_POR        = 0x1AB;
-static uint ID_PREFETCHNTA= 0x1AC;
-static uint ID_PREFETCHT0 = 0x1AD;
-static uint ID_PREFETCHT1 = 0x1AE;
-static uint ID_PREFETCHT2 = 0x1AF;
-static uint ID_PSADBW     = 0x1B0;
-static uint ID_PSHUFB     = 0x1B1;
-static uint ID_PSHUFD     = 0x1B2;
-static uint ID_PSHUFHW    = 0x1B3;
-static uint ID_PSHUFLW    = 0x1B4;
-static uint ID_PSHUFW     = 0x1B5;
-static uint ID_PSIGNB     = 0x1B6;
-static uint ID_PSIGND     = 0x1B7;
-static uint ID_PSIGNW     = 0x1B8;
-static uint ID_PSLLD      = 0x1B9;
-static uint ID_PSLLDQ     = 0x1BA;
-static uint ID_PSLLQ      = 0x1BB;
-static uint ID_PSLLW      = 0x1BC;
-static uint ID_PSRAD      = 0x1BD;
-static uint ID_PSRAW      = 0x1BE;
-static uint ID_PSRLD      = 0x1BF;
-static uint ID_PSRLDQ     = 0x1C0;
-static uint ID_PSRLQ      = 0x1C1;
-static uint ID_PSRLW      = 0x1C2;
-static uint ID_PSUBB      = 0x1C3;
-static uint ID_PSUBD      = 0x1C4;
-static uint ID_PSUBQ      = 0x1C5;
-static uint ID_PSUBSB     = 0x1C6;
-static uint ID_PSUBSW     = 0x1C7;
-static uint ID_PSUBUSB    = 0x1C8;
-static uint ID_PSUBUSW    = 0x1C9;
-static uint ID_PSUBW      = 0x1CA;
-static uint ID_PTEST      = 0x1CB;
-static uint ID_PUNPCKHBD  = 0x1CC;
-static uint ID_PUNPCKHBDQ = 0x1CD;
-static uint ID_PUNPCKHBW  = 0x1CE;
-static uint ID_PUNPCKHDQ  = 0x1CF;
-static uint ID_PUNPCKHQDQ = 0x1D0;
-static uint ID_PUNPCKHWD  = 0x1D1;
-static uint ID_PUNPCKLBW  = 0x1D2;
-static uint ID_PUNPCKLDQ  = 0x1D3;
-static uint ID_PUNPCKLQDQ = 0x1D4;
-static uint ID_PUNPCKLWD  = 0x1D5;
-static uint ID_PUSH       = 0x1D6;
-static uint ID_PUSHA      = 0x1D7;
-static uint ID_PUSHF      = 0x1D8;
-static uint ID_PXOR       = 0x1D9;
-static uint ID_RCL        = 0x1DA;
-static uint ID_RCPPS      = 0x1DB;
-static uint ID_RCPSS      = 0x1DC;
-static uint ID_RCR        = 0x1DD;
-static uint ID_RDMSR      = 0x1DE;
-static uint ID_RDPMC      = 0x1DF;
-static uint ID_RDTSC      = 0x1E0;
-static uint ID_RDTSCP     = 0x1E1;
-static uint ID_REPNZ      = 0x1E2;
-static uint ID_REPZ       = 0x1E3;
-static uint ID_RETF       = 0x1E4;
-static uint ID_RETN       = 0x1E5;
-static uint ID_ROL        = 0x1E6;
-static uint ID_ROR        = 0x1E7;
-static uint ID_ROUNDPD    = 0x1E8;
-static uint ID_ROUNDPS    = 0x1E9;
-static uint ID_ROUNDSD    = 0x1EA;
-static uint ID_ROUNDSS    = 0x1EB;
-static uint ID_RSM        = 0x1EC;
-static uint ID_RSQRTPS    = 0x1ED;
-static uint ID_RSQRTSS    = 0x1EE;
-static uint ID_SAHF       = 0x1EF;
-static uint ID_SAL        = 0x1F0;
-static uint ID_SAR        = 0x1F1;
-static uint ID_SBB        = 0x1F2;
-static uint ID_SCAS       = 0x1F3;
-static uint ID_SETA       = 0x1F4;
-static uint ID_SETAE      = 0x1F5;
-static uint ID_SETALC     = 0x1F6;
-static uint ID_SETB       = 0x1F7;
-static uint ID_SETBE      = 0x1F8;
-static uint ID_SETG       = 0x1F9;
-static uint ID_SETGE      = 0x1FA;
-static uint ID_SETL       = 0x1FB;
-static uint ID_SETLE      = 0x1FC;
-static uint ID_SETNO      = 0x1FD;
-static uint ID_SETNP      = 0x1FE;
-static uint ID_SETNS      = 0x1FF;
-static uint ID_SETNZ      = 0x200;
-static uint ID_SETO       = 0x201;
-static uint ID_SETP       = 0x202;
-static uint ID_SETS       = 0x203;
-static uint ID_SETZ       = 0x204;
-static uint ID_SFENCE     = 0x205;
-static uint ID_SGDT       = 0x206;
-static uint ID_SHL        = 0x207;
-static uint ID_SHLD       = 0x208;
-static uint ID_SHR        = 0x209;
-static uint ID_SHRD       = 0x20A;
-static uint ID_SHUFPD     = 0x20B;
-static uint ID_SHUFPS     = 0x20C;
-static uint ID_SIDT       = 0x20D;
-static uint ID_SLDT       = 0x20E;
-static uint ID_SMSW       = 0x20F;
-static uint ID_SQRTPD     = 0x210;
-static uint ID_SQRTPS     = 0x211;
-static uint ID_SQRTSD     = 0x212;
-static uint ID_SQRTSS     = 0x213;
-static uint ID_SS         = 0x214;
-static uint ID_STC        = 0x215;
-static uint ID_STD        = 0x216;
-static uint ID_STI        = 0x217;
-static uint ID_STMXCSR    = 0x218;
-static uint ID_STOS       = 0x219;
-static uint ID_STR        = 0x21A;
-static uint ID_SUB        = 0x21B;
-static uint ID_SUBPD      = 0x21C;
-static uint ID_SUBPS      = 0x21D;
-static uint ID_SUBSD      = 0x21E;
-static uint ID_SUBSS      = 0x21F;
-static uint ID_SWAPGS     = 0x220;
-static uint ID_SYSCALL    = 0x221;
-static uint ID_SYSENTER   = 0x222;
-static uint ID_SYSEXIT    = 0x223;
-static uint ID_SYSRET     = 0x224;
-static uint ID_TEST       = 0x225;
-static uint ID_UCOMISD    = 0x226;
-static uint ID_UCOMISS    = 0x227;
-static uint ID_UD         = 0x228;
-static uint ID_UD2        = 0x229;
-static uint ID_UNPCKHPD   = 0x22A;
-static uint ID_UNPCKHPS   = 0x22B;
-static uint ID_UNPCKLPD   = 0x22C;
-static uint ID_UNPCKLPS   = 0x22D;
-static uint ID_VERR       = 0x22E;
-static uint ID_VERW       = 0x22F;
-static uint ID_VMCALL     = 0x230;
-static uint ID_VMCLEAR    = 0x231;
-static uint ID_VMLAUNCH   = 0x232;
-static uint ID_VMPTRLD    = 0x233;
-static uint ID_VMPTRST    = 0x234;
-static uint ID_VMREAD     = 0x235;
-static uint ID_VMRESUME   = 0x236;
-static uint ID_VMWRITE    = 0x237;
-static uint ID_VMXOFF     = 0x238;
-static uint ID_VMXON      = 0x239;
-static uint ID_WBINVD     = 0x23A;
-static uint ID_WRMSR      = 0x23B;
-static uint ID_XADD       = 0x23C;
-static uint ID_XCHG       = 0x23D;
-static uint ID_XGETBV     = 0x23E;
-static uint ID_XLAT       = 0x23F;
-static uint ID_XOR        = 0x240;
-static uint ID_XORPD      = 0x241;
-static uint ID_XORPS      = 0x242;
-static uint ID_XRSTOR     = 0x243;
-static uint ID_XSAVE      = 0x244;
-static uint ID_XSETBV     = 0x245;
+static ushort ID_NULL       = 0x0;
+static ushort ID_SWITCH     = 0x1;
+static ushort ID_0F         = 0x2;
+static ushort ID_66         = 0x3;
+static ushort ID_67         = 0x4;
+static ushort ID_AAA        = 0x5;
+static ushort ID_AAD        = 0x6;
+static ushort ID_AAM        = 0x7;
+static ushort ID_AAS        = 0x8;
+static ushort ID_ADC        = 0x9;
+static ushort ID_ADD        = 0xA;
+static ushort ID_ADDPD      = 0xB;
+static ushort ID_ADDPS      = 0xC;
+static ushort ID_ADDSD      = 0xD;
+static ushort ID_ADDSS      = 0xE;
+static ushort ID_ADDSUBPD   = 0xF;
+static ushort ID_ADDSUBPS   = 0x10;
+static ushort ID_ALTER      = 0x11;
+static ushort ID_AND        = 0x12;
+static ushort ID_ANDNPD     = 0x13;
+static ushort ID_ANDNPS     = 0x14;
+static ushort ID_ANDPD      = 0x15;
+static ushort ID_ANDPS      = 0x16;
+static ushort ID_ARPL       = 0x17;
+static ushort ID_BLENDPD    = 0x18;
+static ushort ID_BLENDPS    = 0x19;
+static ushort ID_BLENDVPD   = 0x1A;
+static ushort ID_BLENDVPS   = 0x1B;
+static ushort ID_BOUND      = 0x1C;
+static ushort ID_BSF        = 0x1D;
+static ushort ID_BSR        = 0x1E;
+static ushort ID_BSWAP      = 0x1F;
+static ushort ID_BT         = 0x20;
+static ushort ID_BTC        = 0x21;
+static ushort ID_BTR        = 0x22;
+static ushort ID_BTS        = 0x23;
+static ushort ID_CALL       = 0x24;
+static ushort ID_CALLF      = 0x25;
+static ushort ID_CBW        = 0x26;
+static ushort ID_CLC        = 0x27;
+static ushort ID_CLD        = 0x28;
+static ushort ID_CLFLUSH    = 0x29;
+static ushort ID_CLI        = 0x2A;
+static ushort ID_CLTS       = 0x2B;
+static ushort ID_CMC        = 0x2C;
+static ushort ID_CMOVA      = 0x2D;
+static ushort ID_CMOVAE     = 0x2E;
+static ushort ID_CMOVB      = 0x2F;
+static ushort ID_CMOVBE     = 0x30;
+static ushort ID_CMOVG      = 0x31;
+static ushort ID_CMOVGE     = 0x32;
+static ushort ID_CMOVL      = 0x33;
+static ushort ID_CMOVLE     = 0x34;
+static ushort ID_CMOVNO     = 0x35;
+static ushort ID_CMOVNP     = 0x36;
+static ushort ID_CMOVNS     = 0x37;
+static ushort ID_CMOVNZ     = 0x38;
+static ushort ID_CMOVO      = 0x39;
+static ushort ID_CMOVP      = 0x3A;
+static ushort ID_CMOVS      = 0x3B;
+static ushort ID_CMOVZ      = 0x3C;
+static ushort ID_CMP        = 0x3D;
+static ushort ID_CMPPD      = 0x3E;
+static ushort ID_CMPPS      = 0x3F;
+static ushort ID_CMPS       = 0x40;
+static ushort ID_CMPSD      = 0x41;
+static ushort ID_CMPSS      = 0x42;
+static ushort ID_CMPXCHG    = 0x43;
+static ushort ID_CMPXCHG8B  = 0x44;
+static ushort ID_COMISD     = 0x45;
+static ushort ID_COMISS     = 0x46;
+static ushort ID_CPUID      = 0x47;
+static ushort ID_CRC32      = 0x48;
+static ushort ID_CS         = 0x49;
+static ushort ID_CVTDQ2PD   = 0x4A;
+static ushort ID_CVTDQ2PS   = 0x4B;
+static ushort ID_CVTPD2DQ   = 0x4C;
+static ushort ID_CVTPD2PI   = 0x4D;
+static ushort ID_CVTPD2PS   = 0x4E;
+static ushort ID_CVTPI2PD   = 0x4F;
+static ushort ID_CVTPI2PS   = 0x50;
+static ushort ID_CVTPS2DQ   = 0x51;
+static ushort ID_CVTPS2PD   = 0x52;
+static ushort ID_CVTPS2PI   = 0x53;
+static ushort ID_CVTSD2SI   = 0x54;
+static ushort ID_CVTSD2SS   = 0x55;
+static ushort ID_CVTSI2SD   = 0x56;
+static ushort ID_CVTSI2SS   = 0x57;
+static ushort ID_CVTSS2SD   = 0x58;
+static ushort ID_CVTSS2SI   = 0x59;
+static ushort ID_CVTTPD2DQ  = 0x5A;
+static ushort ID_CVTTPD2PI  = 0x5B;
+static ushort ID_CVTTPS2DQ  = 0x5C;
+static ushort ID_CVTTPS2PI  = 0x5D;
+static ushort ID_CVTTSD2SI  = 0x5E;
+static ushort ID_CVTTSS2SI  = 0x5F;
+static ushort ID_CWD        = 0x60;
+static ushort ID_DAA        = 0x61;
+static ushort ID_DAS        = 0x62;
+static ushort ID_DEC        = 0x63;
+static ushort ID_DIV        = 0x64;
+static ushort ID_DIVPD      = 0x65;
+static ushort ID_DIVPS      = 0x66;
+static ushort ID_DIVSD      = 0x67;
+static ushort ID_DIVSS      = 0x68;
+static ushort ID_DPPD       = 0x69;
+static ushort ID_DPPS       = 0x6A;
+static ushort ID_DS         = 0x6B;
+static ushort ID_EMMS       = 0x6C;
+static ushort ID_ENTER      = 0x6D;
+static ushort ID_ES         = 0x6E;
+static ushort ID_EXTRACTPS  = 0x6F;
+static ushort ID_F2XM1      = 0x70;
+static ushort ID_FABS       = 0x71;
+static ushort ID_FADD       = 0x72;
+static ushort ID_FADDP      = 0x73;
+static ushort ID_FBLD       = 0x74;
+static ushort ID_FBSTP      = 0x75;
+static ushort ID_FCHS       = 0x76;
+static ushort ID_FCMOVA     = 0x77;
+static ushort ID_FCMOVB     = 0x78;
+static ushort ID_FCMOVBE    = 0x79;
+static ushort ID_FCMOVNB    = 0x7A;
+static ushort ID_FCMOVNU    = 0x7B;
+static ushort ID_FCMOVNZ    = 0x7C;
+static ushort ID_FCMOVU     = 0x7D;
+static ushort ID_FCMOVZ     = 0x7E;
+static ushort ID_FCOM       = 0x7F;
+static ushort ID_FCOM2      = 0x80;
+static ushort ID_FCOMI      = 0x81;
+static ushort ID_FCOMIP     = 0x82;
+static ushort ID_FCOMP      = 0x83;
+static ushort ID_FCOMP3     = 0x84;
+static ushort ID_FCOMP5     = 0x85;
+static ushort ID_FCOMPP     = 0x86;
+static ushort ID_FCOS       = 0x87;
+static ushort ID_FDECSTP    = 0x88;
+static ushort ID_FDIV       = 0x89;
+static ushort ID_FDIVP      = 0x8A;
+static ushort ID_FDIVR      = 0x8B;
+static ushort ID_FDIVRP     = 0x8C;
+static ushort ID_FFREE      = 0x8D;
+static ushort ID_FFREEP     = 0x8E;
+static ushort ID_FIADD      = 0x8F;
+static ushort ID_FICOM      = 0x90;
+static ushort ID_FICOMP     = 0x91;
+static ushort ID_FIDIV      = 0x92;
+static ushort ID_FIDIVR     = 0x93;
+static ushort ID_FILD       = 0x94;
+static ushort ID_FIMUL      = 0x95;
+static ushort ID_FINCSTP    = 0x96;
+static ushort ID_FIST       = 0x97;
+static ushort ID_FISTP      = 0x98;
+static ushort ID_FISTTP     = 0x99;
+static ushort ID_FISUB      = 0x9A;
+static ushort ID_FISUBR     = 0x9B;
+static ushort ID_FLD        = 0x9C;
+static ushort ID_FLD1       = 0x9D;
+static ushort ID_FLD2LE     = 0x9E;
+static ushort ID_FLD2LT     = 0x9F;
+static ushort ID_FLDCW      = 0xA0;
+static ushort ID_FLDENV     = 0xA1;
+static ushort ID_FLDLG2     = 0xA2;
+static ushort ID_FLDLN2     = 0xA3;
+static ushort ID_FLDPI      = 0xA4;
+static ushort ID_FLDZ       = 0xA5;
+static ushort ID_FMUL       = 0xA6;
+static ushort ID_FMULP      = 0xA7;
+static ushort ID_FNCLEX     = 0xA8;
+static ushort ID_FNDISI     = 0xA9;
+static ushort ID_FNENI      = 0xAA;
+static ushort ID_FNINIT     = 0xAB;
+static ushort ID_FNOP       = 0xAC;
+static ushort ID_FNSAVE     = 0xAD;
+static ushort ID_FNSETPM    = 0xAE;
+static ushort ID_FNSTCW     = 0xAF;
+static ushort ID_FNSTENV    = 0xB0;
+static ushort ID_FNSTSW     = 0xB1;
+static ushort ID_FPATAN     = 0xB2;
+static ushort ID_FPREM      = 0xB3;
+static ushort ID_FPREM1     = 0xB4;
+static ushort ID_FPTAN      = 0xB5;
+static ushort ID_FRNDINT    = 0xB6;
+static ushort ID_FRSTOR     = 0xB7;
+static ushort ID_FS         = 0xB8;
+static ushort ID_FSCALE     = 0xB9;
+static ushort ID_FSIN       = 0xBA;
+static ushort ID_FSINCOS    = 0xBB;
+static ushort ID_FSQRT      = 0xBC;
+static ushort ID_FST        = 0xBD;
+static ushort ID_FSTP       = 0xBE;
+static ushort ID_FSTP1      = 0xBF;
+static ushort ID_FSTP8      = 0xC0;
+static ushort ID_FSTP9      = 0xC1;
+static ushort ID_FSUB       = 0xC2;
+static ushort ID_FSUBP      = 0xC3;
+static ushort ID_FSUBR      = 0xC4;
+static ushort ID_FSUBRP     = 0xC5;
+static ushort ID_FTST       = 0xC6;
+static ushort ID_FUCOM      = 0xC7;
+static ushort ID_FUCOMI     = 0xC8;
+static ushort ID_FUCOMIP    = 0xC9;
+static ushort ID_FUCOMP     = 0xCA;
+static ushort ID_FUCOMPP    = 0xCB;
+static ushort ID_FWAIT      = 0xCC;
+static ushort ID_FXAM       = 0xCD;
+static ushort ID_FXCH       = 0xCE;
+static ushort ID_FXCH4      = 0xCF;
+static ushort ID_FXCH7      = 0xD0;
+static ushort ID_FXRSTOR    = 0xD1;
+static ushort ID_FXSAVE     = 0xD2;
+static ushort ID_FXTRACT    = 0xD3;
+static ushort ID_FYL2X      = 0xD4;
+static ushort ID_FYL2XP1    = 0xD5;
+static ushort ID_GETSEC     = 0xD6;
+static ushort ID_GS         = 0xD7;
+static ushort ID_HADDPD     = 0xD8;
+static ushort ID_HADDPS     = 0xD9;
+static ushort ID_HINTNOP    = 0xDA;
+static ushort ID_HLT        = 0xDB;
+static ushort ID_HSUBPD     = 0xDC;
+static ushort ID_HSUBPS     = 0xDD;
+static ushort ID_ICEBP      = 0xDE;
+static ushort ID_IDIV       = 0xDF;
+static ushort ID_IMUL       = 0xE0;
+static ushort ID_IN         = 0xE1;
+static ushort ID_INC        = 0xE2;
+static ushort ID_INS        = 0xE3;
+static ushort ID_INSERTPS   = 0xE4;
+static ushort ID_INT        = 0xE5;
+static ushort ID_INTO       = 0xE6;
+static ushort ID_INVD       = 0xE7;
+static ushort ID_INVEPT     = 0xE8;
+static ushort ID_INVLPG     = 0xE9;
+static ushort ID_INVVPID    = 0xEA;
+static ushort ID_IRET       = 0xEB;
+static ushort ID_JA         = 0xEC;
+static ushort ID_JAE        = 0xED;
+static ushort ID_JB         = 0xEE;
+static ushort ID_JBE        = 0xEF;
+static ushort ID_JCXZ       = 0xF0;
+static ushort ID_JG         = 0xF1;
+static ushort ID_JGE        = 0xF2;
+static ushort ID_JL         = 0xF3;
+static ushort ID_JLE        = 0xF4;
+static ushort ID_JMP        = 0xF5;
+static ushort ID_JMPE       = 0xF6;
+static ushort ID_JMPF       = 0xF7;
+static ushort ID_JNO        = 0xF8;
+static ushort ID_JNP        = 0xF9;
+static ushort ID_JNS        = 0xFA;
+static ushort ID_JNZ        = 0xFB;
+static ushort ID_JO         = 0xFC;
+static ushort ID_JP         = 0xFD;
+static ushort ID_JS         = 0xFE;
+static ushort ID_JZ         = 0xFF;
+static ushort ID_LAHF       = 0x100;
+static ushort ID_LAR        = 0x101;
+static ushort ID_LDDQU      = 0x102;
+static ushort ID_LDMXCSR    = 0x103;
+static ushort ID_LDS        = 0x104;
+static ushort ID_LEA        = 0x105;
+static ushort ID_LEAVE      = 0x106;
+static ushort ID_LES        = 0x107;
+static ushort ID_LFENCE     = 0x108;
+static ushort ID_LFS        = 0x109;
+static ushort ID_LGDT       = 0x10A;
+static ushort ID_LGS        = 0x10B;
+static ushort ID_LIDT       = 0x10C;
+static ushort ID_LLDT       = 0x10D;
+static ushort ID_LMSW       = 0x10E;
+static ushort ID_LOADALL    = 0x10F;
+static ushort ID_LOCK       = 0x110;
+static ushort ID_LODS       = 0x111;
+static ushort ID_LOOP       = 0x112;
+static ushort ID_LOOPNZ     = 0x113;
+static ushort ID_LOOPZ      = 0x114;
+static ushort ID_LSL        = 0x115;
+static ushort ID_LSS        = 0x116;
+static ushort ID_LTR        = 0x117;
+static ushort ID_MASKMOVDQU = 0x118;
+static ushort ID_MASKMOVQ   = 0x119;
+static ushort ID_MAXPD      = 0x11A;
+static ushort ID_MAXPS      = 0x11B;
+static ushort ID_MAXSD      = 0x11C;
+static ushort ID_MAXSS      = 0x11D;
+static ushort ID_MFENCE     = 0x11E;
+static ushort ID_MINPD      = 0x11F;
+static ushort ID_MINPS      = 0x120;
+static ushort ID_MINSD      = 0x121;
+static ushort ID_MINSS      = 0x122;
+static ushort ID_MONITOR    = 0x123;
+static ushort ID_MOV        = 0x124;
+static ushort ID_MOVAPD     = 0x125;
+static ushort ID_MOVAPS     = 0x126;
+static ushort ID_MOVBE      = 0x127;
+static ushort ID_MOVD       = 0x128;
+static ushort ID_MOVDDUP    = 0x129;
+static ushort ID_MOVDQ2Q    = 0x12A;
+static ushort ID_MOVDQA     = 0x12B;
+static ushort ID_MOVDQU     = 0x12C;
+static ushort ID_MOVHLPS    = 0x12D;
+static ushort ID_MOVHPD     = 0x12E;
+static ushort ID_MOVHPS     = 0x12F;
+static ushort ID_MOVLPD     = 0x130;
+static ushort ID_MOVLPS     = 0x131;
+static ushort ID_MOVMSKPD   = 0x132;
+static ushort ID_MOVMSKPS   = 0x133;
+static ushort ID_MOVNTDQ    = 0x134;
+static ushort ID_MOVNTDQA   = 0x135;
+static ushort ID_MOVNTI     = 0x136;
+static ushort ID_MOVNTPD    = 0x137;
+static ushort ID_MOVNTPS    = 0x138;
+static ushort ID_MOVNTQ     = 0x139;
+static ushort ID_MOVQ       = 0x13A;
+static ushort ID_MOVQ2DQ    = 0x13B;
+static ushort ID_MOVS       = 0x13C;
+static ushort ID_MOVSD      = 0x13D;
+static ushort ID_MOVSHDUP   = 0x13E;
+static ushort ID_MOVSLDUP   = 0x13F;
+static ushort ID_MOVSS      = 0x140;
+static ushort ID_MOVSX      = 0x141;
+static ushort ID_MOVSXD     = 0x142;
+static ushort ID_MOVUPD     = 0x143;
+static ushort ID_MOVUPS     = 0x144;
+static ushort ID_MOVZX      = 0x145;
+static ushort ID_MPSADBW    = 0x146;
+static ushort ID_MUL        = 0x147;
+static ushort ID_MULPD      = 0x148;
+static ushort ID_MULPS      = 0x149;
+static ushort ID_MULSD      = 0x14A;
+static ushort ID_MULSS      = 0x14B;
+static ushort ID_MWAIT      = 0x14C;
+static ushort ID_NEG        = 0x14D;
+static ushort ID_NOP        = 0x14E;
+static ushort ID_NOT        = 0x14F;
+static ushort ID_OR         = 0x150;
+static ushort ID_ORPD       = 0x151;
+static ushort ID_ORPS       = 0x152;
+static ushort ID_OUT        = 0x153;
+static ushort ID_OUTS       = 0x154;
+static ushort ID_PABSB      = 0x155;
+static ushort ID_PABSD      = 0x156;
+static ushort ID_PABSW      = 0x157;
+static ushort ID_PACKSSDW   = 0x158;
+static ushort ID_PACKSSWB   = 0x159;
+static ushort ID_PACKUSDW   = 0x15A;
+static ushort ID_PACKUSWB   = 0x15B;
+static ushort ID_PADDB      = 0x15C;
+static ushort ID_PADDD      = 0x15D;
+static ushort ID_PADDQ      = 0x15E;
+static ushort ID_PADDSB     = 0x15F;
+static ushort ID_PADDSW     = 0x160;
+static ushort ID_PADDUSB    = 0x161;
+static ushort ID_PADDUSW    = 0x162;
+static ushort ID_PADDW      = 0x163;
+static ushort ID_PALIGNR    = 0x164;
+static ushort ID_PAND       = 0x165;
+static ushort ID_PANDN      = 0x166;
+static ushort ID_PAUSE      = 0x167;
+static ushort ID_PAVGB      = 0x168;
+static ushort ID_PAVGW      = 0x169;
+static ushort ID_PBLENDVB   = 0x16A;
+static ushort ID_PBLENDW    = 0x16B;
+static ushort ID_PCMPEQB    = 0x16C;
+static ushort ID_PCMPEQD    = 0x16D;
+static ushort ID_PCMPEQQ    = 0x16E;
+static ushort ID_PCMPEQW    = 0x16F;
+static ushort ID_PCMPESTRI  = 0x170;
+static ushort ID_PCMPESTRM  = 0x171;
+static ushort ID_PCMPGTB    = 0x172;
+static ushort ID_PCMPGTD    = 0x173;
+static ushort ID_PCMPGTQ    = 0x174;
+static ushort ID_PCMPGTW    = 0x175;
+static ushort ID_PCMPISTRI  = 0x176;
+static ushort ID_PCMPISTRM  = 0x177;
+static ushort ID_PEXTRB     = 0x178;
+static ushort ID_PEXTRQ     = 0x179;
+static ushort ID_PEXTRW     = 0x17A;
+static ushort ID_PHADDD     = 0x17B;
+static ushort ID_PHADDSW    = 0x17C;
+static ushort ID_PHADDW     = 0x17D;
+static ushort ID_PHMINPOSUW = 0x17E;
+static ushort ID_PHSUBD     = 0x17F;
+static ushort ID_PHSUBSW    = 0x180;
+static ushort ID_PHSUBW     = 0x181;
+static ushort ID_PINSRB     = 0x182;
+static ushort ID_PINSRQ     = 0x183;
+static ushort ID_PINSRW     = 0x184;
+static ushort ID_PMADDUBSW  = 0x185;
+static ushort ID_PMADDWD    = 0x186;
+static ushort ID_PMAXSB     = 0x187;
+static ushort ID_PMAXSD     = 0x188;
+static ushort ID_PMAXSW     = 0x189;
+static ushort ID_PMAXUB     = 0x18A;
+static ushort ID_PMAXUD     = 0x18B;
+static ushort ID_PMAXUW     = 0x18C;
+static ushort ID_PMINSB     = 0x18D;
+static ushort ID_PMINSD     = 0x18E;
+static ushort ID_PMINSW     = 0x18F;
+static ushort ID_PMINUB     = 0x190;
+static ushort ID_PMINUD     = 0x191;
+static ushort ID_PMINUW     = 0x192;
+static ushort ID_PMOVMSKB   = 0x193;
+static ushort ID_PMOVSXBD   = 0x194;
+static ushort ID_PMOVSXBQ   = 0x195;
+static ushort ID_PMOVSXBW   = 0x196;
+static ushort ID_PMOVSXDQ   = 0x197;
+static ushort ID_PMOVSXWD   = 0x198;
+static ushort ID_PMOVSXWQ   = 0x199;
+static ushort ID_PMOVZXBD   = 0x19A;
+static ushort ID_PMOVZXBQ   = 0x19B;
+static ushort ID_PMOVZXBW   = 0x19C;
+static ushort ID_PMOVZXDQ   = 0x19D;
+static ushort ID_PMOVZXWD   = 0x19E;
+static ushort ID_PMOVZXWQ   = 0x19F;
+static ushort ID_PMULDQ     = 0x1A0;
+static ushort ID_PMULHRSW   = 0x1A1;
+static ushort ID_PMULHUW    = 0x1A2;
+static ushort ID_PMULHW     = 0x1A3;
+static ushort ID_PMULLD     = 0x1A4;
+static ushort ID_PMULLW     = 0x1A5;
+static ushort ID_PMULUDQ    = 0x1A6;
+static ushort ID_POP        = 0x1A7;
+static ushort ID_POPA       = 0x1A8;
+static ushort ID_POPCNT     = 0x1A9;
+static ushort ID_POPF       = 0x1AA;
+static ushort ID_POR        = 0x1AB;
+static ushort ID_PREFETCHNTA= 0x1AC;
+static ushort ID_PREFETCHT0 = 0x1AD;
+static ushort ID_PREFETCHT1 = 0x1AE;
+static ushort ID_PREFETCHT2 = 0x1AF;
+static ushort ID_PSADBW     = 0x1B0;
+static ushort ID_PSHUFB     = 0x1B1;
+static ushort ID_PSHUFD     = 0x1B2;
+static ushort ID_PSHUFHW    = 0x1B3;
+static ushort ID_PSHUFLW    = 0x1B4;
+static ushort ID_PSHUFW     = 0x1B5;
+static ushort ID_PSIGNB     = 0x1B6;
+static ushort ID_PSIGND     = 0x1B7;
+static ushort ID_PSIGNW     = 0x1B8;
+static ushort ID_PSLLD      = 0x1B9;
+static ushort ID_PSLLDQ     = 0x1BA;
+static ushort ID_PSLLQ      = 0x1BB;
+static ushort ID_PSLLW      = 0x1BC;
+static ushort ID_PSRAD      = 0x1BD;
+static ushort ID_PSRAW      = 0x1BE;
+static ushort ID_PSRLD      = 0x1BF;
+static ushort ID_PSRLDQ     = 0x1C0;
+static ushort ID_PSRLQ      = 0x1C1;
+static ushort ID_PSRLW      = 0x1C2;
+static ushort ID_PSUBB      = 0x1C3;
+static ushort ID_PSUBD      = 0x1C4;
+static ushort ID_PSUBQ      = 0x1C5;
+static ushort ID_PSUBSB     = 0x1C6;
+static ushort ID_PSUBSW     = 0x1C7;
+static ushort ID_PSUBUSB    = 0x1C8;
+static ushort ID_PSUBUSW    = 0x1C9;
+static ushort ID_PSUBW      = 0x1CA;
+static ushort ID_PTEST      = 0x1CB;
+static ushort ID_PUNPCKHBD  = 0x1CC;
+static ushort ID_PUNPCKHBDQ = 0x1CD;
+static ushort ID_PUNPCKHBW  = 0x1CE;
+static ushort ID_PUNPCKHDQ  = 0x1CF;
+static ushort ID_PUNPCKHQDQ = 0x1D0;
+static ushort ID_PUNPCKHWD  = 0x1D1;
+static ushort ID_PUNPCKLBW  = 0x1D2;
+static ushort ID_PUNPCKLDQ  = 0x1D3;
+static ushort ID_PUNPCKLQDQ = 0x1D4;
+static ushort ID_PUNPCKLWD  = 0x1D5;
+static ushort ID_PUSH       = 0x1D6;
+static ushort ID_PUSHA      = 0x1D7;
+static ushort ID_PUSHF      = 0x1D8;
+static ushort ID_PXOR       = 0x1D9;
+static ushort ID_RCL        = 0x1DA;
+static ushort ID_RCPPS      = 0x1DB;
+static ushort ID_RCPSS      = 0x1DC;
+static ushort ID_RCR        = 0x1DD;
+static ushort ID_RDMSR      = 0x1DE;
+static ushort ID_RDPMC      = 0x1DF;
+static ushort ID_RDTSC      = 0x1E0;
+static ushort ID_RDTSCP     = 0x1E1;
+static ushort ID_REPNZ      = 0x1E2;
+static ushort ID_REPZ       = 0x1E3;
+static ushort ID_RETF       = 0x1E4;
+static ushort ID_RETN       = 0x1E5;
+static ushort ID_ROL        = 0x1E6;
+static ushort ID_ROR        = 0x1E7;
+static ushort ID_ROUNDPD    = 0x1E8;
+static ushort ID_ROUNDPS    = 0x1E9;
+static ushort ID_ROUNDSD    = 0x1EA;
+static ushort ID_ROUNDSS    = 0x1EB;
+static ushort ID_RSM        = 0x1EC;
+static ushort ID_RSQRTPS    = 0x1ED;
+static ushort ID_RSQRTSS    = 0x1EE;
+static ushort ID_SAHF       = 0x1EF;
+static ushort ID_SAL        = 0x1F0;
+static ushort ID_SAR        = 0x1F1;
+static ushort ID_SBB        = 0x1F2;
+static ushort ID_SCAS       = 0x1F3;
+static ushort ID_SETA       = 0x1F4;
+static ushort ID_SETAE      = 0x1F5;
+static ushort ID_SETALC     = 0x1F6;
+static ushort ID_SETB       = 0x1F7;
+static ushort ID_SETBE      = 0x1F8;
+static ushort ID_SETG       = 0x1F9;
+static ushort ID_SETGE      = 0x1FA;
+static ushort ID_SETL       = 0x1FB;
+static ushort ID_SETLE      = 0x1FC;
+static ushort ID_SETNO      = 0x1FD;
+static ushort ID_SETNP      = 0x1FE;
+static ushort ID_SETNS      = 0x1FF;
+static ushort ID_SETNZ      = 0x200;
+static ushort ID_SETO       = 0x201;
+static ushort ID_SETP       = 0x202;
+static ushort ID_SETS       = 0x203;
+static ushort ID_SETZ       = 0x204;
+static ushort ID_SFENCE     = 0x205;
+static ushort ID_SGDT       = 0x206;
+static ushort ID_SHL        = 0x207;
+static ushort ID_SHLD       = 0x208;
+static ushort ID_SHR        = 0x209;
+static ushort ID_SHRD       = 0x20A;
+static ushort ID_SHUFPD     = 0x20B;
+static ushort ID_SHUFPS     = 0x20C;
+static ushort ID_SIDT       = 0x20D;
+static ushort ID_SLDT       = 0x20E;
+static ushort ID_SMSW       = 0x20F;
+static ushort ID_SQRTPD     = 0x210;
+static ushort ID_SQRTPS     = 0x211;
+static ushort ID_SQRTSD     = 0x212;
+static ushort ID_SQRTSS     = 0x213;
+static ushort ID_SS         = 0x214;
+static ushort ID_STC        = 0x215;
+static ushort ID_STD        = 0x216;
+static ushort ID_STI        = 0x217;
+static ushort ID_STMXCSR    = 0x218;
+static ushort ID_STOS       = 0x219;
+static ushort ID_STR        = 0x21A;
+static ushort ID_SUB        = 0x21B;
+static ushort ID_SUBPD      = 0x21C;
+static ushort ID_SUBPS      = 0x21D;
+static ushort ID_SUBSD      = 0x21E;
+static ushort ID_SUBSS      = 0x21F;
+static ushort ID_SWAPGS     = 0x220;
+static ushort ID_SYSCALL    = 0x221;
+static ushort ID_SYSENTER   = 0x222;
+static ushort ID_SYSEXIT    = 0x223;
+static ushort ID_SYSRET     = 0x224;
+static ushort ID_TEST       = 0x225;
+static ushort ID_UCOMISD    = 0x226;
+static ushort ID_UCOMISS    = 0x227;
+static ushort ID_UD         = 0x228;
+static ushort ID_UD2        = 0x229;
+static ushort ID_UNPCKHPD   = 0x22A;
+static ushort ID_UNPCKHPS   = 0x22B;
+static ushort ID_UNPCKLPD   = 0x22C;
+static ushort ID_UNPCKLPS   = 0x22D;
+static ushort ID_VERR       = 0x22E;
+static ushort ID_VERW       = 0x22F;
+static ushort ID_VMCALL     = 0x230;
+static ushort ID_VMCLEAR    = 0x231;
+static ushort ID_VMLAUNCH   = 0x232;
+static ushort ID_VMPTRLD    = 0x233;
+static ushort ID_VMPTRST    = 0x234;
+static ushort ID_VMREAD     = 0x235;
+static ushort ID_VMRESUME   = 0x236;
+static ushort ID_VMWRITE    = 0x237;
+static ushort ID_VMXOFF     = 0x238;
+static ushort ID_VMXON      = 0x239;
+static ushort ID_WBINVD     = 0x23A;
+static ushort ID_WRMSR      = 0x23B;
+static ushort ID_XADD       = 0x23C;
+static ushort ID_XCHG       = 0x23D;
+static ushort ID_XGETBV     = 0x23E;
+static ushort ID_XLAT       = 0x23F;
+static ushort ID_XOR        = 0x240;
+static ushort ID_XORPD      = 0x241;
+static ushort ID_XORPS      = 0x242;
+static ushort ID_XRSTOR     = 0x243;
+static ushort ID_XSAVE      = 0x244;
+static ushort ID_XSETBV     = 0x245;
 
 
 
@@ -1106,7 +1106,7 @@ public struct DISASM_INOUT_PARAMS
     public byte options;
     public UInt64 bas;
 };
-public struct INTERNAL_DATA
+public class INTERNAL_DATA
 {
     public byte[] prefixes;//[PREFIX_COUNT]; //Valuable prefixes.
     public byte severe_err;             //Severe disassembling error.
@@ -1114,45 +1114,109 @@ public struct INTERNAL_DATA
     public byte is_opsize_used;         //
     public byte is_addrsize_used;       //Prefixes were used during disassembling.
     public byte is_rex_used;            //
+    public INTERNAL_DATA()
+    {
+        prefixes = new byte[PREFIX_COUNT];
+    }
+    public INTERNAL_DATA(byte val)
+    {
+        prefixes = new byte[PREFIX_COUNT];
+        for (byte i = 0; i < PREFIX_COUNT; i++)
+            prefixes[i] = val;
+    }
 };
 
-public struct MULTI_MNEMONIC
+public class MULTI_MNEMONIC : MNEMONIC
 {
     public char indicator;
     public uint size;
     //public SQ b;
     public string[] values;
+    public MULTI_MNEMONIC() : base("")
+    { 
+    }
+    public MULTI_MNEMONIC(string val) : base(val) { }
+    public MULTI_MNEMONIC(char _indicator, uint _size, string[] _values)
+        : base("")
+    {
+    indicator = _indicator;
+    size = _size;
+    values = _values;
+    }
 }
 //static struct MULTI_MNEMONIC pusha  = { MM_INDICATOR, SQ_v,      { _UT("pusha"),   _UT("pushad"),  _UT("bad_mnem")  } };
-public struct MNEMONIC
+public class MNEMONIC
 {
     public string value;
-    public MULTI_MNEMONIC multi_mnemonic;
+    public MNEMONIC(string val)
+    {
+        value = val;
+    }
 };
 
 public struct INTERNAL_OPERAND
 {
     public byte type;
     public byte size;
+    public INTERNAL_OPERAND(byte _type, byte _size)
+    {
+        type = _type;
+        size = _size;
+    }
 };
 public struct OPCODE_DESCRIPTOR
 {
     public UInt64 groups;
-    public MNEMONIC mnemonic;
+    public MULTI_MNEMONIC mnemonic;
     public UInt16 id;
     public INTERNAL_OPERAND[] ops;//[3]
-    public UInt16 props;
+    public ushort props;
     public byte tested_flags;
     public byte modified_flags;
     public byte set_flags;
     public byte cleared_flags;
     public byte undefined_flags;
     public byte arch;
+    public OPCODE_DESCRIPTOR(
+    UInt64 _groups,
+    MULTI_MNEMONIC _mnemonic,
+    UInt16 _id,
+    INTERNAL_OPERAND[] _ops,
+    UInt16 _props,
+    byte _tested_flags,
+    byte _modified_flags,
+    byte _set_flags,
+    byte _cleared_flags,
+    byte _undefined_flags,
+    byte _arch)
+    {
+    groups = _groups;
+    mnemonic = _mnemonic;
+    id = _id;
+    ops =_ops;
+    props = _props;
+    tested_flags = _tested_flags;
+    modified_flags = _modified_flags;
+    set_flags = _set_flags;
+    cleared_flags = _cleared_flags;
+    undefined_flags = _undefined_flags;
+    arch = _arch;
+    }
+
 };
 public struct TABLE_DESCRIPTOR
 {
     public byte min, max, mask, shift, props;
     public OPCODE_DESCRIPTOR[] opcodes;
+    public TABLE_DESCRIPTOR(byte _min, byte _max, byte _mask, byte _shift, byte _props, OPCODE_DESCRIPTOR[] _opcodes)
+    {
+    min = _min;
+    max = _max;
+    mask = _mask;
+    shift = _shift;
+    props = _props;
+    opcodes = _opcodes;
+    }
 }
 
 public struct OPERAND_SIZE
@@ -1449,6 +1513,18 @@ public static UInt16[] pref_bits =
     INSTR_PREFIX_LOCK,
     INSTR_PREFIX_REX};
 
+//INSTRUCTION.addrsize's values:
+static byte ADDR_SIZE_16 = 0x2;
+static byte ADDR_SIZE_32 = 0x4;
+static byte ADDR_SIZE_64 = 0x8;
+
+//DISASM_INOUT_PARAMS.options' bits:
+static byte DISASM_OPTION_APPLY_REL     = 0x1;
+static byte DISASM_OPTION_OPTIMIZE_DISP = 0x2;
+
+
+static char MM_INDICATOR = '*';
+
 public static byte[] pref_opcodes =
 {
     0x2E, //CS
@@ -1464,19 +1540,310 @@ public static byte[] pref_opcodes =
     0xF0  //LOCK
 };
 
-//INSTRUCTION.addrsize's values:
-static byte ADDR_SIZE_16 = 0x2;
-static byte ADDR_SIZE_32 = 0x4;
-static byte ADDR_SIZE_64 = 0x8;
-
-//DISASM_INOUT_PARAMS.options' bits:
-static byte DISASM_OPTION_APPLY_REL     = 0x1;
-static byte DISASM_OPTION_OPTIMIZE_DISP = 0x2;
+static byte ARCH_COMMON = 0x1;
+static byte ARCH_INTEL  = 0x2;
+static byte ARCH_AMD    = 0x4;
+static byte ARCH_ALL = (byte)((int)ARCH_COMMON | (int)ARCH_INTEL | (int)ARCH_AMD);
 
 
-static char MM_INDICATOR = '*';
+//Warning: may contain a lot of tables!
 
-public static TABLE_DESCRIPTOR[] tables;// =
+/*60*/
+static MULTI_MNEMONIC pusha = new MULTI_MNEMONIC(MM_INDICATOR, SQ_v, new[] { "pusha", "pushad", "bad_mnem" });
+/*61*/ static MULTI_MNEMONIC popa   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v,   new[]     {"popa",  "popad",   "bad_mnem" });
+/*6D*/ static MULTI_MNEMONIC ins    = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v,   new[]     { "insw",  "insd",    "bad_mnem" });
+/*6F*/ static MULTI_MNEMONIC outs   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v,   new[]     { "outsw", "outsd",   "bad_mnem" });
+/*98*/ static MULTI_MNEMONIC cbw    = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp, new[]     { "cbw",    "cwde",    "cdqe"    });
+/*99*/ static MULTI_MNEMONIC cwd    = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp, new[]     { "cwd}",   "cdq",     "cqo"     });
+/*9C*/
+static MULTI_MNEMONIC pushf = new MULTI_MNEMONIC(MM_INDICATOR, SQ_vd64, new[] { "pushfw", "pushfd", "pushfq" });
+/*9D*/ static MULTI_MNEMONIC popf   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vd64,  new[] { "popfw",   "popfd",   "popfq"});
+/*A5*/ static MULTI_MNEMONIC movs   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp,   new[] { "movsw",   "movsd",   "movsq"});
+/*A7*/ static MULTI_MNEMONIC cmps   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp,   new[] { "cmpsw",   "cmpsd",   "cmpsq"});
+/*AB*/ static MULTI_MNEMONIC stos   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp,   new[] { "stosw",   "stosd",   "stosq"});
+/*AD*/ static MULTI_MNEMONIC lods   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp,   new[] { "lodsw",   "lodsd",   "lodsq"});
+/*AF*/ static MULTI_MNEMONIC scas   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp,   new[] { "scasw",   "scasd",   "scasq"});
+/*CF*/ static MULTI_MNEMONIC iret   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp,   new[] { "iretw",   "iretd",   "iretq"});
+/*E0*/ static MULTI_MNEMONIC loopnz = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v67q64,new[] { "loopwnz", "loopdnz", "loopqnz"});
+/*E1*/ static MULTI_MNEMONIC loopz  = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v67q64,new[] { "loopwz",  "loopdz",  "loopqz"});
+/*E2*/ static MULTI_MNEMONIC loop   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v67q64,new[] { "loopw",   "loopd",   "loopq"});
+/*E3*/
+static MULTI_MNEMONIC jcxz = new MULTI_MNEMONIC(MM_INDICATOR, SQ_v67q64, new[] { "jcxz", "jecxz", "jrcxz" });
+
+
+public static OPCODE_DESCRIPTOR[] opcodes_1byte = new[] {
+/*00*/    new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD, 
+                            new[] {
+                                    new INTERNAL_OPERAND(TQ_E, SQ_b),
+                                    new INTERNAL_OPERAND(TQ_G, SQ_b),
+                                    new INTERNAL_OPERAND(TQ_NULL, SQ_NULL)
+                                  },
+                            (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*01*/    new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD, 
+                            new[] {
+                                    new INTERNAL_OPERAND(TQ_E, SQ_vqp),
+                                    new INTERNAL_OPERAND(TQ_G, SQ_vqp),
+                                    new INTERNAL_OPERAND(TQ_NULL, SQ_NULL)
+                                  },
+                            (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_ES, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_ES, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR(  GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_CS, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_0F, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_0F, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_SS, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_SS, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_DS, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_DS, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_ES, new[] {new INTERNAL_OPERAND(TQ_PREF_ES, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_DECIMAL, new MULTI_MNEMONIC("daa"), ID_DAA, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x5, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_CS, new[] {new INTERNAL_OPERAND(TQ_PREF_CS, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_DECIMAL, new MULTI_MNEMONIC("das"), ID_DAS, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x5, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_SS, new[] {new INTERNAL_OPERAND(TQ_PREF_SS, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_DECIMAL, new MULTI_MNEMONIC("aaa"), ID_AAA, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x4, 0x9F, 0x0, 0x0, 0x9A, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_DS, new[] {new INTERNAL_OPERAND(TQ_PREF_DS, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_DECIMAL, new MULTI_MNEMONIC("aas"), ID_AAS, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x4, 0x9F, 0x0, 0x0, 0x9A, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vd64 ),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, pusha, ID_PUSHA, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, popa, ID_POPA, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BREAK | GRP_STACK, new MULTI_MNEMONIC("bound"), ID_BOUND, new[] {new INTERNAL_OPERAND(TQ_G, SQ_v),new INTERNAL_OPERAND(TQ_M, SQ_a),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_MODRM | PROP_IOPL | PROP_I64), 0x0, 0x20, 0x0, 0x20, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SYSTEM, new MULTI_MNEMONIC("arpl"), ID_ARPL, new[] {new INTERNAL_OPERAND(TQ_E, SQ_w),new INTERNAL_OPERAND(TQ_G, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_MODRM | PROP_POST_PROC | POST_PROC_ARPL_MOVSXD), 0x0, 0x8, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_FS, new[] {new INTERNAL_OPERAND(TQ_PREF_FS, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_GS, new[] {new INTERNAL_OPERAND(TQ_PREF_GS, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_66, new[] {new INTERNAL_OPERAND(TQ_PREF_66, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_66_0F_JMP, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC(""), ID_67, new[] {new INTERNAL_OPERAND(TQ_PREF_67, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_I, SQ_vs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("imul"), ID_IMUL, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x1E, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH, new[] {new INTERNAL_OPERAND(TQ_I, SQ_bss),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("imul"), ID_IMUL, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_bs) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x1E, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT | GRP_STRING, new MULTI_MNEMONIC("insb"), ID_INS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT | GRP_STRING, ins, ID_INS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT | GRP_STRING, new MULTI_MNEMONIC("outsb"), ID_OUTS, new[] {new INTERNAL_OPERAND(TQ_X, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT | GRP_STRING, outs, ID_OUTS, new[] {new INTERNAL_OPERAND(TQ_X, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jo"), ID_JO, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jno"), ID_JNO, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jb"), ID_JB, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jae"), ID_JAE, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jz"), ID_JZ, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jnz"), ID_JNZ, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jbe"), ID_JBE, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("ja"), ID_JA, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("js"), ID_JS, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jns"), ID_JNS, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jp"), ID_JP, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jnp"), ID_JNP, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jl"), ID_JL, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jge"), ID_JGE, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jle"), ID_JLE, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jg"), ID_JG, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_80, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_81, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_82, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_83, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("test"), ID_TEST, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("test"), ID_TEST, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_G, SQ_b),new INTERNAL_OPERAND(TQ_E, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_E, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_E, SQ_wv),new INTERNAL_OPERAND(TQ_S, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("lea"), ID_LEA, new[] {new INTERNAL_OPERAND(TQ_G, SQ_vqp),new INTERNAL_OPERAND(TQ_M, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_S, SQ_w),new INTERNAL_OPERAND(TQ_E, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_8F, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_CONTROL, new MULTI_MNEMONIC("nop"), ID_NOP, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_POST_PROC | POST_PROC_NOP_PAUSE), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xchg"), ID_XCHG, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_CONVER, cbw, ID_CBW, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_CONVER, cwd, ID_CWD, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("callf"), ID_CALLF, new[] {new INTERNAL_OPERAND(TQ_A, SQ_p),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fwait"), ID_FWAIT, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK | GRP_FLGCTRL, pushf, ID_PUSHF, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK | GRP_FLGCTRL, popf, ID_POPF, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_FLGCTRL, new MULTI_MNEMONIC("sahf"), ID_SAHF, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x1F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_FLGCTRL, new MULTI_MNEMONIC("lahf"), ID_LAHF, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1F, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_O, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_O, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_O, SQ_b),new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_O, SQ_vqp),new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_STRING, new MULTI_MNEMONIC("movsb"), ID_MOVS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_b),new INTERNAL_OPERAND(TQ_X, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_STRING, movs, ID_MOVS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_vqp),new INTERNAL_OPERAND(TQ_X, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_STRING | GRP_BINARY, new MULTI_MNEMONIC("cmpsb"), ID_CMPS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_b),new INTERNAL_OPERAND(TQ_X, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_STRING | GRP_BINARY, cmps, ID_CMPS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_vqp),new INTERNAL_OPERAND(TQ_X, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("test"), ID_TEST, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("test"), ID_TEST, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_STRING, new MULTI_MNEMONIC("stosb"), ID_STOS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_b),new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_STRING, stos, ID_STOS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_vqp),new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_STRING, new MULTI_MNEMONIC("lodsb"), ID_LODS, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_X, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_STRING, lods, ID_LODS, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_X, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_STRING | GRP_BINARY, new MULTI_MNEMONIC("scasb"), ID_SCAS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_b),new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_STRING | GRP_BINARY, scas, ID_SCAS, new[] {new INTERNAL_OPERAND(TQ_Y, SQ_vqp),new INTERNAL_OPERAND(TQ_rAX, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x40, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_C0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_C1, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("retn"), ID_RETN, new[] {new INTERNAL_OPERAND(TQ_I, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("retn"), ID_RETN, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_SEGREG, new MULTI_MNEMONIC("les"), ID_LES, new[] {new INTERNAL_OPERAND(TQ_G, SQ_v),new INTERNAL_OPERAND(TQ_M, SQ_p),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_MODRM | PROP_I64), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_SEGREG, new MULTI_MNEMONIC("lds"), ID_LDS, new[] {new INTERNAL_OPERAND(TQ_G, SQ_v),new INTERNAL_OPERAND(TQ_M, SQ_p),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_MODRM | PROP_I64), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_C6, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_C7, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("enter"), ID_ENTER, new[] {new INTERNAL_OPERAND(TQ_I, SQ_w),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("leave"), ID_LEAVE, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("retf"), ID_RETF, new[] {new INTERNAL_OPERAND(TQ_I, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("retf"), ID_RETF, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BREAK | GRP_STACK, new MULTI_MNEMONIC("int"), ID_INT, new[] {new INTERNAL_OPERAND(TQ_3, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x20, 0x0, 0x20, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BREAK | GRP_STACK, new MULTI_MNEMONIC("int"), ID_INT, new[] {new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x20, 0x0, 0x20, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BREAK | GRP_STACK, new MULTI_MNEMONIC("into"), ID_INTO, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x80, 0x20, 0x0, 0x20, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BREAK | GRP_STACK, iret, ID_IRET, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_D0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_D1, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_D2, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_D3, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_DECIMAL, new MULTI_MNEMONIC("aam"), ID_AAM, new[] {new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_DECIMAL, new MULTI_MNEMONIC("aad"), ID_AAD, new[] {new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setalc"), ID_SETALC, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_I64 | PROP_UNDOC), 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("xlat"), ID_XLAT, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_D8_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_D9_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_DA_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_DB_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_DC_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_DD_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_DE_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_DF_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, loopnz, ID_LOOPNZ, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, loopz, ID_LOOPZ, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, loop, ID_LOOP, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_COND, jcxz, ID_JCXZ, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("in"), ID_IN, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("in"), ID_IN, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_v),new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("out"), ID_OUT, new[] {new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("out"), ID_OUT, new[] {new INTERNAL_OPERAND(TQ_I, SQ_b),new INTERNAL_OPERAND(TQ_rAX, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("call"), ID_CALL, new[] {new INTERNAL_OPERAND(TQ_J, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH, new MULTI_MNEMONIC("jmp"), ID_JMP, new[] {new INTERNAL_OPERAND(TQ_J, SQ_vds),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH, new MULTI_MNEMONIC("jmpf"), ID_JMPF, new[] {new INTERNAL_OPERAND(TQ_A, SQ_p),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_I64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH, new MULTI_MNEMONIC("jmp"), ID_JMP, new[] {new INTERNAL_OPERAND(TQ_J, SQ_bs),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("in"), ID_IN, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_rDX, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("in"), ID_IN, new[] {new INTERNAL_OPERAND(TQ_rAX, SQ_v),new INTERNAL_OPERAND(TQ_rDX, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("out"), ID_OUT, new[] {new INTERNAL_OPERAND(TQ_rDX, SQ_w),new INTERNAL_OPERAND(TQ_rAX, SQ_b),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_INOUT, new MULTI_MNEMONIC("out"), ID_OUT, new[] {new INTERNAL_OPERAND(TQ_rDX, SQ_w),new INTERNAL_OPERAND(TQ_rAX, SQ_v),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC("lock"), ID_LOCK, new[] {new INTERNAL_OPERAND(TQ_PREF_F0, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BREAK | GRP_STACK, new MULTI_MNEMONIC("icebp"), ID_ICEBP, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_UNDOC, 0x0, 0x20, 0x0, 0x20, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC("repnz"), ID_REPNZ, new[] {new INTERNAL_OPERAND(TQ_PREF_F2, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_F2_0F_JMP, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_PREFIX, new MULTI_MNEMONIC("repz"), ID_REPZ, new[] {new INTERNAL_OPERAND(TQ_PREF_F3, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_F3_0F_JMP, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SYSTEM, new MULTI_MNEMONIC("hlt"), ID_HLT, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_RING0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_FLGCTRL, new MULTI_MNEMONIC("cmc"), ID_CMC, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x1, 0x1, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_F6, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_F7, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_FLGCTRL, new MULTI_MNEMONIC("clc"), ID_CLC, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x1, 0x0, 0x1, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_FLGCTRL, new MULTI_MNEMONIC("stc"), ID_STC, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x1, 0x1, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_FLGCTRL, new MULTI_MNEMONIC("cli"), ID_CLI, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x20, 0x0, 0x20, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_FLGCTRL, new MULTI_MNEMONIC("sti"), ID_STI, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, PROP_IOPL, 0x0, 0x20, 0x20, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_FLGCTRL, new MULTI_MNEMONIC("cld"), ID_CLD, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x40, 0x0, 0x40, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_FLGCTRL, new MULTI_MNEMONIC("std"), ID_STD, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x40, 0x40, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_FE, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_FF, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static TABLE_DESCRIPTOR[] tables = new[] {
+    new TABLE_DESCRIPTOR(0x0, 0xFF, 0xFF, 0x0, 0x0, opcodes_1byte) };
 /*0x0 IDX_1BYTE */
     //min //max //mask //shift //props         //table
 //    {{ 0x0, 0xFF, 0xFF, 0x0, 0x0, "opcodes_1byte" }};
@@ -1868,8 +2235,8 @@ static void parse_mnemonic(OPCODE_DESCRIPTOR opcode, INSTRUCTION instr, INTERNAL
     }
     else
     {
-        get_instruction_opsize(opcode.mnemonic.multi_mnemonic, instr, idata, mode);
-        instr.mnemonic = opcode.mnemonic.multi_mnemonic.values[bsr(instr.opsize) - 1];
+        get_instruction_opsize(opcode.mnemonic, instr, idata, mode);
+        instr.mnemonic = opcode.mnemonic.values[bsr(instr.opsize) - 1];
     }
 }
 
@@ -1941,13 +2308,15 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
         public mediana(Win32Assembly assembly)
         {
             a = assembly;
+            //tables = new TABLE_DESCRIPTOR[1]() = {0x0, 0xFF, 0xFF, 0x0, 0x0, "opcodes_1byte" };
         }
         public UInt32 medi_disassemble(ulong offset, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
         {
             UInt32 len;
             UInt32 res;
             OPCODE_DESCRIPTOR opcode = new OPCODE_DESCRIPTOR();
-            INTERNAL_DATA idata = new INTERNAL_DATA();
+            INTERNAL_DATA idata = new INTERNAL_DATA(0xFF);
+
             //Setup everything.
             //memset(instr, 0x0, sizeof(*instr));
             //memset(&idata, 0x0, sizeof(idata));
