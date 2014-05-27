@@ -682,205 +682,205 @@ static uint ID_XSETBV     = 0x245;
 
 
 
-static uint PROP_LOCK      = 0x1;
-static uint PROP_I64       = 0x2;
-static uint PROP_O64       = 0x4;
-static uint PROP_IOPL      = 0x8;
-static uint PROP_RING0     = 0x10;
-static uint PROP_SERIAL    = 0x20;
-static uint PROP_MODRM     = 0x40;
-static uint PROP_UNDOC     = 0x80;
-static uint PROP_POST_PROC = 0x100;
+static ushort PROP_LOCK = 0x1;
+static ushort PROP_I64 = 0x2;
+static ushort PROP_O64 = 0x4;
+static ushort PROP_IOPL = 0x8;
+static ushort PROP_RING0 = 0x10;
+static ushort PROP_SERIAL = 0x20;
+static ushort PROP_MODRM = 0x40;
+static ushort PROP_UNDOC = 0x80;
+static ushort PROP_POST_PROC = 0x100;
 
-static uint TQ_NULL = 0xFF;
-static uint TQ_1    = 0x0;
-static uint TQ_3    = 0x1;
-static uint TQ_A    = 0x2;
-static uint TQ_C    = 0x3;
-static uint TQ_D    = 0x4;
-static uint TQ_E    = 0x5;
-static uint TQ_G    = 0x6;
-static uint TQ_H    = 0x7;
-static uint TQ_I    = 0x8;
-static uint TQ_J    = 0x9;
-static uint TQ_M    = 0xA;
-static uint TQ_N    = 0xB;
-static uint TQ_O    = 0xC;
-static uint TQ_P    = 0xD;
-static uint TQ_Q    = 0xE;
-static uint TQ_R    = 0xF;
-static uint TQ_S    = 0x10;
-static uint TQ_T    = 0x11;
-static uint TQ_U    = 0x12;
-static uint TQ_V    = 0x13;
-static uint TQ_W    = 0x14;
-static uint TQ_X    = 0x15;
-static uint TQ_Y    = 0x16;
-static uint TQ_Z    = 0x17;
-static uint TQ_rAX  = 0x18;
-static uint TQ_rCX  = 0x19;
-static uint TQ_rDX  = 0x1A;
-static uint TQ_rBX  = 0x1B;
-static uint TQ_rSP  = 0x1C;
-static uint TQ_rBP  = 0x1D;
-static uint TQ_rSI  = 0x1E;
-static uint TQ_rDI  = 0x1F;
-static uint TQ_fES  = 0x20;
-static uint TQ_fEST = 0x21;
-static uint TQ_fST0 = 0x22;
-static uint TQ_CS   = 0x23;
-static uint TQ_DS   = 0x24;
-static uint TQ_ES   = 0x25;
-static uint TQ_SS   = 0x26;
-static uint TQ_FS   = 0x27;
-static uint TQ_GS   = 0x28;
-static uint TQ_PREF_CS = 0x29;
-static uint TQ_PREF_DS = 0x2A;
-static uint TQ_PREF_ES = 0x2B;
-static uint TQ_PREF_SS = 0x2C;
-static uint TQ_PREF_FS = 0x2D;
-static uint TQ_PREF_GS = 0x2E;
-static uint TQ_PREF_66 = 0x2F;
-static uint TQ_PREF_67 = 0x30;
-static uint TQ_PREF_F2 = 0x31;
-static uint TQ_PREF_F3 = 0x32;
-static uint TQ_PREF_F0 = 0x33;
+static byte TQ_NULL = 0xFF;
+static byte TQ_1    = 0x0;
+static byte TQ_3    = 0x1;
+static byte TQ_A    = 0x2;
+static byte TQ_C    = 0x3;
+static byte TQ_D    = 0x4;
+static byte TQ_E    = 0x5;
+static byte TQ_G    = 0x6;
+static byte TQ_H    = 0x7;
+static byte TQ_I    = 0x8;
+static byte TQ_J    = 0x9;
+static byte TQ_M    = 0xA;
+static byte TQ_N    = 0xB;
+static byte TQ_O    = 0xC;
+static byte TQ_P    = 0xD;
+static byte TQ_Q    = 0xE;
+static byte TQ_R    = 0xF;
+static byte TQ_S    = 0x10;
+static byte TQ_T    = 0x11;
+static byte TQ_U    = 0x12;
+static byte TQ_V    = 0x13;
+static byte TQ_W    = 0x14;
+static byte TQ_X    = 0x15;
+static byte TQ_Y    = 0x16;
+static byte TQ_Z    = 0x17;
+static byte TQ_rAX  = 0x18;
+static byte TQ_rCX  = 0x19;
+static byte TQ_rDX  = 0x1A;
+static byte TQ_rBX  = 0x1B;
+static byte TQ_rSP  = 0x1C;
+static byte TQ_rBP  = 0x1D;
+static byte TQ_rSI  = 0x1E;
+static byte TQ_rDI  = 0x1F;
+static byte TQ_fES  = 0x20;
+static byte TQ_fEST = 0x21;
+static byte TQ_fST0 = 0x22;
+static byte TQ_CS   = 0x23;
+static byte TQ_DS   = 0x24;
+static byte TQ_ES   = 0x25;
+static byte TQ_SS   = 0x26;
+static byte TQ_FS   = 0x27;
+static byte TQ_GS   = 0x28;
+static byte TQ_PREF_CS = 0x29;
+static byte TQ_PREF_DS = 0x2A;
+static byte TQ_PREF_ES = 0x2B;
+static byte TQ_PREF_SS = 0x2C;
+static byte TQ_PREF_FS = 0x2D;
+static byte TQ_PREF_GS = 0x2E;
+static byte TQ_PREF_66 = 0x2F;
+static byte TQ_PREF_67 = 0x30;
+static byte TQ_PREF_F2 = 0x31;
+static byte TQ_PREF_F3 = 0x32;
+static byte TQ_PREF_F0 = 0x33;
 
-static uint SQ_NULL   = 0xFF;
-static uint SQ_a      = 0x0;
-static uint SQ_b      = 0x1;
-static uint SQ_bcd    = 0x2;
-static uint SQ_bdqp   = 0x3;
-static uint SQ_bs     = 0x4;
-static uint SQ_bss    = 0x5;
-static uint SQ_d      = 0x6;
-static uint SQ_ddq    = 0x7;
-static uint SQ_di     = 0x8;
-static uint SQ_dq     = 0x9;
-static uint SQ_dq64   = 0xA;
-static uint SQ_dqp    = 0xB;
-static uint SQ_dr     = 0xC;
-static uint SQ_ds     = 0xD;
-static uint SQ_e      = 0xE;
-static uint SQ_er     = 0xF;
-static uint SQ_p      = 0x10;
-static uint SQ_pd     = 0x11;
-static uint SQ_pi     = 0x12;
-static uint SQ_ps     = 0x13;
-static uint SQ_psq    = 0x14;
-static uint SQ_ptp    = 0x15;
-static uint SQ_q      = 0x16;
-static uint SQ_qdq    = 0x17;
-static uint SQ_qi     = 0x18;
-static uint SQ_s      = 0x19;
-static uint SQ_sd     = 0x1A;
-static uint SQ_sr     = 0x1B;
-static uint SQ_ss     = 0x1C;
-static uint SQ_st     = 0x1D;
-static uint SQ_stx    = 0x1E;
-static uint SQ_v      = 0x1F;
-static uint SQ_v67q64 = 0x20;
-static uint SQ_vd64   = 0x21;
-static uint SQ_vds    = 0x22;
-static uint SQ_vq64   = 0x23;
-static uint SQ_vqp    = 0x24;
-static uint SQ_vs     = 0x25;
-static uint SQ_w      = 0x26;
-static uint SQ_wdq    = 0x27;
-static uint SQ_wdqp   = 0x28;
-static uint SQ_wi     = 0x29;
-static uint SQ_wv     = 0x2A;
-static uint SQ_wvqp   = 0x2B;
+static byte SQ_NULL   = 0xFF;
+static byte SQ_a      = 0x0;
+static byte SQ_b      = 0x1;
+static byte SQ_bcd    = 0x2;
+static byte SQ_bdqp   = 0x3;
+static byte SQ_bs     = 0x4;
+static byte SQ_bss    = 0x5;
+static byte SQ_d      = 0x6;
+static byte SQ_ddq    = 0x7;
+static byte SQ_di     = 0x8;
+static byte SQ_dq     = 0x9;
+static byte SQ_dq64   = 0xA;
+static byte SQ_dqp    = 0xB;
+static byte SQ_dr     = 0xC;
+static byte SQ_ds     = 0xD;
+static byte SQ_e      = 0xE;
+static byte SQ_er     = 0xF;
+static byte SQ_p      = 0x10;
+static byte SQ_pd     = 0x11;
+static byte SQ_pi     = 0x12;
+static byte SQ_ps     = 0x13;
+static byte SQ_psq    = 0x14;
+static byte SQ_ptp    = 0x15;
+static byte SQ_q      = 0x16;
+static byte SQ_qdq    = 0x17;
+static byte SQ_qi     = 0x18;
+static byte SQ_s      = 0x19;
+static byte SQ_sd     = 0x1A;
+static byte SQ_sr     = 0x1B;
+static byte SQ_ss     = 0x1C;
+static byte SQ_st     = 0x1D;
+static byte SQ_stx    = 0x1E;
+static byte SQ_v      = 0x1F;
+static byte SQ_v67q64 = 0x20;
+static byte SQ_vd64   = 0x21;
+static byte SQ_vds    = 0x22;
+static byte SQ_vq64   = 0x23;
+static byte SQ_vqp    = 0x24;
+static byte SQ_vs     = 0x25;
+static byte SQ_w      = 0x26;
+static byte SQ_wdq    = 0x27;
+static byte SQ_wdqp   = 0x28;
+static byte SQ_wi     = 0x29;
+static byte SQ_wv     = 0x2A;
+static byte SQ_wvqp   = 0x2B;
 
-static uint IDX_1BYTE    = 0x0;
-static uint IDX_80       = 0x1;
-static uint IDX_81       = 0x2;
-static uint IDX_82       = 0x3;
-static uint IDX_83       = 0x4;
-static uint IDX_8F       = 0x5;
-static uint IDX_C0       = 0x6;
-static uint IDX_C1       = 0x7;
-static uint IDX_C6       = 0x8;
-static uint IDX_C7       = 0x9;
-static uint IDX_D0       = 0xA;
-static uint IDX_D1       = 0xB;
-static uint IDX_D2       = 0xC;
-static uint IDX_D3       = 0xD;
-static uint IDX_F6       = 0xE;
-static uint IDX_F7       = 0xF;
-static uint IDX_FE       = 0x10;
-static uint IDX_FF       = 0x11;
+static byte IDX_1BYTE    = 0x0;
+static byte IDX_80       = 0x1;
+static byte IDX_81       = 0x2;
+static byte IDX_82       = 0x3;
+static byte IDX_83       = 0x4;
+static byte IDX_8F       = 0x5;
+static byte IDX_C0       = 0x6;
+static byte IDX_C1       = 0x7;
+static byte IDX_C6       = 0x8;
+static byte IDX_C7       = 0x9;
+static byte IDX_D0       = 0xA;
+static byte IDX_D1       = 0xB;
+static byte IDX_D2       = 0xC;
+static byte IDX_D3       = 0xD;
+static byte IDX_F6       = 0xE;
+static byte IDX_F7       = 0xF;
+static byte IDX_FE       = 0x10;
+static byte IDX_FF       = 0x11;
 
-static uint IDX_D8_SWTCH = 0x12;
-static uint IDX_D8_MEM   = 0x13;
-static uint IDX_D8_NOMEM = 0x14;
+static byte IDX_D8_SWTCH = 0x12;
+static byte IDX_D8_MEM   = 0x13;
+static byte IDX_D8_NOMEM = 0x14;
 
-static uint IDX_D9_SWTCH = 0x15;
-static uint IDX_D9_MEM   = 0x16;
-static uint IDX_D9_NOMEM = 0x17;
+static byte IDX_D9_SWTCH = 0x15;
+static byte IDX_D9_MEM   = 0x16;
+static byte IDX_D9_NOMEM = 0x17;
 
-static uint IDX_DA_SWTCH = 0x18;
-static uint IDX_DA_MEM   = 0x19;
-static uint IDX_DA_NOMEM = 0x1A;
+static byte IDX_DA_SWTCH = 0x18;
+static byte IDX_DA_MEM   = 0x19;
+static byte IDX_DA_NOMEM = 0x1A;
 
-static uint IDX_DB_SWTCH = 0x1B;
-static uint IDX_DB_MEM   = 0x1C;
-static uint IDX_DB_NOMEM = 0x1D;
+static byte IDX_DB_SWTCH = 0x1B;
+static byte IDX_DB_MEM   = 0x1C;
+static byte IDX_DB_NOMEM = 0x1D;
 
-static uint IDX_DC_SWTCH = 0x1E;
-static uint IDX_DC_MEM   = 0x1F;
-static uint IDX_DC_NOMEM = 0x20;
+static byte IDX_DC_SWTCH = 0x1E;
+static byte IDX_DC_MEM   = 0x1F;
+static byte IDX_DC_NOMEM = 0x20;
 
-static uint IDX_DD_SWTCH = 0x21;
-static uint IDX_DD_MEM   = 0x22;
-static uint IDX_DD_NOMEM = 0x23;
+static byte IDX_DD_SWTCH = 0x21;
+static byte IDX_DD_MEM   = 0x22;
+static byte IDX_DD_NOMEM = 0x23;
 
-static uint IDX_DE_SWTCH = 0x24;
-static uint IDX_DE_MEM   = 0x25;
-static uint IDX_DE_NOMEM = 0x26;
+static byte IDX_DE_SWTCH = 0x24;
+static byte IDX_DE_MEM   = 0x25;
+static byte IDX_DE_NOMEM = 0x26;
 
-static uint IDX_DF_SWTCH = 0x27;
-static uint IDX_DF_MEM   = 0x28;
-static uint IDX_DF_NOMEM = 0x29;
+static byte IDX_DF_SWTCH = 0x27;
+static byte IDX_DF_MEM   = 0x28;
+static byte IDX_DF_NOMEM = 0x29;
 
-static uint IDX_0F                = 0x2A;
-static uint IDX_0F_00             = 0x2B;
-static uint IDX_0F_01_SWTCH       = 0x2C;
-static uint IDX_0F_01_MEM         = 0x2D;
-static uint IDX_0F_01_NOMEM_SWTCH = 0x2E;
-static uint IDX_0F_01_NOMEM_00    = 0x2F;
-static uint IDX_0F_01_NOMEM_01    = 0x30;
-static uint IDX_0F_01_NOMEM_02    = 0x31;
-static uint IDX_0F_01_NOMEM_07    = 0x32;
-static uint IDX_0F_12             = 0x33;
-static uint IDX_0F_16             = 0x34;
-static uint IDX_0F_18             = 0x35;
-static uint IDX_0F_19             = 0x36;
-static uint IDX_0F_71             = 0x37;
-static uint IDX_0F_72             = 0x38;
-static uint IDX_0F_73             = 0x39;
-static uint IDX_0F_AE_SWTCH       = 0x3A;
-static uint IDX_0F_AE_MEM         = 0x3B;
-static uint IDX_0F_AE_NOMEM       = 0x3C;
-static uint IDX_0F_BA             = 0x3D;
-static uint IDX_0F_C7             = 0x3E;
-static uint IDX_66_0F_JMP         = 0x3F;
-static uint IDX_66_0F             = 0x40;
-static uint IDX_66_0F71           = 0x41;
-static uint IDX_66_0F72           = 0x42;
-static uint IDX_66_0F73           = 0x43;
-static uint IDX_66_0FC7           = 0x44;
-static uint IDX_F2_0F_JMP         = 0x45;
-static uint IDX_F2_0F             = 0x46;
-static uint IDX_F3_0F_JMP         = 0x47;
-static uint IDX_F3_0F             = 0x48;
-static uint IDX_F3_0FC7           = 0x49;
+static byte IDX_0F                = 0x2A;
+static byte IDX_0F_00             = 0x2B;
+static byte IDX_0F_01_SWTCH       = 0x2C;
+static byte IDX_0F_01_MEM         = 0x2D;
+static byte IDX_0F_01_NOMEM_SWTCH = 0x2E;
+static byte IDX_0F_01_NOMEM_00    = 0x2F;
+static byte IDX_0F_01_NOMEM_01    = 0x30;
+static byte IDX_0F_01_NOMEM_02    = 0x31;
+static byte IDX_0F_01_NOMEM_07    = 0x32;
+static byte IDX_0F_12             = 0x33;
+static byte IDX_0F_16             = 0x34;
+static byte IDX_0F_18             = 0x35;
+static byte IDX_0F_19             = 0x36;
+static byte IDX_0F_71             = 0x37;
+static byte IDX_0F_72             = 0x38;
+static byte IDX_0F_73             = 0x39;
+static byte IDX_0F_AE_SWTCH       = 0x3A;
+static byte IDX_0F_AE_MEM         = 0x3B;
+static byte IDX_0F_AE_NOMEM       = 0x3C;
+static byte IDX_0F_BA             = 0x3D;
+static byte IDX_0F_C7             = 0x3E;
+static byte IDX_66_0F_JMP         = 0x3F;
+static byte IDX_66_0F             = 0x40;
+static byte IDX_66_0F71           = 0x41;
+static byte IDX_66_0F72           = 0x42;
+static byte IDX_66_0F73           = 0x43;
+static byte IDX_66_0FC7           = 0x44;
+static byte IDX_F2_0F_JMP         = 0x45;
+static byte IDX_F2_0F             = 0x46;
+static byte IDX_F3_0F_JMP         = 0x47;
+static byte IDX_F3_0F             = 0x48;
+static byte IDX_F3_0FC7           = 0x49;
 
-static uint IDX_0F_38   = 0x4A;
-static uint IDX_66_0F38 = 0x4B;
-static uint IDX_F2_0F38 = 0x4C;
-static uint IDX_0F_3A   = 0x4D;
-static uint IDX_66_0F3A = 0x4E;
+static byte IDX_0F_38   = 0x4A;
+static byte IDX_66_0F38 = 0x4B;
+static byte IDX_F2_0F38 = 0x4C;
+static byte IDX_0F_3A   = 0x4D;
+static byte IDX_66_0F3A = 0x4E;
 
 static int POST_PROC_SHIFT = 0xC;
 
@@ -1013,6 +1013,44 @@ static byte PREF_LOCK_ID     = 0xA;
 static byte PREF_REX_ID      = 0xB;
 
 
+/************************
+* Defines and structs for
+* instruction.
+*************************
+*/
+//INSTRUCTION.flag's values:
+static ushort INSTR_FLAG_MODRM = 0x0001;
+static ushort INSTR_FLAG_SIB = 0x0002;
+static ushort INSTR_FLAG_SF_PREFIXES = 0x0004;
+static ushort INSTR_FLAG_IOPL = 0x0008;
+static ushort INSTR_FLAG_RING0 = 0x0010;
+static ushort INSTR_FLAG_SERIAL = 0x0020;
+static ushort INSTR_FLAG_UNDOC = 0x0040;
+
+//INSTRUCTION.prefixes values.
+//Segment prefixes:
+static UInt16 INSTR_PREFIX_CS = 0x0001;
+static UInt16 INSTR_PREFIX_DS = 0x0002;
+static UInt16 INSTR_PREFIX_ES = 0x0004;
+static UInt16 INSTR_PREFIX_SS = 0x0008;
+static UInt16 INSTR_PREFIX_FS = 0x0010;
+static UInt16 INSTR_PREFIX_GS = 0x0020;
+//Segment prefixes mask:
+static uint INSTR_PREFIX_SEG_MASK  = 0x003F;
+//Repeat prefixes:
+static UInt16 INSTR_PREFIX_REPZ = 0x0040;
+static UInt16 INSTR_PREFIX_REPNZ = 0x0080;
+//Repeat prefixes mask:
+static uint INSTR_PREFIX_REP_MASK  = 0x00C0;
+//Size override prefixes:
+static UInt16 INSTR_PREFIX_OPSIZE = 0x0100;
+static UInt16 INSTR_PREFIX_ADDRSIZE = 0x0200;
+static UInt16 INSTR_PREFIX_REX = 0x0400;
+//Operand size prefixes mask:
+static uint INSTR_PREFIX_SIZE_MASK = 0x0300;
+//LOCK prefix:
+static UInt16 INSTR_PREFIX_LOCK = 0x0800;
+
 //[StructLayout(LayoutKind.Explicit)]
         public struct DISPLACEMENT
         {
@@ -1061,7 +1099,7 @@ public struct INSTRUCTION
 public struct DISASM_INOUT_PARAMS
 {
     public int sf_prefixes_len;
-    public byte sf_prefixes;
+    public byte[] sf_prefixes;
     public UInt32 errcode;
     public byte arch;
     public byte mode;
@@ -1080,20 +1118,16 @@ public struct INTERNAL_DATA
 
 public struct MULTI_MNEMONIC
 {
-    public int a;
-    public int b;
-    public struct mnem
-    {
-        public string m1;
-        public string m2;
-        public string m3;
-    }
+    public char indicator;
+    public uint size;
+    //public SQ b;
+    public string[] values;
 }
 //static struct MULTI_MNEMONIC pusha  = { MM_INDICATOR, SQ_v,      { _UT("pusha"),   _UT("pushad"),  _UT("bad_mnem")  } };
 public struct MNEMONIC
 {
     public string value;
-    public MULTI_MNEMONIC[] multi_mnemonic;
+    public MULTI_MNEMONIC multi_mnemonic;
 };
 
 public struct INTERNAL_OPERAND
@@ -1121,69 +1155,348 @@ public struct TABLE_DESCRIPTOR
     public OPCODE_DESCRIPTOR[] opcodes;
 }
 
+public struct OPERAND_SIZE
+{
+    public UInt16 size_in_stream;
+    public UInt16 size;
+    public byte sign;
+}
+
+
+
+
+public delegate void SQ(OPERAND_SIZE opsize, INSTRUCTION instr, INTERNAL_DATA idata, byte mode);
+
+/*******************************************************
+* Operand's size qualifiers (SQ_*) handlers' prototypes.
+********************************************************
+*/
+public static SQ[] sq_handlers;
+
+public SQ
+    sq_a,
+    sq_b,
+    sq_bcd,
+    sq_bdqp,
+    sq_bs,
+    sq_bss,
+    sq_d,
+    sq_ddq,
+    sq_di,
+    sq_dq,
+    sq_dq64,
+    sq_dqp,
+    sq_dr,
+    sq_ds,
+    sq_e,
+    sq_er,
+    sq_p,
+    sq_pd,
+    sq_pi,
+    sq_ps,
+    sq_psq,
+    sq_ptp,
+    sq_q,
+    sq_qdq,
+    sq_qi,
+    sq_s,
+    sq_sd,
+    sq_sr,
+    sq_ss,
+    sq_st,
+    sq_stx,
+    sq_v,
+    sq_v67q64,
+    sq_vd64,
+    sq_vds,
+    sq_vq64,
+    sq_vqp,
+    sq_vs,
+    sq_w,
+    sq_wdq,
+    sq_wdqp,
+    sq_wi,
+    sq_wv,
+    sq_wvqp;
+
+
+/***************************************
+* Postprocessing functions's prototypes.
+****************************************
+*/
+
+public delegate UInt32 PP(ulong origin_offset, ulong offset, INSTRUCTION instr, INTERNAL_DATA idata, byte mode);
+
+public static PP[] postprocs;
+
+public PP
+    post_proc_arpl_movsxd,
+    post_proc_nop_pause,
+    post_proc_multinop,
+    post_proc_cmpxchg8b;
+
+public delegate UInt32 TQ(ulong origin_offset, ulong offset, INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, byte mode);
 
 /*
  Operand's type qualifers (TQ_) handlers' prototypes.
 
 */
-static uint32_t tq_1(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_3(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_A(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_C(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_D(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_E(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_G(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_H(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_I(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_J(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_M(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_N(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_O(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_P(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_Q(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_R(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_S(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_T(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_U(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_V(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_W(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_X(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_Y(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_Z(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rAX(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rCX(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rDX(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rBX(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rSP(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rBP(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rSI(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_rDI(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_fST0(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_fES(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_fEST(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_CS(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_DS(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_SS(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_ES(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_FS(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t tq_GS(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_CS_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_DS_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_SS_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_ES_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_FS_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_GS_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_OPSIZE_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_ADDRSIZE_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_REPZ_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_REPNZ_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
-static uint32_t pref_LOCK_set(ulong origin_offset, ulong offset,INSTRUCTION instr, int op_index,OPERAND_SIZE opsize,INTERNAL_DATA idata, uint8_t mode);
+public static TQ[] tq_handlers;
 
+public TQ 
+tq_1,
+tq_3,
+tq_A
+,tq_C
+,tq_D
+,tq_E
+,tq_G
+,tq_H
+,tq_I
+,tq_J
+,tq_M
+,tq_N
+,tq_O
+,tq_P
+,tq_Q
+,tq_R
+,tq_S
+,tq_T
+,tq_U
+,tq_V
+,tq_W
+,tq_X
+,tq_Y
+,tq_Z
+,tq_rAX
+,tq_rCX
+,tq_rDX
+,tq_rBX
+,tq_rSP
+,tq_rBP
+,tq_rSI
+,tq_rDI
+,tq_fST0
+,tq_fES
+,tq_fEST
+,tq_CS
+,tq_DS
+,tq_SS
+,tq_ES
+,tq_FS
+,tq_GS,
+pref_CS_set,
+pref_DS_set,
+pref_SS_set,
+pref_ES_set,
+pref_FS_set,
+pref_GS_set,
+pref_OPSIZE_set,
+pref_ADDRSIZE_set,
+pref_REPZ_set,
+pref_REPNZ_set,
+pref_LOCK_set;
+
+/************************
+* Defines and structs for
+* operand.
+*************************
+*/
+//OPERAND.flags' values:
+static ushort OPERAND_TYPE_REG = 0x01;
+static ushort OPERAND_TYPE_MEM = 0x02;
+static ushort OPERAND_TYPE_IMM = 0x04;
+static ushort OPERAND_TYPE_DIR = 0x08;
+static ushort OPERAND_TYPE_MASK= 0x0F;
+
+static byte OPERAND_FLAG_PRESENT= 0x10;
+static byte OPERAND_FLAG_REL    = 0x20;
+
+//OPERAND.size's values:
+static ushort OPERAND_SIZE_8   = 0x0001;
+static ushort OPERAND_SIZE_16  = 0x0002;
+static ushort OPERAND_SIZE_32  = 0x0004;
+static ushort OPERAND_SIZE_48  = 0x0006;
+static ushort OPERAND_SIZE_64  = 0x0008;
+static ushort OPERAND_SIZE_80  = 0x000A;
+static ushort OPERAND_SIZE_128 = 0x0010;
+static ushort OPERAND_SIZE_14  = 0x000E;
+static ushort OPERAND_SIZE_28  = 0x001C;
+static ushort OPERAND_SIZE_94  = 0x005E;
+static ushort OPERAND_SIZE_108 = 0x006C;
+static ushort OPERAND_SIZE_512 = 0x0200;
+
+//OPERAND.ADDR.mod's bits:
+static byte ADDR_MOD_BASE = 0x1;
+static byte ADDR_MOD_IDX  = 0x2;
+static byte ADDR_MOD_DISP = 0x4;
+
+//OPERAND.REG.type's values:
+static ushort REG_TYPE_GEN= 0x0;
+static ushort REG_TYPE_SEG= 0x1;
+static ushort REG_TYPE_CR = 0x2;
+static ushort REG_TYPE_DBG= 0x3;
+static ushort REG_TYPE_TR = 0x4;
+static ushort REG_TYPE_FPU= 0x5;
+static ushort REG_TYPE_MMX= 0x7;
+static ushort REG_TYPE_XMM= 0x8;
+
+//OPERAND.REG.code's values (GPR):
+static ushort REG_CODE_AX = 0x0;
+static ushort REG_CODE_CX = 0x1;
+static ushort REG_CODE_DX = 0x2;
+static ushort REG_CODE_BX = 0x3;
+static ushort REG_CODE_SP = 0x4;
+static ushort REG_CODE_BP = 0x5;
+static ushort REG_CODE_SI = 0x6;
+static ushort REG_CODE_DI = 0x7;
+
+static ushort REG_CODE_64 = 0x8;
+
+static ushort REG_CODE_R8 = 0x8;
+static ushort REG_CODE_R9 = 0x9;
+static ushort REG_CODE_R10= 0xA;
+static ushort REG_CODE_R11= 0xB;
+static ushort REG_CODE_R12= 0xC;
+static ushort REG_CODE_R13= 0xD;
+static ushort REG_CODE_R14= 0xE;
+static ushort REG_CODE_R15= 0xF;
+static ushort REG_CODE_SPL= 0x10;
+static ushort REG_CODE_BPL= 0x11;
+static ushort REG_CODE_SIL= 0x12;
+static ushort REG_CODE_DIL= 0x13;
+static ushort REG_CODE_IP = 0x14;
+
+//OPERAND.REG.code's values (segment registers):
+static ushort SREG_CODE_CS= 0x0;
+static ushort SREG_CODE_DS= 0x1;
+static ushort SREG_CODE_ES= 0x2;
+static ushort SREG_CODE_SS= 0x3;
+static ushort SREG_CODE_FS= 0x4;
+static ushort SREG_CODE_GS= 0x5;
+
+//OPERAND.REG.code's values (FPU registers):
+static ushort FREG_CODE_ST0= 0x0;
+static ushort FREG_CODE_ST1= 0x1;
+static ushort FREG_CODE_ST2= 0x2;
+static ushort FREG_CODE_ST3= 0x3;
+static ushort FREG_CODE_ST4= 0x4;
+static ushort FREG_CODE_ST5= 0x5;
+static ushort FREG_CODE_ST6= 0x6;
+static ushort FREG_CODE_ST7= 0x7;
+
+//OPERAND.REG.code's values (control registers):
+static ushort CREG_CODE_CR0= 0x0;
+static ushort CREG_CODE_CR1= 0x1;
+static ushort CREG_CODE_CR2= 0x2;
+static ushort CREG_CODE_CR3= 0x3;
+static ushort CREG_CODE_CR4= 0x4;
+static ushort CREG_CODE_CR5= 0x5;
+static ushort CREG_CODE_CR6= 0x6;
+static ushort CREG_CODE_CR7= 0x7;
+
+//OPERAND.REG.code's values (debug registers):
+static ushort DREG_CODE_DR0= 0x0;
+static ushort DREG_CODE_DR1= 0x1;
+static ushort DREG_CODE_DR2= 0x2;
+static ushort DREG_CODE_DR3= 0x3;
+static ushort DREG_CODE_DR4= 0x4;
+static ushort DREG_CODE_DR5= 0x5;
+static ushort DREG_CODE_DR6= 0x6;
+static ushort DREG_CODE_DR7= 0x7;
+
+//OPERAND.REG.code's values (MMX registers):
+static ushort MREG_CODE_MM0= 0x0;
+static ushort MREG_CODE_MM1= 0x1;
+static ushort MREG_CODE_MM2= 0x2;
+static ushort MREG_CODE_MM3= 0x3;
+static ushort MREG_CODE_MM4= 0x4;
+static ushort MREG_CODE_MM5= 0x5;
+static ushort MREG_CODE_MM6= 0x6;
+static ushort MREG_CODE_MM7= 0x7;
+
+//OPERAND.REG.code's values (XMM registers):
+static ushort XREG_CODE_XMM0 = 0x0;
+static ushort XREG_CODE_XMM1 = 0x1;
+static ushort XREG_CODE_XMM2 = 0x2;
+static ushort XREG_CODE_XMM3 = 0x3;
+static ushort XREG_CODE_XMM4 = 0x4;
+static ushort XREG_CODE_XMM5 = 0x5;
+static ushort XREG_CODE_XMM6 = 0x6;
+static ushort XREG_CODE_XMM7 = 0x7;
+
+static ushort XREG_CODE_XMM8 = 0x8;
+static ushort XREG_CODE_XMM9 = 0x9;
+static ushort XREG_CODE_XMM10= 0xA;
+static ushort XREG_CODE_XMM11= 0xB;
+static ushort XREG_CODE_XMM12= 0xC;
+static ushort XREG_CODE_XMM13= 0xD;
+static ushort XREG_CODE_XMM14= 0xE;
+static ushort XREG_CODE_XMM15 = 0xF;
+
+public static UInt16[] pref_bits = 
+{
+    INSTR_PREFIX_CS,
+    INSTR_PREFIX_DS,
+    INSTR_PREFIX_ES,
+    INSTR_PREFIX_SS,
+    INSTR_PREFIX_FS,
+    INSTR_PREFIX_GS,
+    INSTR_PREFIX_OPSIZE,
+    INSTR_PREFIX_ADDRSIZE,
+    INSTR_PREFIX_REPZ,
+    INSTR_PREFIX_REPNZ,
+    INSTR_PREFIX_LOCK,
+    INSTR_PREFIX_REX};
+
+public static byte[] pref_opcodes =
+{
+    0x2E, //CS
+    0x3E, //DS
+    0x26, //ES
+    0x36, //SS
+    0x64, //FS
+    0x66, //GS
+    0x66, //OPSIZE
+    0x67, //ADDRSIZE
+    0xF2, //REPZ
+    0xF3, //REPNZ
+    0xF0  //LOCK
+};
+
+//INSTRUCTION.addrsize's values:
+static byte ADDR_SIZE_16 = 0x2;
+static byte ADDR_SIZE_32 = 0x4;
+static byte ADDR_SIZE_64 = 0x8;
+
+//DISASM_INOUT_PARAMS.options' bits:
+static byte DISASM_OPTION_APPLY_REL     = 0x1;
+static byte DISASM_OPTION_OPTIMIZE_DISP = 0x2;
+
+
+static char MM_INDICATOR = '*';
 
 public static TABLE_DESCRIPTOR[] tables;// =
 /*0x0 IDX_1BYTE */
     //min //max //mask //shift //props         //table
 //    {{ 0x0, 0xFF, 0xFF, 0x0, 0x0, "opcodes_1byte" }};
+
+
+//If DISASM_INOUT_PARAMS.sf_prefixes != NULL, copies superfluous prefix's value to the array.
+static void add_sf_prefix_value(byte[] prefixes, int index, byte value, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
+{
+    instr.flags |= INSTR_FLAG_SF_PREFIXES;
+
+    //if (param.sf_prefixes!=0)
+        param.sf_prefixes[param.sf_prefixes_len++] = value;
+    prefixes[index] = 0xFF;    
+}
+
+//Gets superfluous prefix's value by its index and call to function above :).
+static void add_sf_prefix(byte[] prefixes, int index, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
+{
+    add_sf_prefix_value(prefixes, index, pref_opcodes[prefixes[index]], instr, param);
+}
 
 //Main function for parsing prefixes. Reads input stream until meets non-prefix byte
 // or maximum instruction length is exceeded. The function checks if a prefix of the same group
@@ -1205,7 +1518,9 @@ static UInt32 parse_prefixes(ulong offset, INSTRUCTION instr, INTERNAL_DATA idat
 
     while(true)
     {
-        pref_code = *offset;
+        //pref_code = *offset;
+        pref_code = 0;
+
         if (res > MAX_INSTRUCTION_LEN)
         {
             idata.severe_err = ERR_TOO_LONG;//error: instruction too long.
@@ -1240,7 +1555,7 @@ static UInt32 parse_prefixes(ulong offset, INSTRUCTION instr, INTERNAL_DATA idat
                 }
             }
 
-            tmp = tq_handlers[ptr.ops[0].type](null, null, instr, 0, null, null, param.mode);
+            tmp = tq_handlers[ptr.ops[0].type](0, 0, instr, 0, new OPERAND_SIZE(), new INTERNAL_DATA(), param.mode);
             pref_index = (byte)(tmp >> 8);
             pref_id = (byte)tmp;// &0xFF;
             if (idata.prefixes[pref_index] != 0xFF)
@@ -1277,6 +1592,8 @@ static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_d
     do
     {
         //opcode = *offset;
+        opcode = 0;
+
         opcode >>= tables[table].shift;
         opcode &= tables[table].mask;
         opcode -= tables[table].min;
@@ -1308,7 +1625,7 @@ static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_d
         }
         break;
     }
-    while(1);
+    while(true);
 
     if (idata.severe_err!=0)
         opcode_descr = tables[table].opcodes[opcode];
@@ -1316,6 +1633,14 @@ static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_d
     return res;
 }
 
+//Checks opcode-extension prefixes (repz, repnz, opsize) are superfluous.
+static void check_ext_sf_prefixes(byte[] prefixes, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
+{
+    if (prefixes[PREF_OPSIZE_INDEX] != 0xFF)
+        add_sf_prefix(prefixes, PREF_OPSIZE_INDEX, instr, param);
+    if (prefixes[PREF_REP_INDEX] != 0xFF)
+        add_sf_prefix(prefixes, PREF_OPSIZE_INDEX, instr, param);
+}
 //Main function for parsing opcode and prefixes. First of all it parses all prefixes and then
 // looks up for struct OPCODE_DESCRIPTOR. The following algorithm is used to handle instructions that
 // use prefixes as opcode extension:
@@ -1334,12 +1659,11 @@ static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_d
 //          Yes: Success.
 static UInt32 parse_opcode(ulong offset, OPCODE_DESCRIPTOR opcode_descr, INSTRUCTION instr, INTERNAL_DATA idata, DISASM_INOUT_PARAMS param)
 {
-    byte ext_table_index;
-    byte ext_prefix_index;
+    byte ext_table_index  = 0xFF;
+    byte ext_prefix_index = 0;
     UInt32 res;
     UInt32 tmp;
 
-    ext_table_index = 0xFF;
     res = parse_prefixes(offset, instr, idata, ext_table_index, ext_prefix_index, param);
     if (idata.severe_err==0)
     {
@@ -1375,37 +1699,242 @@ static UInt32 parse_opcode(ulong offset, OPCODE_DESCRIPTOR opcode_descr, INSTRUC
     return res;
 }
 
+//Applies disassembling options.
+static void apply_disasm_options(INSTRUCTION instr, UInt32 len, DISASM_INOUT_PARAMS param)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if ((param.options & DISASM_OPTION_APPLY_REL)!=0)
+        {
+            if ((instr.ops[i].flags & OPERAND_FLAG_REL)!=0)
+            {
+                instr.ops[i].value.imm.imm64 += len + param.bas;
+            }
+        }
 
+        if ((param.options & DISASM_OPTION_OPTIMIZE_DISP)!=0)
+        {
+            if (((instr.ops[i].flags & OPERAND_TYPE_MEM)!=0) && (instr.ops[i].value.addr.mod != ADDR_MOD_DISP))
+            {
+                if (instr.disp.value.d64 == 0x0)
+                    instr.ops[i].value.addr.mod &= (byte)(~(uint)ADDR_MOD_DISP);
+            }
+        }
+    }
+}
 
 static UInt32 parse_operand( ulong origin_offset, ulong offset, INTERNAL_OPERAND iop, INSTRUCTION instr, int op_index, INTERNAL_DATA idata, byte mode)
 {
     UInt32 res = 0;
-    OPERAND_SIZE opsize;
+    OPERAND_SIZE opsize = new OPERAND_SIZE();
 
     if (iop.type != TQ_NULL)
     {
         instr.ops[op_index].flags |= OPERAND_FLAG_PRESENT;
-        if (iop.size >= sizeof(sq_handlers) / sizeof(sq_handlers[0]))
+        if (iop.size >= sq_handlers.Count())
         {
             idata.severe_err = ERR_INTERNAL;
         }
         else
         {
-            sq_handlers[iop.size](&opsize, instr, idata, mode);
+            sq_handlers[iop.size](opsize, instr, idata, mode);
         }
-
-        if (iop.size >= sizeof(tq_handlers) / sizeof(tq_handlers[0]))
+        
+        if (iop.size >= tq_handlers.Count())
         {
             idata.severe_err = ERR_INTERNAL;
         }
         else
         {
-            res = tq_handlers[iop.type](origin_offset, offset, instr, op_index, &opsize, idata, mode);
+            res = tq_handlers[iop.type](origin_offset, offset, instr, op_index, opsize, idata, mode);
         }
     }
 
     return res;
 }
+
+//Returns address size. Address size is common for all operands.
+static void get_address_size(INSTRUCTION instr, byte[] prefixes, byte mode)
+{
+    if (mode == DISASSEMBLE_MODE_64)
+    {
+        if (prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
+            instr.addrsize = ADDR_SIZE_32;
+        else
+            instr.addrsize = ADDR_SIZE_64;
+    }
+    else
+    {
+        if (prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
+            mode ^= (byte)(DISASSEMBLE_MODE_16 | DISASSEMBLE_MODE_32);
+
+        if (mode == DISASSEMBLE_MODE_16)
+            instr.addrsize = ADDR_SIZE_16;
+        else
+            instr.addrsize = ADDR_SIZE_32;
+    }
+}
+
+//Copies MODRM and SIB bytes to struct INSTRUCTION.
+static byte parse_modrm_sib(ulong offset, INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
+{
+    byte len = 0;
+
+    if ((opcode.props & PROP_MODRM)!=0)
+    {
+        len++;
+        instr.flags |= INSTR_FLAG_MODRM;
+        //instr.modrm = *offset;
+        instr.modrm = 0;
+        if (instr.addrsize != ADDR_SIZE_16)
+        {
+            if ((instr.modrm & 0x7) == 0x4 && (instr.modrm & 0xC0) != 0xC0)
+            {
+                len++;
+                instr.flags |= INSTR_FLAG_SIB;
+                //instr.sib = offset[1];
+                instr.sib = 1;
+            }
+        }
+    }
+
+    return len;
+}
+
+static void copy_eflags(INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
+{
+    instr.tested_flags = opcode.tested_flags;
+    instr.modified_flags = opcode.modified_flags;
+    instr.set_flags = opcode.set_flags;
+    instr.cleared_flags = opcode.cleared_flags;
+    instr.undefined_flags = opcode.undefined_flags;
+}
+
+
+//Copies instruction's flags from struct OPCODE_DESCRIPTOR to struct INSTRUCTION.
+static void copy_instr_flags(INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
+{
+    if ((opcode.props & PROP_IOPL)!=0)
+        instr.flags |= INSTR_FLAG_IOPL;
+    if ((opcode.props & PROP_RING0)!=0)
+        instr.flags |= INSTR_FLAG_RING0;
+    if ((opcode.props & PROP_SERIAL)!=0)
+        instr.flags |= INSTR_FLAG_SERIAL;
+    if ((opcode.props & PROP_UNDOC) != 0)
+        instr.flags |= INSTR_FLAG_UNDOC;
+}
+
+
+static byte bsr(byte src)
+{
+    byte res;
+
+    for (res = 0; src!=0; src >>= 0x1)
+    {
+        if ((src & 0x1)!=0)break;
+        res++;
+    }
+    return res;
+}
+
+
+//Get instruction's size. Well, really this is size of implicit operand
+// that influences on instruction's mnemonic.
+static void get_instruction_opsize(MULTI_MNEMONIC multi_mnemonic, INSTRUCTION instr, INTERNAL_DATA idata, byte mode)
+{
+    OPERAND_SIZE opsize = new OPERAND_SIZE();
+
+    if (multi_mnemonic.size >= sq_handlers.Count())
+    {
+        idata.severe_err = ERR_INTERNAL;
+    }
+    else
+    {
+        sq_handlers[multi_mnemonic.size](opsize, instr, idata, mode);
+    }
+
+    instr.opsize = (byte)opsize.size; //Possible sizes are 2/4/8.
+}
+
+//Parses instruction's mnemonic. If mnemonic is simple, it is just copied to
+// struct INSTRUCTION. If mnemonic contains has multi mnemonic indicator (MM_INDICATOR)
+// at first character then it depends on implicit operand's size. In this case the function
+// calls get_instruction_opsize and builds choses mnemonic basing on result.
+static void parse_mnemonic(OPCODE_DESCRIPTOR opcode, INSTRUCTION instr, INTERNAL_DATA idata, byte mode)
+{
+    if (opcode.mnemonic.value[0] != MM_INDICATOR)
+    {
+        instr.mnemonic = opcode.mnemonic.value;
+    }
+    else
+    {
+        get_instruction_opsize(opcode.mnemonic.multi_mnemonic, instr, idata, mode);
+        instr.mnemonic = opcode.mnemonic.multi_mnemonic.values[bsr(instr.opsize) - 1];
+    }
+}
+
+
+//Checks if segment override prefix is superfluous.
+static void check_seg_sf_prefixes(INSTRUCTION instr, byte[] prefixes, DISASM_INOUT_PARAMS param)
+{
+    uint i;
+    bool mem_op_found = false;
+
+    if (prefixes[PREF_SEG_INDEX] != 0xFF)
+    {
+        for (i = 0; i < 3; i++)
+        {
+            if ((instr.ops[i].flags & OPERAND_TYPE_MEM)!=0)
+            {
+                if (param.mode == DISASSEMBLE_MODE_64)
+                {
+                    if ( !((prefixes[PREF_SEG_INDEX] == PREF_FS_ID) || (prefixes[PREF_SEG_INDEX] == PREF_GS_ID)) )
+                    {
+                        add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                    }
+                }
+                else
+                {
+                    if ( (instr.ops[i].value.addr.mod & ADDR_MOD_BASE)==0 )
+                    {
+                        if (instr.ops[i].value.addr.seg == SREG_CODE_DS)
+                            add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                    }
+                    else
+                    {
+                        if ((instr.ops[i].value.addr.bas == REG_CODE_BP) || (instr.ops[i].value.addr.bas == REG_CODE_SP))
+                        {
+                            if (instr.ops[i].value.addr.seg == SREG_CODE_SS)
+                                add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                        }
+                        else
+                        {
+                            if (instr.ops[i].value.addr.seg == SREG_CODE_DS)
+                                add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                        }
+                    }
+                }
+
+                mem_op_found = true;
+            }
+        }
+
+        if (!mem_op_found)
+            add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+    }
+}
+
+
+//Converts prefixes from internal to external representation.
+static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
+{
+    for (int i = 0; i < PREFIX_COUNT; i++)
+    {
+        if (prefixes[i] != 0xFF)
+            instr.prefixes |= pref_bits[prefixes[i]];
+    }
+}
+
 
         Win32Assembly a;
         public OPERAND b;
@@ -1417,8 +1946,8 @@ static UInt32 parse_operand( ulong origin_offset, ulong offset, INTERNAL_OPERAND
         {
             UInt32 len;
             UInt32 res;
-            OPCODE_DESCRIPTOR opcode;
-            INTERNAL_DATA idata;
+            OPCODE_DESCRIPTOR opcode = new OPCODE_DESCRIPTOR();
+            INTERNAL_DATA idata = new INTERNAL_DATA();
             //Setup everything.
             //memset(instr, 0x0, sizeof(*instr));
             //memset(&idata, 0x0, sizeof(idata));
@@ -1531,10 +2060,10 @@ static UInt32 parse_operand( ulong origin_offset, ulong offset, INTERNAL_OPERAND
     //Check if segment prefix is superfluous.
     check_seg_sf_prefixes(instr, idata.prefixes, param);
     //Check if opsize is superfluous. 
-    if (!idata.is_opsize_used && idata.prefixes[PREF_OPSIZE_INDEX] != 0xFF)
+    if ((idata.is_opsize_used!=0) && idata.prefixes[PREF_OPSIZE_INDEX] != 0xFF)
         add_sf_prefix(idata.prefixes, PREF_OPSIZE_INDEX, instr, param);
     //Check if addrsize is superfluous. 
-    if (!idata.is_addrsize_used && idata.prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
+    if ((idata.is_addrsize_used!=0) && idata.prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
         add_sf_prefix(idata.prefixes, PREF_ADDRSIZE_INDEX, instr, param);
 
     //Convert prefixes to output representation.
@@ -1544,13 +2073,13 @@ static UInt32 parse_operand( ulong origin_offset, ulong offset, INTERNAL_OPERAND
     param.errcode = idata.err;
 
     //And post checks.
-    if (!(param.arch & opcode.arch))
+    if ((param.arch & opcode.arch)!=0)
         param.errcode = ERR_ANOT_ARCH;//error: another architecture.
-    else if ( (instr.prefixes & INSTR_PREFIX_LOCK) && !(opcode.props & PROP_LOCK) )
+    else if ( ((instr.prefixes & INSTR_PREFIX_LOCK)!=0) && ((opcode.props & PROP_LOCK)==0) )
         param.errcode = ERR_NON_LOCKABLE;//error: prefix lock non-lockable instruction.
-    else if ((opcode.props & PROP_I64) && (param.mode == DISASSEMBLE_MODE_64))
+    else if (((opcode.props & PROP_I64)!=0) && (param.mode == DISASSEMBLE_MODE_64))
         param.errcode = ERR_16_32_ONLY;//error: instruction is 16/32bit mode only.
-    else if (opcode.props & PROP_O64 && param.mode != DISASSEMBLE_MODE_64)
+    else if (((opcode.props & PROP_O64)!=0) && (param.mode != DISASSEMBLE_MODE_64))
         param.errcode = ERR_64_ONLY;//error: instruction is 64bit mode only.
 
     apply_disasm_options(instr, len, param);

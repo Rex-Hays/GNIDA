@@ -15,6 +15,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,7 +28,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -55,14 +55,19 @@
   <PropertyGroup>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GNIDA.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Be.Windows.Forms.HexBox">
-      <HintPath>Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll</HintPath>
+    <Reference Include="Be.Windows.Forms.HexBox, Version=1.4.6.13072, Culture=neutral, PublicKeyToken=e0e5adf0ebc99863, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Be.Windows.Forms.HexBox\bin\Release\Be.Windows.Forms.HexBox.dll</HintPath>
     </Reference>
     <Reference Include="FastColoredTextBox, Version=2.13.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>FastColoredTextBox\Binary\FastColoredTextBox.dll</HintPath>
+      <HintPath>FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -114,8 +119,6 @@
     <Compile Include="AsmRes\AsmResolver\OffsetEditorDlg.Designer.cs">
       <DependentUpon>OffsetEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="AsmRes\AsmResolver\Program.cs" />
-    <Compile Include="AsmRes\AsmResolver\Properties\AssemblyInfo.cs" />
     <Compile Include="AsmRes\AsmResolver\Properties\Resources.Designer.cs" />
     <Compile Include="AsmRes\AsmResolver\Properties\Settings.Designer.cs" />
     <Compile Include="AsmRes\AsmResolver\PropertyGridDlg.cs">
@@ -308,7 +311,6 @@
     <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\PreparationTask.cs" />
     <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\RebuildingTask.cs" />
     <Compile Include="AsmRes\TUP.AsmResolver\PE\Writers\Structures.cs" />
-    <Compile Include="AsmRes\TUP.AsmResolver\Properties\AssemblyInfo.cs" />
     <Compile Include="AsmRes\TUP.AsmResolver\ReadingParameters.cs" />
     <Compile Include="AsmRes\TUP.AsmResolver\ResourceDataEntry.cs" />
     <Compile Include="AsmRes\TUP.AsmResolver\ResourceDirectory.cs" />
@@ -319,95 +321,7 @@
     <Compile Include="AsmRes\TUP.AsmResolver\SubSystem.cs" />
     <Compile Include="AsmRes\TUP.AsmResolver\Win32Assembly.cs" />
     <Compile Include="AsmRes\TUP.AsmResolver\WritingParameters.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\BuiltInContextMenu.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Be.Windows.Forms.HexBox\ByteCharConverters.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\ByteCollection.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\BytePositionInfo.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\DataBlock.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\DataMap.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\DynamicByteProvider.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\DynamicFileByteProvider.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\FileByteProvider.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\FileDataBlock.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\FindOptions.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\HexBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Be.Windows.Forms.HexBox\HexCasing.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\IByteProvider.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\MemoryDataBlock.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\NativeMethods.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\Properties\Resources.Designer.cs" />
-    <Compile Include="Be.Windows.Forms.HexBox\Util.cs" />
     <Compile Include="CmmDisassembler.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\AutocompleteItem.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\AutocompleteMenu.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\Bookmarks.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\Char.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\CommandManager.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\Commands.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\DocumentMap.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\ExportToHTML.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\ExportToRTF.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\FastColoredTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\FileTextSource.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\FindForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\FindForm.Designer.cs">
-      <DependentUpon>FindForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\GoToForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\GoToForm.Designer.cs">
-      <DependentUpon>GoToForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\Hints.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\Hotkeys.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\HotkeysEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\HotkeysEditorForm.Designer.cs">
-      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\LimitedStack.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\Line.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\LinesAccessor.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\MacrosManager.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\Place.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\PlatformType.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\Properties\AssemblyInfo.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\Range.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\ReplaceForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\ReplaceForm.Designer.cs">
-      <DependentUpon>ReplaceForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\Ruler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\Ruler.Designer.cs">
-      <DependentUpon>Ruler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\Style.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\SyntaxDescriptor.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\SyntaxHighlighter.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\TextSource.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\TypeDescriptor.cs" />
-    <Compile Include="FCTB\FastColoredTextBox\UnfocusablePanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FCTB\FastColoredTextBox\VisualMarker.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -440,39 +354,6 @@
     <EmbeddedResource Include="AsmRes\AsmResolver\PropertyGridDlg.resx">
       <DependentUpon>PropertyGridDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Be.Windows.Forms.HexBox\HexBox.resx">
-      <DependentUpon>HexBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.resources" />
-    <EmbeddedResource Include="Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.Properties.Resources.resources" />
-    <EmbeddedResource Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.resources" />
-    <EmbeddedResource Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.Properties.Resources.resources" />
-    <EmbeddedResource Include="Be.Windows.Forms.HexBox\Properties\Resources.resx" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\FastColoredTextBox.resx">
-      <DependentUpon>FastColoredTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\FindForm.resx">
-      <DependentUpon>FindForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\GoToForm.resx">
-      <DependentUpon>GoToForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\HotkeysEditorForm.resx">
-      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FastColoredTextBox.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FindForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.GoToForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.HotkeysEditorForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.ReplaceForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources" />
-    <EmbeddedResource Include="FCTB\FastColoredTextBox\ReplaceForm.resx">
-      <DependentUpon>ReplaceForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -494,20 +375,7 @@
     <None Include="AsmRes\TUP.AsmResolver\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="AsmRes\TUP.AsmResolver\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="AsmRes\TUP.AsmResolver\PE\Writers\Plan .NET Rebuilder" />
-    <None Include="Be.Windows.Forms.HexBox\HexBox.snk" />
-    <None Include="Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.csproj.GenerateResource.Cache" />
-    <None Include="Be.Windows.Forms.HexBox\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.csproj.GenerateResource.Cache" />
-    <None Include="Be.Windows.Forms.HexBox\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="cmm\STARTUP.H--" />
-    <None Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll.lastcodeanalysissucceeded" />
-    <None Include="FCTB\FastColoredTextBox\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.Cache" />
-    <None Include="FCTB\FastColoredTextBox\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.Cache" />
-    <None Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojResolveAssemblyReference.cache" />
-    <None Include="FCTB\FastColoredTextBox\SyntaxHighlighter.cs.old" />
-    <None Include="FCTB\Help\FastColoredTextBox_Help.chm" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -549,41 +417,8 @@
     <Content Include="AsmRes\TUP.AsmResolver\TUP.AsmResolver.csproj" />
     <Content Include="AsmRes\TUP.AsmResolver\TUP.AsmResolver.csproj.user" />
     <Content Include="AsmRes\TUP.AsmResolver\TUP.AsmResolver.xml" />
-    <Content Include="Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj" />
-    <Content Include="Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.xml" />
-    <Content Include="Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll" />
-    <Content Include="Be.Windows.Forms.HexBox\bin\Release\Be.Windows.Forms.HexBox.dll" />
-    <Content Include="Be.Windows.Forms.HexBox\HexBox.bmp" />
-    <Content Include="Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.csproj.FileListAbsolute.txt" />
-    <Content Include="Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.dll" />
-    <Content Include="Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.pdb" />
-    <Content Include="Be.Windows.Forms.HexBox\obj\Debug\TempPE\Properties.Resources.Designer.cs.dll" />
-    <Content Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.csproj.FileListAbsolute.txt" />
-    <Content Include="Be.Windows.Forms.HexBox\obj\Release\Be.Windows.Forms.HexBox.dll" />
-    <Content Include="Be.Windows.Forms.HexBox\obj\Release\TempPE\Properties.Resources.Designer.cs.dll" />
     <Content Include="cmm\c--.exe" />
     <Content Include="favicon.ico" />
-    <Content Include="FCTB\Binary\FastColoredTextBox.dll" />
-    <Content Include="FCTB\Binary\FastColoredTextBox.xml" />
-    <Content Include="FCTB\Binary\htmlDesc.xml" />
-    <Content Include="FCTB\Binary\TabStrip.dll" />
-    <Content Include="FCTB\Binary\Tester.exe" />
-    <Content Include="FCTB\FastColoredTextBox.sln" />
-    <Content Include="FCTB\FastColoredTextBoxVS2008.sln" />
-    <Content Include="FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll" />
-    <Content Include="FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb" />
-    <Content Include="FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML" />
-    <Content Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll" />
-    <Content Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll.CodeAnalysisLog.xml" />
-    <Content Include="FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb" />
-    <Content Include="FCTB\FastColoredTextBox\FastColoredTextBox.csproj" />
-    <Content Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.FileListAbsolute.txt" />
-    <Content Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll" />
-    <Content Include="FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb" />
-    <Content Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.FileListAbsolute.txt" />
-    <Content Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.dll" />
-    <Content Include="FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb" />
-    <Content Include="FCTB\license.txt" />
     <Content Include="mediana\dump.cpp" />
     <Content Include="mediana\mediana.cpp" />
     <Content Include="mediana\mediana.h" />
@@ -614,12 +449,12 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 и x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <ProductName>Клиентский профиль .NET Framework 3.5 с пакетом обновления 1 %28SP1%29</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -631,8 +466,7 @@
   <ItemGroup>
     <Folder Include="AsmRes\TUP.AsmResolver\obj\Debug\TempPE\" />
     <Folder Include="AsmRes\TUP.AsmResolver\obj\Release\TempPE\" />
-    <Folder Include="FCTB\FastColoredTextBox\obj\Debug\TempPE\" />
-    <Folder Include="FCTB\FastColoredTextBox\obj\Release\TempPE\" />
+    <Folder Include="AsmRes\TUP.AsmResolver\Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

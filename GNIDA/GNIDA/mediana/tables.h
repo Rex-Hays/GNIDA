@@ -47,9 +47,9 @@ struct INTERNAL_OPERAND
 
 struct MULTI_MNEMONIC
 {
-    unichar_t indicator;
-    unichar_t size;
-    unichar_t values[][MAX_MNEMONIC_LEN];
+	unichar_t indicator;
+	unichar_t size;
+	unichar_t values[][MAX_MNEMONIC_LEN];
 };
 
 #define MM_INDICATOR '*'

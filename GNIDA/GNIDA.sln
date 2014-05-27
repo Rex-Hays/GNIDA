@@ -4,17 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GNIDA", "GNIDA\GNIDA.csproj", "{3CB7673A-06B2-4DED-8400-A5CBD4C36943}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B1C33316-7181-4C94-A6D4-7C66CA02808D} = {B1C33316-7181-4C94-A6D4-7C66CA02808D}
-		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457} = {26C5F25F-B450-4CAF-AD8B-B8D11AE73457}
-		{6DD14A85-CCFC-4774-BD26-0F5772512319} = {6DD14A85-CCFC-4774-BD26-0F5772512319}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUP.AsmResolver", "GNIDA\AsmResolver\TUP.AsmResolver\TUP.AsmResolver.csproj", "{B1C33316-7181-4C94-A6D4-7C66CA02808D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastColoredTextBox", "GNIDA\FastColoredTextBox\FastColoredTextBox\FastColoredTextBox.csproj", "{6DD14A85-CCFC-4774-BD26-0F5772512319}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Be.Windows.Forms.HexBox", "GNIDA\Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj", "{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,18 +15,6 @@ Global
 		{3CB7673A-06B2-4DED-8400-A5CBD4C36943}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CB7673A-06B2-4DED-8400-A5CBD4C36943}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CB7673A-06B2-4DED-8400-A5CBD4C36943}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1C33316-7181-4C94-A6D4-7C66CA02808D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1C33316-7181-4C94-A6D4-7C66CA02808D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1C33316-7181-4C94-A6D4-7C66CA02808D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1C33316-7181-4C94-A6D4-7C66CA02808D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DD14A85-CCFC-4774-BD26-0F5772512319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DD14A85-CCFC-4774-BD26-0F5772512319}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DD14A85-CCFC-4774-BD26-0F5772512319}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DD14A85-CCFC-4774-BD26-0F5772512319}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

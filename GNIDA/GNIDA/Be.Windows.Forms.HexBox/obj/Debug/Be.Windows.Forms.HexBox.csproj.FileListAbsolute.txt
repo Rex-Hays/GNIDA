@@ -5,3 +5,11 @@ C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.dll
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.pdb
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.csprojResolveAssemblyReference.cache
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.pdb
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.xml
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.resources
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.Properties.Resources.resources
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.csproj.GenerateResource.Cache
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.dll
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.pdb
