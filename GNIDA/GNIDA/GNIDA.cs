@@ -174,25 +174,25 @@ namespace GNIDA
             public string UpComment;
             public string Comment;
             public string SubComment;
-            public x86Instruction Inst;
+            public mediana.INSTRUCTION Inst;
             public string Label ="";
-            public Stroka(GNIDA Prnt, x86Instruction Ins, string UpC = "", string Com = "", string SubC = "")
+            public Stroka(GNIDA Prnt, mediana.INSTRUCTION Ins, string UpC = "", string Com = "", string SubC = "")
             {
                 Parent = Prnt;
                 Inst = Ins;
                 UpComment = UpC;
                 Comment = Com;
                 SubComment = SubC;
-                addr = Ins.Offset.FileOffset;
+                addr = Ins.opcode_offset;
             }
             public string ToCmmString(Dictionary<long, TFunc> NewSubs)
             {
                 string tmp = "";
-                if (Label != "") tmp = "/*" + (Inst.Offset.Rva + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
-                tmp += "/*" + (Inst.Offset.Rva + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/  " + Inst.ToCmmString(Parent.FullProcList, Parent.VarDict, NewSubs);
+                if (Label != "") tmp = "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
+                tmp += "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/  " + Inst.mnemonic;//Inst.ToCmmString(Parent.FullProcList, Parent.VarDict, NewSubs);
                 if (Comment != "") tmp += "// " + Comment;
                 tmp += "\n";
-                if (SubComment != "") tmp += "/*" + (Inst.Offset.Rva + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ // " + SubComment + "\n";
+                if (SubComment != "") tmp += "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ // " + SubComment + "\n";
                 return tmp;
             }
         }
@@ -203,7 +203,6 @@ namespace GNIDA
             List<int> LabelList = new List<int>();
             x86Instruction instruction;
 
-            mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
             mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
             uint Len = 0;
             byte[] sf_prefixes = new byte[mediana.MAX_INSTRUCTION_LEN];
@@ -216,14 +215,16 @@ namespace GNIDA
             Tasks.Add(addr);
             for (uint i = 0; Tasks.Count > 0; i++)
             {
+                mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
+                Len = MeDisasm.medi_disassemble(Tasks[0], ref instr1, ref param);
                 assembly.Disassembler.CurrentOffset = (uint)Tasks[0];
-                Len = MeDisasm.medi_disassemble((uint)Tasks[0], ref instr1, ref param);
-                //Console.WriteLine(((uint)Tasks[0]).ToString("X"));
+                Console.WriteLine(instr1.mnemonic);
+                Console.WriteLine(((uint)Tasks[0]).ToString("X"));
+                Console.WriteLine(Len.ToString("X"));
                 Tasks.Remove(Tasks[0]);
                 instruction = assembly.Disassembler.DisassembleNextInstruction();
-                lst.Add(new Stroka(this, instruction));
-                //Console.WriteLine(instruction.ToAsmString());
-                switch (instruction.OpCode.OpCodeBytes[0])
+                lst.Add(new Stroka(this, instr1));
+                switch (instr1.bytes[0])
                 {
                               //Jxx
                     case 0x74://Jz
@@ -268,7 +269,9 @@ namespace GNIDA
                             }
                             break;
                 }
-                Tasks.Add(instruction.Offset.FileOffset + (uint)instruction.Size);
+                //Tasks.Add( instruction.Offset.FileOffset + (uint)instruction.Size);
+                Tasks.Add((long)instr1.Addr + Len);
+                
             }
             foreach (uint Addr in LabelList)
             {
@@ -277,7 +280,7 @@ namespace GNIDA
                     );
                 if (result != null)
                 {
-                    result.Label = "Loc_" + result.Inst.Offset.Rva.ToString("X8");
+                    result.Label = "Loc_" + result.Inst.opcode_offset.ToString("X8");
                 }
             }
             return lst;
@@ -285,9 +288,9 @@ namespace GNIDA
 
         public void LoadFile(string FName)
         {
+            byte[] sf_prefixes = new byte[mediana.MAX_INSTRUCTION_LEN];
             mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
             mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
-            byte[] sf_prefixes = new byte[mediana.MAX_INSTRUCTION_LEN];
 
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);

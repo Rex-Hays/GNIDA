@@ -10,86 +10,89 @@ using System.Runtime.InteropServices;
 
 namespace GNIDA
 {
-    //[StructLayout(LayoutKind.Explicit)]
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public struct reg1
+    {
+        [FieldOffset(0)]
+        public byte code;
+        [FieldOffset(1)]
+        public byte type;
+    };
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public struct far_addr321
+    {
+        [FieldOffset(0)]
+        public UInt16 offset;
+        [FieldOffset(2)]
+        public UInt16 seg;
+        //[FieldOffset(0)]
+        //public UInt32 Val;
+    }
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public struct imm1
+    {
+        [FieldOffset(0)]
+        public byte imm8;
+        [FieldOffset(0)]
+        public UInt16 imm16;
+        [FieldOffset(0)]
+        public UInt32 imm32;
+        [FieldOffset(0)]
+        public UInt64 imm64;
+        //[FieldOffset(0)]
+        //public byte[] immab;
+        [FieldOffset(8)]
+        public byte size;
+        [FieldOffset(9)]
+        public byte offset;
+    }
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public struct far_addr481
+    {
+        [FieldOffset(0)]
+        public UInt32 offset;
+        [FieldOffset(4)]
+        public UInt16 seg;
+        [FieldOffset(0)]
+        public UInt64 Val;
+    }
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public struct far_addr1
+    {
+        [FieldOffset(0)]
+        public far_addr321 far_addr32;
+        [FieldOffset(0)]
+        public far_addr481 far_addr48;
+        //[FieldOffset(0)]
+        //public byte[] far_addr_ab;
+        [FieldOffset(6)]
+        public byte offset;
+    }
+    public struct addr1
+    {
+        public byte seg;
+        public byte mod;
+        public byte bas;
+        public byte index;
+        public byte scale;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public struct value1
+    {
+        [FieldOffset(0)]
+        public reg1 reg;
+        [FieldOffset(0)]
+        public imm1 imm;
+        [FieldOffset(0)]
+        public far_addr1 far_addr;
+        [FieldOffset(0)]
+        public addr1 addr;
+    }
+
     public struct OPERAND
     {
         public value1 value;
-        public struct value1
-        {
-            public reg1 reg;
-            //[StructLayout(LayoutKind.Explicit)]
-            public struct reg1
-            {
-                //[FieldOffset(0)]
-                public byte code;
-                //[FieldOffset(1)]
-                public byte type;
-            };
-            public imm1 imm;
-            [StructLayout(LayoutKind.Explicit)]
-            public struct imm1
-            {
-                [FieldOffset(0)]
-                public byte imm8;
-                [FieldOffset(0)]
-                public UInt16 imm16;
-                [FieldOffset(0)]
-                public UInt32 imm32;
-                [FieldOffset(0)]
-                public UInt64 imm64;
-                [FieldOffset(0)]
-                public byte[] immab;
-                [FieldOffset(8)]
-                public byte size;
-                [FieldOffset(9)]
-                public byte offset;
-            }
-
-            public far_addr1 far_addr;
-            [StructLayout(LayoutKind.Explicit)]
-            public struct far_addr1
-            {
-                [FieldOffset(0)]
-                public far_addr321 far_addr32;
-                [StructLayout(LayoutKind.Explicit)]
-                public struct far_addr321
-                {
-                    [FieldOffset(0)]
-                    public UInt16 offset;
-                    [FieldOffset(2)]
-                    public UInt16 seg;
-                }
-                [FieldOffset(0)]
-                public far_addr481 far_addr48;
-                [StructLayout(LayoutKind.Explicit)]
-                public struct far_addr481
-                {
-                    [FieldOffset(0)]
-                    public UInt32 offset;
-                    [FieldOffset(4)]
-                    public UInt16 seg;
-                }
-                [FieldOffset(0)]
-                public byte[] far_addr_ab;
-                [FieldOffset(6)]
-                public byte offset;
-            }
-            //    [StructLayout(LayoutKind.Explicit)]
-            public addr1 addr;
-            public struct addr1
-            {
-                //[FieldOffset(0)]
-                public byte seg;
-                //[FieldOffset(0)]
-                public byte mod;
-                //[FieldOffset(0)]
-                public byte bas;
-                //[FieldOffset(0)]
-                public byte index;
-                //[FieldOffset(0)]
-                public byte scale;
-            }
-        }
         public ushort size; //Fuck... I need 16_t only for 'stx' size qualifier.
         public byte flags;
     };
@@ -1063,17 +1066,17 @@ static uint INSTR_PREFIX_SIZE_MASK = 0x0300;
 //LOCK prefix:
 static UInt16 INSTR_PREFIX_LOCK = 0x0800;
 
-[StructLayout(LayoutKind.Explicit)]
+//[StructLayout(LayoutKind.Explicit)]
 public struct DISPLACEMENT
         {
-    [FieldOffset(0)]
+    //[FieldOffset(0)]
             public byte size;
-    [FieldOffset(1)]
+    //[FieldOffset(1)]
             public byte offset;
-    [FieldOffset(2)]
-    public value1 value;
+    //[FieldOffset(2)]
+    public value2 value;
     [StructLayout(LayoutKind.Explicit)]
-    public struct value1
+    public struct value2
     {
         [FieldOffset(0)]
         public UInt16 d16;
@@ -1081,12 +1084,14 @@ public struct DISPLACEMENT
         public UInt32 d32;
         [FieldOffset(0)]
         public UInt64 d64;
-        [FieldOffset(0)]
-        public byte[] ab;
+        //[FieldOffset(0)]
+        //public byte[] ab;
     }
 };
 public class INSTRUCTION
 {
+    public ulong Addr;
+    public byte[] bytes;
     public UInt64 groups;
     public UInt16 id;
     public UInt16 flags;
@@ -2004,8 +2009,16 @@ static byte get_disp(long origin_offset, long offset, ref INSTRUCTION instr, int
     instr.disp.size = len;
     if (len!=0)
     {
-        instr.disp.value.ab = assembly.Image.ReadBytes(offset, len);
-        movsx(ref instr.disp.value.ab, len, 0x8);
+        //instr.disp.value.ab = assembly.Image.ReadBytes(offset, len);
+        byte[] bt = assembly.Image.ReadBytes(offset, len);
+        instr.disp.value.d64 = 0;
+        foreach (byte bb in bt.Reverse())
+        {
+            instr.disp.value.d64 <<= 8;
+            instr.disp.value.d64 += bb;
+        }
+
+        movsx(ref instr.disp.value.d64, len, 0x8);
         instr.disp.offset = (byte)(offset - origin_offset);
     }
 
@@ -2185,6 +2198,20 @@ static void get_seg(ref INSTRUCTION instr, int op_index, byte[] prefixes, DISMOD
 * Some internal common routines.
 ********************************
 */
+internal static void movsx(ref UInt64 value, uint size1, uint size2)
+{
+    UInt64 t = value;
+    byte msb;
+    if (size1 < size2)
+    {
+        for (int x = 1; x < size1; x++) t <<= 8;
+        msb = (byte)t;
+        if ((msb & 0x80) != 0) msb = 0xFF;else msb = 0x00;
+            for (byte b = (byte)size1; b < size2; b++)
+                value |= (UInt64)((msb)<<(b*8));
+    }
+
+}
 internal static void movsx(ref byte[] value, uint size1, uint size2)
 {//???
     byte msb;
@@ -2192,8 +2219,8 @@ internal static void movsx(ref byte[] value, uint size1, uint size2)
     {
         msb = value[size1 - 1];
         //msb = *((uint8_t *)((uint8_t *)value + size1 - 1));
-        if ((msb & 0x80)!=0)
-            for(uint b=size1;b<size2;b++)value[b] = 0xFF;
+        if ((msb & 0x80) != 0)
+            for (uint b = size1; b < size2; b++) value[b] = 0xFF;
             //memset((uint8_t *)value + size1, 0xFF, size2 - size1);
         else
             for(uint b=size1;b<size2;b++)value[b] = 0x0;
@@ -2287,7 +2314,14 @@ public static UInt32 tq_A(long origin_offset, long offset, ref INSTRUCTION instr
     instr.ops[op_index].flags |= OPERAND_TYPE_DIR;
     instr.ops[op_index].size = opsize.size;
     instr.ops[op_index].value.far_addr.offset = (byte)(offset - origin_offset);
-    instr.ops[op_index].value.far_addr.far_addr_ab = assembly.Image.ReadBytes(offset, instr.ops[op_index].size);
+    //instr.ops[op_index].value.far_addr.far_addr_ab = assembly.Image.ReadBytes(offset, instr.ops[op_index].size);
+    byte[] bt = assembly.Image.ReadBytes(offset, instr.ops[op_index].size);
+    instr.ops[op_index].value.far_addr.far_addr48.Val = 0;
+    foreach (byte bb in bt.Reverse())
+    {
+        instr.ops[op_index].value.far_addr.far_addr48.Val <<= 8;
+        instr.ops[op_index].value.far_addr.far_addr48.Val += bb;
+    }
     return instr.ops[op_index].size;
 }
 
@@ -2331,10 +2365,20 @@ public static UInt32 tq_I(long origin_offset, long offset, ref INSTRUCTION instr
     instr.ops[op_index].flags |= OPERAND_TYPE_IMM;
     instr.ops[op_index].size = opsize.size;
     instr.ops[op_index].value.imm.size = (byte)opsize.size_in_stream;
-    instr.ops[op_index].value.imm.offset = (byte)(offset - origin_offset);
-    instr.ops[op_index].value.imm.immab = assembly.Image.ReadBytes(offset, opsize.size_in_stream);
-    //memcpy(&(instr.ops[op_index].value.imm.imm8), offset, opsize.size_in_stream);
-    movsx(ref instr.ops[op_index].value.imm.immab, opsize.size_in_stream, 0x8);
+    instr.ops[op_index].value.imm .offset = (byte)(offset - origin_offset);
+    //instr.ops[op_index].value.imm.immab = assembly.Image.ReadBytes(offset, opsize.size_in_stream);
+
+    byte[] bt = assembly.Image.ReadBytes(offset, opsize.size_in_stream);
+    instr.ops[op_index].value.imm.imm64 = 0;
+    foreach (byte bb in bt.Reverse())
+    {
+        instr.ops[op_index].value.imm.imm64 <<= 8;
+        instr.ops[op_index].value.imm.imm64 += bb;
+    }
+    
+    //!!!memcpy(&(instr.ops[op_index].value.imm.imm8), offset, opsize.size_in_stream);
+    
+    //movsx(ref instr.ops[op_index].value.imm.immab, opsize.size_in_stream, 0x8);
     return (byte)opsize.size_in_stream;
 }
 
@@ -2369,7 +2413,15 @@ public static UInt32 tq_O(long origin_offset, long offset, ref INSTRUCTION instr
     instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
     instr.ops[op_index].size = opsize.size;
     instr.ops[op_index].value.addr.mod = ADDR_MOD_DISP;
-    instr.disp.value.ab = assembly.Image.ReadBytes(offset, instr.addrsize);
+    //instr.disp.value.ab = assembly.Image.ReadBytes(offset, instr.addrsize);
+    byte[] bt = assembly.Image.ReadBytes(offset, instr.addrsize);
+    instr.disp.value.d64 = 0;
+    foreach (byte bb in bt.Reverse())
+    {
+        instr.disp.value.d64 <<= 8;
+        instr.disp.value.d64 += bb;
+    }
+
     get_seg(ref instr, op_index, idata.prefixes, mode);
 
     return res;
@@ -5967,7 +6019,8 @@ static UInt32 parse_opcode(long offset, ref OPCODE_DESCRIPTOR opcode_descr, ref 
             idata.severe_err = ERRS.ERR_BADCODE;//error: invalid opcode.
         }
     }
-
+    instr.Addr = (ulong)offset;
+    instr.bytes = assembly.Image.ReadBytes(offset, (int)res);
     return res;
 }
 
@@ -6057,7 +6110,7 @@ static byte parse_modrm_sib(long offset, ref INSTRUCTION instr, OPCODE_DESCRIPTO
         len++;
         instr.flags |= INSTR_FLAG_MODRM;
         //instr.modrm = *offset;
-        instr.modrm = 0;
+        instr.modrm = assembly.Image.ReadBytes(offset, 1)[0];
         if (instr.addrsize != ADDR_SIZE_16)
         {
             if ((instr.modrm & 0x7) == 0x4 && (instr.modrm & 0xC0) != 0xC0)
@@ -6065,11 +6118,10 @@ static byte parse_modrm_sib(long offset, ref INSTRUCTION instr, OPCODE_DESCRIPTO
                 len++;
                 instr.flags |= INSTR_FLAG_SIB;
                 //instr.sib = offset[1];
-                instr.sib = 1;
+                instr.sib = instr.modrm = assembly.Image.ReadBytes(offset, 2)[1]; 
             }
         }
     }
-
     return len;
 }
 
@@ -6134,7 +6186,7 @@ static void get_instruction_opsize(MULTI_MNEMONIC multi_mnemonic, INSTRUCTION in
 // calls get_instruction_opsize and builds choses mnemonic basing on result.
 static void parse_mnemonic(OPCODE_DESCRIPTOR opcode, INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    if (opcode.mnemonic.value[0] != MM_INDICATOR)
+    if ((opcode.mnemonic.value.Length>0) && (opcode.mnemonic.value[0] != MM_INDICATOR))
     {
         instr.mnemonic = opcode.mnemonic.value;
     }
