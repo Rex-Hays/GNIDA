@@ -838,432 +838,432 @@ static void sq_a(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct 
 
 static void sq_b(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_8;
-    opsize ->size = OPERAND_SIZE_8;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_8;
+	opsize->size = OPERAND_SIZE_8;
+	opsize->sign = 0;
 }
 
 static void sq_bcd(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_er(opsize, instr, idata, mode);
+	sq_er(opsize, instr, idata, mode);
 }
 
 static void sq_bdqp(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if ((instr ->modrm & 0xC0) == 0xC0)
-    {
-        sq_dqp(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_b(opsize, instr, idata, mode);
-    }
+	if ((instr->modrm & 0xC0) == 0xC0)
+	{
+		sq_dqp(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_b(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_bs(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_8;
-    switch(mode)
-    {
-    case DISASSEMBLE_MODE_16:
-        opsize ->size = OPERAND_SIZE_16;
-        break;
-    case DISASSEMBLE_MODE_32:
-        opsize ->size = OPERAND_SIZE_32;
-        break;
-    case DISASSEMBLE_MODE_64:
-        opsize ->size = OPERAND_SIZE_64;
-        break;
-    }
-    opsize ->sign = 1;
+	opsize->size_in_stream = OPERAND_SIZE_8;
+	switch (mode)
+	{
+	case DISASSEMBLE_MODE_16:
+		opsize->size = OPERAND_SIZE_16;
+		break;
+	case DISASSEMBLE_MODE_32:
+		opsize->size = OPERAND_SIZE_32;
+		break;
+	case DISASSEMBLE_MODE_64:
+		opsize->size = OPERAND_SIZE_64;
+		break;
+	}
+	opsize->sign = 1;
 }
 
 static void sq_bss(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_bs(opsize, instr, idata, mode);
+	sq_bs(opsize, instr, idata, mode);
 }
 
 static void sq_d(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_32;
-    opsize ->size = OPERAND_SIZE_32;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_32;
+	opsize->size = OPERAND_SIZE_32;
+	opsize->sign = 0;
 }
 
 static void sq_ddq(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if ((instr ->modrm & 0xC0) == 0xC0)
-    {
-        sq_dq(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_d(opsize, instr, idata, mode);
-    }
+	if ((instr->modrm & 0xC0) == 0xC0)
+	{
+		sq_dq(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_d(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_di(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_32;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_32;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_dq(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_128;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_128;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_dq64(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode != DISASSEMBLE_MODE_64)
-    {
-        sq_d(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_q(opsize, instr, idata, mode);
-    }
+	if (mode != DISASSEMBLE_MODE_64)
+	{
+		sq_d(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_q(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_dqp(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode == DISASSEMBLE_MODE_64)
-    {
-        opsize ->size_in_stream = get_operand_size(instr, idata, mode);
-        opsize ->size = opsize ->size_in_stream;
-        opsize ->sign = 0;
-    }
-    else
-    {
-        sq_d(opsize, instr, idata, mode);
-    }
+	if (mode == DISASSEMBLE_MODE_64)
+	{
+		opsize->size_in_stream = get_operand_size(instr, idata, mode);
+		opsize->size = opsize->size_in_stream;
+		opsize->sign = 0;
+	}
+	else
+	{
+		sq_d(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_dr(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_64;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_64;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_ds(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_d(opsize, instr, idata, mode);
-    opsize ->sign = 1;
+	sq_d(opsize, instr, idata, mode);
+	opsize->sign = 1;
 }
 
 static void sq_e(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (get_operand_size_16_32(idata, mode) == OPERAND_SIZE_16)
-    {
-        opsize ->size_in_stream = OPERAND_SIZE_14;
-    }
-    else
-    {
-        opsize ->size_in_stream = OPERAND_SIZE_28;
-    }
+	if (get_operand_size_16_32(idata, mode) == OPERAND_SIZE_16)
+	{
+		opsize->size_in_stream = OPERAND_SIZE_14;
+	}
+	else
+	{
+		opsize->size_in_stream = OPERAND_SIZE_28;
+	}
 
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_er(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_80;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_80;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_p(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = get_operand_size_16_32(idata, mode) + OPERAND_SIZE_16;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = get_operand_size_16_32(idata, mode) + OPERAND_SIZE_16;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_pd(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_dq(opsize, instr, idata, mode);
+	sq_dq(opsize, instr, idata, mode);
 }
 
 static void sq_pi(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_q(opsize, instr, idata, mode);
+	sq_q(opsize, instr, idata, mode);
 }
 
 static void sq_ps(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_128;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_128;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_psq(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_q(opsize, instr, idata, mode);
+	sq_q(opsize, instr, idata, mode);
 }
 
 static void sq_ptp(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode == DISASSEMBLE_MODE_64)
-    {
-        opsize ->size_in_stream = get_operand_size(instr, idata, mode) + OPERAND_SIZE_16;
-        opsize ->size = opsize ->size_in_stream;
-        opsize ->sign = 0;
-    }
-    else
-    {
-        sq_p(opsize, instr, idata, mode);
-    }
+	if (mode == DISASSEMBLE_MODE_64)
+	{
+		opsize->size_in_stream = get_operand_size(instr, idata, mode) + OPERAND_SIZE_16;
+		opsize->size = opsize->size_in_stream;
+		opsize->sign = 0;
+	}
+	else
+	{
+		sq_p(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_q(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_64;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_64;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_qdq(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if ((instr ->modrm & 0xC0) == 0xC0)
-    {
-        sq_dq(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_q(opsize, instr, idata, mode);
-    }
+	if ((instr->modrm & 0xC0) == 0xC0)
+	{
+		sq_dq(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_q(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_qi(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_64;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_64;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_s(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_48;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_48;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_sd(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_dq(opsize, instr, idata, mode);
+	sq_dq(opsize, instr, idata, mode);
 }
 
 static void sq_sr(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_32;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_32;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_ss(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    sq_dq(opsize, instr, idata, mode);
+	sq_dq(opsize, instr, idata, mode);
 }
 
 static void sq_st(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (get_operand_size_16_32(idata, mode) == OPERAND_SIZE_16)
-    {
-        opsize ->size_in_stream = OPERAND_SIZE_94;
-    }
-    else
-    {
-        opsize ->size_in_stream = OPERAND_SIZE_108;
-    }
+	if (get_operand_size_16_32(idata, mode) == OPERAND_SIZE_16)
+	{
+		opsize->size_in_stream = OPERAND_SIZE_94;
+	}
+	else
+	{
+		opsize->size_in_stream = OPERAND_SIZE_108;
+	}
 
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_stx(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_512;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_512;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_v(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = get_operand_size_16_32(idata, mode);
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = get_operand_size_16_32(idata, mode);
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_v67q64(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode == DISASSEMBLE_MODE_64)
-    {
-        sq_q(opsize, instr, idata, mode);
-    }
-    else
-    {
-        if (idata ->prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
-        {
-            mode ^= (DISASSEMBLE_MODE_16 | DISASSEMBLE_MODE_32);
-            idata ->is_addrsize_used = 1;
-        }
+	if (mode == DISASSEMBLE_MODE_64)
+	{
+		sq_q(opsize, instr, idata, mode);
+	}
+	else
+	{
+		if (idata->prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
+		{
+			mode ^= (DISASSEMBLE_MODE_16 | DISASSEMBLE_MODE_32);
+			idata->is_addrsize_used = 1;
+		}
 
-        if (mode == DISASSEMBLE_MODE_16)
-        {
-            sq_w(opsize, instr, idata, mode);
-        }
-        else
-        {
-            sq_d(opsize, instr, idata, mode);
-        }
-    }
+		if (mode == DISASSEMBLE_MODE_16)
+		{
+			sq_w(opsize, instr, idata, mode);
+		}
+		else
+		{
+			sq_d(opsize, instr, idata, mode);
+		}
+	}
 }
 
 static void sq_vd64(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode != DISASSEMBLE_MODE_64)
-    {
-        sq_v(opsize, instr, idata, mode);
-    }
-    else
-    {
-        if (idata ->prefixes[PREF_OPSIZE_INDEX] != 0xFF)
-        {
-            idata ->is_opsize_used = 1;
-            sq_w(opsize, instr, idata, mode);
-        }
-        else
-        {
-            sq_q(opsize, instr, idata, mode);
-        }
-    }
+	if (mode != DISASSEMBLE_MODE_64)
+	{
+		sq_v(opsize, instr, idata, mode);
+	}
+	else
+	{
+		if (idata->prefixes[PREF_OPSIZE_INDEX] != 0xFF)
+		{
+			idata->is_opsize_used = 1;
+			sq_w(opsize, instr, idata, mode);
+		}
+		else
+		{
+			sq_q(opsize, instr, idata, mode);
+		}
+	}
 }
 
 static void sq_vds(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode == DISASSEMBLE_MODE_64)
-    {
-        opsize ->size_in_stream = OPERAND_SIZE_32;
-        opsize ->size = OPERAND_SIZE_64;
-        opsize ->sign = 1;
-    }
-    else
-    {
-        sq_v(opsize, instr, idata, mode);
-    }
+	if (mode == DISASSEMBLE_MODE_64)
+	{
+		opsize->size_in_stream = OPERAND_SIZE_32;
+		opsize->size = OPERAND_SIZE_64;
+		opsize->sign = 1;
+	}
+	else
+	{
+		sq_v(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_vq64(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode == DISASSEMBLE_MODE_64)
-    {
-        sq_q(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_v(opsize, instr, idata, mode);
-    }
+	if (mode == DISASSEMBLE_MODE_64)
+	{
+		sq_q(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_v(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_vqp(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode == DISASSEMBLE_MODE_64)
-    {
-        opsize ->size_in_stream = get_operand_size(instr, idata, mode);
-        opsize ->size = opsize ->size_in_stream;
-        opsize ->sign = 0;
-    }
-    else
-    {
-        sq_v(opsize, instr, idata, mode);
-    }
+	if (mode == DISASSEMBLE_MODE_64)
+	{
+		opsize->size_in_stream = get_operand_size(instr, idata, mode);
+		opsize->size = opsize->size_in_stream;
+		opsize->sign = 0;
+	}
+	else
+	{
+		sq_v(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_vs(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if (mode != DISASSEMBLE_MODE_64)
-    {
-        sq_v(opsize, instr, idata, mode);
-    }
-    else
-    {
-        opsize ->size_in_stream = get_operand_size_16_32(idata, mode);
-        if (idata ->prefixes[PREF_OPSIZE_INDEX] != 0xFF)
-        {
-            opsize ->size = OPERAND_SIZE_16;
-        }
-        else
-        {
-            opsize ->size = OPERAND_SIZE_64;
-        }
-    }
+	if (mode != DISASSEMBLE_MODE_64)
+	{
+		sq_v(opsize, instr, idata, mode);
+	}
+	else
+	{
+		opsize->size_in_stream = get_operand_size_16_32(idata, mode);
+		if (idata->prefixes[PREF_OPSIZE_INDEX] != 0xFF)
+		{
+			opsize->size = OPERAND_SIZE_16;
+		}
+		else
+		{
+			opsize->size = OPERAND_SIZE_64;
+		}
+	}
 }
 
 static void sq_w(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_16;
-    opsize ->size = OPERAND_SIZE_16;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_16;
+	opsize->size = OPERAND_SIZE_16;
+	opsize->sign = 0;
 }
 
 static void sq_wdq(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if ((instr ->modrm & 0xC0) == 0xC0)
-    {
-        sq_dq(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_w(opsize, instr, idata, mode);
-    }
+	if ((instr->modrm & 0xC0) == 0xC0)
+	{
+		sq_dq(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_w(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_wdqp(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if ((instr ->modrm & 0xC0) == 0xC0)
-    {
-        sq_dqp(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_w(opsize, instr, idata, mode);
-    }
+	if ((instr->modrm & 0xC0) == 0xC0)
+	{
+		sq_dqp(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_w(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_wi(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    opsize ->size_in_stream = OPERAND_SIZE_16;
-    opsize ->size = opsize ->size_in_stream;
-    opsize ->sign = 0;
+	opsize->size_in_stream = OPERAND_SIZE_16;
+	opsize->size = opsize->size_in_stream;
+	opsize->sign = 0;
 }
 
 static void sq_wv(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if ((instr ->modrm & 0xC0) == 0xC0)
-    {
-        sq_v(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_w(opsize, instr, idata, mode);
-    }
+	if ((instr->modrm & 0xC0) == 0xC0)
+	{
+		sq_v(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_w(opsize, instr, idata, mode);
+	}
 }
 
 static void sq_wvqp(struct OPERAND_SIZE *opsize, struct INSTRUCTION *instr, struct INTERNAL_DATA *idata, uint8_t mode)
 {
-    if ((instr ->modrm & 0xC0) == 0xC0)
-    {
-        sq_vqp(opsize, instr, idata, mode);
-    }
-    else
-    {
-        sq_w(opsize, instr, idata, mode);
-    }
+	if ((instr->modrm & 0xC0) == 0xC0)
+	{
+		sq_vqp(opsize, instr, idata, mode);
+	}
+	else
+	{
+		sq_w(opsize, instr, idata, mode);
+	}
 }
 
 /*************************

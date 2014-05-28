@@ -26,46 +26,52 @@ namespace GNIDA
                 public byte type;
             };
             public imm1 imm;
-            //[StructLayout(LayoutKind.Explicit)]
+            [StructLayout(LayoutKind.Explicit)]
             public struct imm1
             {
-                //[FieldOffset(0)]
+                [FieldOffset(0)]
                 public byte imm8;
-                //[FieldOffset(0)]
+                [FieldOffset(0)]
                 public UInt16 imm16;
-                //[FieldOffset(0)]
+                [FieldOffset(0)]
                 public UInt32 imm32;
-                //[FieldOffset(0)]
+                [FieldOffset(0)]
                 public UInt64 imm64;
-                //[FieldOffset(8)]
+                [FieldOffset(0)]
+                public byte[] immab;
+                [FieldOffset(8)]
                 public byte size;
-                //[FieldOffset(9)]
+                [FieldOffset(9)]
                 public byte offset;
             }
 
-            //[StructLayout(LayoutKind.Explicit)]
             public far_addr1 far_addr;
+            [StructLayout(LayoutKind.Explicit)]
             public struct far_addr1
             {
-                //[StructLayout(LayoutKind.Explicit)]
+                [FieldOffset(0)]
                 public far_addr321 far_addr32;
+                [StructLayout(LayoutKind.Explicit)]
                 public struct far_addr321
                 {
-                    //[FieldOffset(0)]
+                    [FieldOffset(0)]
                     public UInt16 offset;
-                    //[FieldOffset(2)]
+                    [FieldOffset(2)]
                     public UInt16 seg;
                 }
+                [FieldOffset(0)]
                 public far_addr481 far_addr48;
-                //[StructLayout(LayoutKind.Explicit)]
+                [StructLayout(LayoutKind.Explicit)]
                 public struct far_addr481
                 {
-                    //[FieldOffset(0)]
+                    [FieldOffset(0)]
                     public UInt32 offset;
-                    //[FieldOffset(4)]
+                    [FieldOffset(4)]
                     public UInt16 seg;
                 }
-                //[FieldOffset(6)]
+                [FieldOffset(0)]
+                public byte[] far_addr_ab;
+                [FieldOffset(6)]
                 public byte offset;
             }
             //    [StructLayout(LayoutKind.Explicit)]
@@ -84,13 +90,13 @@ namespace GNIDA
                 public byte scale;
             }
         }
-        public UInt16 size; //Fuck... I need 16_t only for 'stx' size qualifier.
+        public ushort size; //Fuck... I need 16_t only for 'stx' size qualifier.
         public byte flags;
     };
     public class mediana
     {
         static uint MAX_MNEMONIC_LEN = 0x0C;
-        static uint MAX_INSTRUCTION_LEN = 0x0F;
+        public static uint MAX_INSTRUCTION_LEN = 0x0F;
 
 /*******************
 * Instructions' IDs.
@@ -891,36 +897,37 @@ static int POST_PROC_CMPXCHG8B   = 0x3 << POST_PROC_SHIFT;
 static int POST_PROC_JCXZ        = 0x4 << POST_PROC_SHIFT;
 
 
-static uint TBL_PROP_MODRM  = 0x1;
-static uint TBL_PROP_SUFFIX = 0x2;
-
+static byte TBL_PROP_MODRM  = 0x1;
+static byte TBL_PROP_SUFFIX = 0x2;
 
 /**********************
 * Disassembling errors.
 ***********************
 */
-static byte ERR_OK          = 0x0;
-static byte ERR_BADCODE     = 0x1;
-static byte ERR_TOO_LONG    = 0x2;
-static byte ERR_NON_LOCKABLE= 0x3;
-static byte ERR_RM_REG      = 0x4;
-static byte ERR_RM_MEM      = 0x5;
-static byte ERR_16_32_ONLY  = 0x6;
-static byte ERR_64_ONLY     = 0x7;
-static byte ERR_REX_NOOPCD  = 0x8;
-static byte ERR_ANOT_ARCH   = 0x9;
-static byte ERR_INTERNAL    = 0xA;
-
-
+public enum ERRS
+{
+        ERR_OK,
+        ERR_BADCODE,
+        ERR_TOO_LONG,
+        ERR_NON_LOCKABLE,   
+        ERR_RM_REG,
+        ERR_RM_MEM,
+        ERR_16_32_ONLY,
+        ERR_64_ONLY,
+        ERR_REX_NOOPCD,
+        ERR_ANOT_ARCH,
+        ERR_INTERNAL
+};
 
 /*******************
 * Disassemble modes.
 ********************
 */
-static byte DISASSEMBLE_MODE_16 = 0x1;
-static byte DISASSEMBLE_MODE_32 = 0x2;
-static byte DISASSEMBLE_MODE_64 = 0x4;
-
+public enum DISMODE { 
+DISASSEMBLE_MODE_16 = 0x1,
+DISASSEMBLE_MODE_32 = 0x2,
+DISASSEMBLE_MODE_64 = 0x4,
+}
 
 
 /**********************
@@ -987,6 +994,11 @@ static byte PREF_REX_INDEX      = 0x5;
 
 static byte PREFIX_COUNT = 0x6;
 
+//INSTRUCTION.rex's bits:
+static byte PREFIX_REX_W = 0x8;
+static byte PREFIX_REX_R = 0x4;
+static byte PREFIX_REX_X = 0x2;
+static byte PREFIX_REX_B = 0x1;
 
 //PREF_SEG_*
 static byte PREF_CS_ID       = 0x0;
@@ -1051,26 +1063,29 @@ static uint INSTR_PREFIX_SIZE_MASK = 0x0300;
 //LOCK prefix:
 static UInt16 INSTR_PREFIX_LOCK = 0x0800;
 
-//[StructLayout(LayoutKind.Explicit)]
-        public struct DISPLACEMENT
+[StructLayout(LayoutKind.Explicit)]
+public struct DISPLACEMENT
         {
-    //[FieldOffset(0)]
+    [FieldOffset(0)]
             public byte size;
-    //[FieldOffset(1)]
+    [FieldOffset(1)]
             public byte offset;
-    //[FieldOffset(2)]
+    [FieldOffset(2)]
     public value1 value;
+    [StructLayout(LayoutKind.Explicit)]
     public struct value1
     {
-        //[FieldOffset(2)]
+        [FieldOffset(0)]
         public UInt16 d16;
-        //[FieldOffset(2)]
+        [FieldOffset(0)]
         public UInt32 d32;
-        //[FieldOffset(2)]
+        [FieldOffset(0)]
         public UInt64 d64;
+        [FieldOffset(0)]
+        public byte[] ab;
     }
 };
-public struct INSTRUCTION
+public class INSTRUCTION
 {
     public UInt64 groups;
     public UInt16 id;
@@ -1094,23 +1109,27 @@ public struct INSTRUCTION
     public byte undefined_flags;
 
     public string mnemonic;//[MAX_MNEMONIC_LEN];
+    public INSTRUCTION()
+    {
+        ops = new OPERAND[3];//OPERAND[3];
+    }
 }
 
 public struct DISASM_INOUT_PARAMS
 {
     public int sf_prefixes_len;
     public byte[] sf_prefixes;
-    public UInt32 errcode;
+    public ERRS errcode;
     public byte arch;
-    public byte mode;
+    public DISMODE mode;
     public byte options;
     public UInt64 bas;
 };
 public class INTERNAL_DATA
 {
     public byte[] prefixes;//[PREFIX_COUNT]; //Valuable prefixes.
-    public byte severe_err;             //Severe disassembling error.
-    public byte err;                    //DIsassembling error.
+    public ERRS severe_err;             //Severe disassembling error.
+    public ERRS err;                    //DIsassembling error.
     public byte is_opsize_used;         //
     public byte is_addrsize_used;       //Prefixes were used during disassembling.
     public byte is_rex_used;            //
@@ -1144,7 +1163,7 @@ public class MULTI_MNEMONIC : MNEMONIC
     values = _values;
     }
 }
-//static struct MULTI_MNEMONIC pusha  = { MM_INDICATOR, SQ_v,      { _UT("pusha"),   _UT("pushad"),  _UT("bad_mnem")  } };
+//static struct MULTI_MNEMONIC pusha  = { MM_INDICATOR, SQ_v,      { new MULTI_MNEMONIC("pusha"),   new MULTI_MNEMONIC("pushad"),  new MULTI_MNEMONIC("bad_mnem")  } };
 public class MNEMONIC
 {
     public string value;
@@ -1190,17 +1209,42 @@ public struct OPCODE_DESCRIPTOR
     byte _undefined_flags,
     byte _arch)
     {
-    groups = _groups;
-    mnemonic = _mnemonic;
-    id = _id;
-    ops =_ops;
-    props = _props;
-    tested_flags = _tested_flags;
-    modified_flags = _modified_flags;
-    set_flags = _set_flags;
-    cleared_flags = _cleared_flags;
-    undefined_flags = _undefined_flags;
-    arch = _arch;
+        groups = _groups;
+        mnemonic = _mnemonic;
+        id = _id;
+        ops = _ops;
+        props = _props;
+        tested_flags = _tested_flags;
+        modified_flags = _modified_flags;
+        set_flags = _set_flags;
+        cleared_flags = _cleared_flags;
+        undefined_flags = _undefined_flags;
+        arch = _arch;
+    }
+    public OPCODE_DESCRIPTOR(
+    UInt64 _groups,
+    MULTI_MNEMONIC _mnemonic,
+    UInt16 _id,
+    INTERNAL_OPERAND[] _ops,
+    int _props,
+    byte _tested_flags,
+    byte _modified_flags,
+    byte _set_flags,
+    byte _cleared_flags,
+    byte _undefined_flags,
+    byte _arch)
+    {
+        groups = _groups;
+        mnemonic = _mnemonic;
+        id = _id;
+        ops = _ops;
+        props = (UInt16)_props;
+        tested_flags = _tested_flags;
+        modified_flags = _modified_flags;
+        set_flags = _set_flags;
+        cleared_flags = _cleared_flags;
+        undefined_flags = _undefined_flags;
+        arch = _arch;
     }
 
 };
@@ -1225,19 +1269,85 @@ public struct OPERAND_SIZE
     public UInt16 size;
     public byte sign;
 }
+class ADDR
+{
+    public byte seg;
+    public byte mod;
+    public byte bas;
+    public byte index;
+    public byte scale;
+    public ADDR(byte _seg,
+                byte _mod,
+                byte _bas,
+                byte _index,
+                byte _scale)
+    {
+        seg = _seg;
+        mod = _mod;
+        bas = _bas;
+        index = _index;
+        scale = _scale;
+    }
+    public ADDR(byte _seg,
+                int _mod,
+                byte _bas,
+                byte _index,
+                byte _scale)
+    {
+        seg = _seg;
+        mod = (byte)_mod;
+        bas = _bas;
+        index = _index;
+        scale = _scale;
+    }
+}
+static byte[] sregs =
+{
+    SREG_CODE_CS,
+    SREG_CODE_DS,
+    SREG_CODE_ES,
+    SREG_CODE_SS,
+    SREG_CODE_FS,
+    SREG_CODE_GS
+};
+//Table for bulding 16bit addresses in my representation.
+static ADDR[] addrs_16bit =
+{
+      //seg         mod                                           base         index        scale
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_IDX,                 REG_CODE_BX, REG_CODE_SI, 0x1 ),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_IDX,                 REG_CODE_BX, REG_CODE_DI, 0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_IDX,                 REG_CODE_BP, REG_CODE_SI, 0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_IDX,                 REG_CODE_BP, REG_CODE_DI, 0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE,                                REG_CODE_SI, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE,                                REG_CODE_DI, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_DISP,                                0x0,         0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE,                                REG_CODE_BX, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BX, REG_CODE_SI, 0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BX, REG_CODE_DI, 0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BP, REG_CODE_SI, 0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BP, REG_CODE_DI, 0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_SI, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_DI, 0x0,         0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_BP, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_BX, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BX, REG_CODE_SI, 0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BX, REG_CODE_DI, 0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BP, REG_CODE_SI, 0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP, REG_CODE_BP, REG_CODE_DI, 0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_SI, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_DI, 0x0,         0x1),
+    new ADDR( SREG_CODE_SS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_BP, 0x0,         0x1),
+    new ADDR( SREG_CODE_DS, ADDR_MOD_BASE | ADDR_MOD_DISP,                REG_CODE_BX, 0x0,         0x1)
+};
 
 
-
-
-public delegate void SQ(OPERAND_SIZE opsize, INSTRUCTION instr, INTERNAL_DATA idata, byte mode);
+public delegate void SQ(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode);
 
 /*******************************************************
 * Operand's size qualifiers (SQ_*) handlers' prototypes.
 ********************************************************
 */
-public static SQ[] sq_handlers;
-
-public SQ
+public static SQ[] sq_handlers = {
     sq_a,
     sq_b,
     sq_bcd,
@@ -1281,7 +1391,491 @@ public SQ
     sq_wdqp,
     sq_wi,
     sq_wv,
-    sq_wvqp;
+    sq_wvqp};
+
+/********************************************
+* Operand's size qualifiers' (SQ_*) handlers.
+*********************************************
+*/
+public static void sq_a(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+}
+public static void sq_b(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_8;
+    opsize.size = OPERAND_SIZE_8;
+    opsize.sign = 0;
+}
+
+public static void sq_bcd(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_er(ref opsize, ref instr, idata, mode);
+}
+
+public static void sq_bdqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        sq_dqp(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_b(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_bs(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_8;
+    switch(mode)
+    {
+        case DISMODE.DISASSEMBLE_MODE_16:
+        opsize.size = OPERAND_SIZE_16;
+        break;
+        case DISMODE.DISASSEMBLE_MODE_32:
+        opsize.size = OPERAND_SIZE_32;
+        break;
+        case DISMODE.DISASSEMBLE_MODE_64:
+        opsize.size = OPERAND_SIZE_64;
+        break;
+    }
+    opsize.sign = 1;
+}
+
+public static void sq_bss(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_bs(ref opsize, ref instr, idata, mode);
+}
+
+public static void sq_d(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_32;
+    opsize.size = OPERAND_SIZE_32;
+    opsize.sign = 0;
+}
+
+public static void sq_ddq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        sq_dq(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_d(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_di(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_32;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_dq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_128;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_dq64(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode != DISMODE.DISASSEMBLE_MODE_64)
+    {
+        sq_d(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_q(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_dqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        opsize.size_in_stream = get_operand_size(instr, ref idata, mode);
+        opsize.size = opsize.size_in_stream;
+        opsize.sign = 0;
+    }
+    else
+    {
+        sq_d(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_dr(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_64;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_ds(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_d(ref opsize, ref instr, idata, mode);
+    opsize.sign = 1;
+}
+
+public static void sq_e(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (get_operand_size_16_32(ref idata, mode) == OPERAND_SIZE_16)
+    {
+        opsize.size_in_stream = OPERAND_SIZE_14;
+    }
+    else
+    {
+        opsize.size_in_stream = OPERAND_SIZE_28;
+    }
+
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_er(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_80;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_p(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = (ushort)(get_operand_size_16_32(ref idata, mode) + OPERAND_SIZE_16);
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_pd(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_dq(ref opsize, ref instr, idata, mode);
+}
+
+public static void sq_pi(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_q(ref opsize, ref instr, idata, mode);
+}
+
+public static void sq_ps(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_128;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_psq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_q(ref opsize, ref instr, idata, mode);
+}
+
+public static void sq_ptp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        opsize.size_in_stream = (ushort)(get_operand_size(instr, ref idata, mode) + OPERAND_SIZE_16);
+        opsize.size = opsize.size_in_stream;
+        opsize.sign = 0;
+    }
+    else
+    {
+        sq_p(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_q(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_64;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_qdq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        sq_dq(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_q(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_qi(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_64;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_s(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_48;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_sd(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_dq(ref opsize, ref instr, idata, mode);
+}
+
+public static void sq_sr(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_32;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_ss(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    sq_dq(ref opsize, ref instr, idata, mode);
+}
+
+public static void sq_st(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (get_operand_size_16_32(ref idata, mode) == OPERAND_SIZE_16)
+    {
+        opsize.size_in_stream = OPERAND_SIZE_94;
+    }
+    else
+    {
+        opsize.size_in_stream = OPERAND_SIZE_108;
+    }
+
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_stx(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_512;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_v(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = get_operand_size_16_32(ref idata, mode);
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_v67q64(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        sq_q(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        if (idata.prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
+        {
+            mode ^= (DISMODE.DISASSEMBLE_MODE_16 | DISMODE.DISASSEMBLE_MODE_32);
+            idata.is_addrsize_used = 1;
+        }
+
+        if (mode == DISMODE.DISASSEMBLE_MODE_16)
+        {
+            sq_w(ref opsize, ref instr, idata, mode);
+        }
+        else
+        {
+            sq_d(ref opsize, ref instr, idata, mode);
+        }
+    }
+}
+
+public static void sq_vd64(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode != DISMODE.DISASSEMBLE_MODE_64)
+    {
+        sq_v(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        if (idata.prefixes[PREF_OPSIZE_INDEX] != 0xFF)
+        {
+            idata.is_opsize_used = 1;
+            sq_w(ref opsize, ref instr, idata, mode);
+        }
+        else
+        {
+            sq_q(ref opsize, ref instr, idata, mode);
+        }
+    }
+}
+
+public static void sq_vds(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        opsize.size_in_stream = OPERAND_SIZE_32;
+        opsize.size = OPERAND_SIZE_64;
+        opsize.sign = 1;
+    }
+    else
+    {
+        sq_v(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_vq64(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        sq_q(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_v(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_vqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        opsize.size_in_stream = get_operand_size(instr, ref idata, mode);
+        opsize.size = opsize.size_in_stream;
+        opsize.sign = 0;
+    }
+    else
+    {
+        sq_v(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_vs(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode != DISMODE.DISASSEMBLE_MODE_64)
+    {
+        sq_v(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        opsize.size_in_stream = get_operand_size_16_32(ref idata, mode);
+        if (idata.prefixes[PREF_OPSIZE_INDEX] != 0xFF)
+        {
+            opsize.size = OPERAND_SIZE_16;
+        }
+        else
+        {
+            opsize.size = OPERAND_SIZE_64;
+        }
+    }
+}
+
+public static void sq_w(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_16;
+    opsize.size = OPERAND_SIZE_16;
+    opsize.sign = 0;
+}
+
+public static void sq_wdq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        sq_dq(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_w(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_wdqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        sq_dqp(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_w(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_wi(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    opsize.size_in_stream = OPERAND_SIZE_16;
+    opsize.size = opsize.size_in_stream;
+    opsize.sign = 0;
+}
+
+public static void sq_wv(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        sq_v(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_w(ref opsize, ref instr, idata, mode);
+    }
+}
+
+public static void sq_wvqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        sq_vqp(ref opsize, ref instr, idata, mode);
+    }
+    else
+    {
+        sq_w(ref opsize, ref instr, idata, mode);
+    }
+}
+
+
+//Returns size accordingly to disassemble mode and opsize prefix.
+public static ushort get_operand_size_16_32(ref INTERNAL_DATA idata, DISMODE mode)
+{
+    ushort res;
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+        mode = DISMODE.DISASSEMBLE_MODE_32;
+
+    if (idata.prefixes[PREF_OPSIZE_INDEX] != 0xFF)
+    {
+        mode ^= (DISMODE.DISASSEMBLE_MODE_16 | DISMODE.DISASSEMBLE_MODE_32);
+        idata.is_opsize_used = 1;
+    }
+
+    if (mode == DISMODE.DISASSEMBLE_MODE_16)
+        res = OPERAND_SIZE_16;
+    else
+        res = OPERAND_SIZE_32;
+
+    return res;
+}
+
+//Returns size accordingly to disassemble mode, size override and REX.W prefixes.
+public static ushort get_operand_size(INSTRUCTION instr, ref INTERNAL_DATA idata, DISMODE mode)
+{
+    ushort res;
+
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        if (idata.prefixes[PREF_REX_INDEX] != (instr.rex & PREFIX_REX_W))
+        {
+            res = OPERAND_SIZE_64;
+            idata.is_rex_used = 1;
+        }
+        else
+        {
+            res = get_operand_size_16_32(ref idata, mode);
+        }
+    }
+    else
+    {
+        res = get_operand_size_16_32(ref idata, mode);
+    }
+
+    return res;
+}
 
 
 /***************************************
@@ -1289,7 +1883,7 @@ public SQ
 ****************************************
 */
 
-public delegate UInt32 PP(ulong origin_offset, ulong offset, INSTRUCTION instr, INTERNAL_DATA idata, byte mode);
+public delegate UInt32 PP(long origin_offset, long offset, INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode);
 
 public static PP[] postprocs;
 
@@ -1299,15 +1893,319 @@ public PP
     post_proc_multinop,
     post_proc_cmpxchg8b;
 
-public delegate UInt32 TQ(ulong origin_offset, ulong offset, INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, byte mode);
+static byte OPERAND_TYPE_REG  = 0x01;
+static byte OPERAND_TYPE_MEM  = 0x02;
+static byte OPERAND_TYPE_IMM  = 0x04;
+static byte OPERAND_TYPE_DIR  = 0x08;
+static byte OPERAND_TYPE_MASK = 0x0F;
+
+//Creates OPERAND_TYPE_REG operand of given type.
+static void create_reg_operand(ref INSTRUCTION instr, int op_index, byte type, byte code, ushort size)
+{
+    instr.ops[op_index].flags |= OPERAND_TYPE_REG;
+    instr.ops[op_index].value.reg.type = type;
+    instr.ops[op_index].value.reg.code = code;
+    instr.ops[op_index].size = size;
+}
+
+static void create_genreg_operand(ref INSTRUCTION instr, int op_index, byte code, ushort size, byte rex, ref INTERNAL_DATA idata, DISMODE mode)
+{
+    if (mode == DISMODE.DISASSEMBLE_MODE_64 && idata.prefixes[PREF_REX_INDEX] != 0xFF)
+    {
+        if (code > REG_CODE_BX && size == OPERAND_SIZE_8)
+        {
+            code |= REG_CODE_64;
+            code += 0x4;
+            idata.is_rex_used = 1;
+        }
+        if ((instr.rex & rex)!=0)
+        {
+            code |= REG_CODE_64;
+            idata.is_rex_used = 1;
+        }
+    }
+    create_reg_operand(ref instr, op_index, REG_TYPE_GEN, code, size);
+}
+
+static void create_xmmreg_operand(ref INSTRUCTION instr, int op_index, byte code, ushort size, byte rex, ref INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((mode == DISMODE.DISASSEMBLE_MODE_64) && (idata.prefixes[PREF_REX_INDEX] != 0xFF))
+    {
+        if ((instr.rex & rex)!=0)
+        {
+            code |= REG_CODE_64;
+            idata.is_rex_used = 1;
+        }
+    }
+    create_reg_operand(ref instr, op_index, REG_TYPE_XMM, code, size);
+}
+
+//Parses operand accordingly to MODRM value.
+static UInt32 parse_rm_operand(long origin_offset, long  offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, ref INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 len = 0;
+
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        create_genreg_operand(ref instr, op_index, (byte)(instr.modrm & 0x7), opsize.size, PREFIX_REX_B, ref idata, mode);
+    }
+    else
+    {
+        len = parse_mem_operand(origin_offset, offset, ref instr, op_index, opsize, idata, mode);
+    }
+
+    return len;
+}
+
+//Parses memory address operand.
+static UInt32 parse_mem_operand(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 len;
+
+    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = opsize.size;
+    if (instr.addrsize == ADDR_SIZE_16)
+    {
+        len = parse_mem_operand_16(origin_offset, offset, ref instr, op_index, mode);
+    }
+    else
+    {
+        len = parse_mem_operand_32_64(origin_offset, offset, ref instr, op_index, idata, mode);
+    }
+    idata.is_addrsize_used = 1;
+
+    return len;
+}
+
+//Calculates displacement's size and copies it to struct DISPLACEMENT.
+static byte get_disp(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, DISMODE mode)
+{
+    byte len = 0;
+
+    switch(instr.ops[op_index].value.addr.mod)
+    {
+    case 0x0:
+        if (instr.ops[op_index].value.addr.bas == REG_CODE_BP)
+            len = instr.addrsize;
+        else
+            len = 0x0;
+        break;
+    case 0x1:
+        len = 0x1;
+        break;
+    case 0x2:
+        len = instr.addrsize;
+        break;
+    }
+
+    if (len == 8)
+        len = 4;
+
+    instr.disp.size = len;
+    if (len!=0)
+    {
+        instr.disp.value.ab = assembly.Image.ReadBytes(offset, len);
+        movsx(ref instr.disp.value.ab, len, 0x8);
+        instr.disp.offset = (byte)(offset - origin_offset);
+    }
+
+    return len;
+}
+
+//Parses 16bit memory address operand.
+static UInt32 parse_mem_operand_16(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, DISMODE mode)
+{
+    byte len;
+    int index;
+
+    instr.ops[op_index].value.addr.mod = (byte)(instr.modrm >> 0x6);
+    len = get_disp(origin_offset, offset, ref instr, op_index, mode);
+    index = (instr.modrm >> 0x3 & 0x18) | (instr.modrm & 0x7);
+    instr.ops[op_index].value.addr.seg = addrs_16bit[index].seg;
+    instr.ops[op_index].value.addr.mod = addrs_16bit[index].mod;
+    instr.ops[op_index].value.addr.bas = addrs_16bit[index].bas;
+    instr.ops[op_index].value.addr.index = addrs_16bit[index].index;
+    instr.ops[op_index].value.addr.scale = addrs_16bit[index].scale;
+
+    return len;
+}
+//Builds ADDR.mod field from instruction's MODRM byte.
+static void get_mod_type_modrm(ref INSTRUCTION instr, int op_index)
+{
+    if (instr.ops[op_index].value.addr.mod != 0x0)
+    {
+        instr.ops[op_index].value.addr.mod = (byte)(ADDR_MOD_BASE | ADDR_MOD_DISP);
+    }
+    else
+    {
+        if ((instr.ops[op_index].value.addr.bas == REG_CODE_BP) || (instr.ops[op_index].value.addr.bas == REG_CODE_R13))
+        {
+            instr.ops[op_index].value.addr.mod = ADDR_MOD_DISP;
+        }
+        else
+        {
+            instr.ops[op_index].value.addr.mod = ADDR_MOD_BASE;
+        }
+    }
+
+}
+//Builds ADDR.mod field from instruction's SIB byte.
+static void get_mod_type_sib(ref INSTRUCTION instr, int op_index)
+{
+    if (instr.ops[op_index].value.addr.index == REG_CODE_SP)
+    {
+        get_mod_type_modrm(ref instr, op_index);
+    }
+    else
+    {
+        if (instr.ops[op_index].value.addr.mod == 0)
+        {
+            if ((instr.ops[op_index].value.addr.bas == REG_CODE_BP) || (instr.ops[op_index].value.addr.bas == REG_CODE_R13))
+            {
+                instr.ops[op_index].value.addr.mod = (byte)(ADDR_MOD_IDX | ADDR_MOD_DISP);
+            }
+            else
+            {
+                instr.ops[op_index].value.addr.mod = (byte)(ADDR_MOD_BASE | ADDR_MOD_IDX);
+            }
+        }
+        else
+        {
+            instr.ops[op_index].value.addr.mod = (byte)(ADDR_MOD_BASE | ADDR_MOD_IDX | ADDR_MOD_DISP);
+        }
+    }
+}
+
+//Parses 32/64bit memory address operand.
+static UInt32 parse_mem_operand_32_64(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 len = 0;
+
+    if ((instr.flags & INSTR_FLAG_SIB)!=0)
+    {
+        instr.ops[op_index].value.addr.mod = (byte)(instr.modrm >> 0x6);
+        instr.ops[op_index].value.addr.bas = (byte)(instr.sib & 0x7);
+        instr.ops[op_index].value.addr.index = (byte)((instr.sib >> 3) & 0x7);
+        instr.ops[op_index].value.addr.scale = (byte)(1 << (instr.sib >> 0x6));
+
+        if (mode == DISMODE.DISASSEMBLE_MODE_64 && idata.prefixes[PREF_REX_INDEX] != 0xFF)
+        {
+            if ((instr.rex & PREFIX_REX_B)!=0)
+            {
+                instr.ops[op_index].value.addr.bas |= REG_CODE_64;
+                idata.is_rex_used = 1;
+            }
+            if ((instr.rex & PREFIX_REX_X)!=0)
+            {
+                instr.ops[op_index].value.addr.index |= REG_CODE_64;
+                idata.is_rex_used = 1;
+            }
+        }
+        len = get_disp(origin_offset, offset, ref instr, op_index, mode);
+        get_mod_type_sib(ref instr, op_index);
+    }
+    else
+    {
+        instr.ops[op_index].value.addr.mod = (byte)(instr.modrm >> 0x6);
+        instr.ops[op_index].value.addr.bas = (byte)(instr.modrm & 0x7);
+
+        if (mode == DISMODE.DISASSEMBLE_MODE_64)
+        {
+            if ((idata.prefixes[PREF_REX_INDEX] != 0xFF) && ((instr.rex & PREFIX_REX_B)!=0))
+            {
+                instr.ops[op_index].value.addr.bas |= REG_CODE_64;
+                idata.is_rex_used = 1;
+            }
+
+            if ( (instr.ops[op_index].value.addr.mod == 0x0) &&
+                 ((instr.ops[op_index].value.addr.bas == REG_CODE_BP) ||
+                  (instr.ops[op_index].value.addr.bas == REG_CODE_R13)) )
+            {
+                instr.ops[op_index].value.addr.bas = REG_CODE_IP;
+            }
+        }
+        len = get_disp(origin_offset, offset, ref instr, op_index, mode);
+        get_mod_type_modrm(ref instr, op_index);
+    }
+    get_seg(ref instr, op_index, idata.prefixes, mode);
+
+    return len;
+}
+
+//Calculates segment for memory addressing operands accordingly to
+//mode, segment override prefixes and address base register.
+static void get_seg(ref INSTRUCTION instr, int op_index, byte[] prefixes, DISMODE mode)
+{
+    if (prefixes[PREF_SEG_INDEX] == 0xFF)
+    {
+        if (mode == DISMODE.DISASSEMBLE_MODE_64)
+        {
+            instr.ops[op_index].value.addr.seg = SREG_CODE_CS;
+        }
+        else
+        {
+            if ( (instr.ops[op_index].value.addr.mod & ADDR_MOD_BASE)==0 )
+            {
+                instr.ops[op_index].value.addr.seg = SREG_CODE_DS;
+            }
+            else
+            {
+                if ((instr.ops[op_index].value.addr.bas != REG_CODE_BP) && (instr.ops[op_index].value.addr.bas != REG_CODE_SP))
+                {
+                    instr.ops[op_index].value.addr.seg = SREG_CODE_DS;
+                }
+                else
+                {
+                    instr .ops[op_index].value.addr.seg = SREG_CODE_SS;
+                }
+            }
+        }
+    }
+    else
+    {
+        if (mode != DISMODE.DISASSEMBLE_MODE_64)
+        {
+            instr.ops[op_index].value.addr.seg = sregs[prefixes[PREF_SEG_INDEX]];
+        }
+        else
+        {
+            if (prefixes[PREF_SEG_INDEX] == PREF_FS_ID || prefixes[PREF_SEG_INDEX] == PREF_GS_ID)
+            {
+                instr.ops[op_index].value.addr.seg = sregs[prefixes[PREF_SEG_INDEX]];
+            }
+            else
+            {
+                instr.ops[op_index].value.addr.seg = SREG_CODE_CS;
+            }
+        }
+    }
+}
+
+/*******************************
+* Some internal common routines.
+********************************
+*/
+internal static void movsx(ref byte[] value, uint size1, uint size2)
+{//???
+    byte msb;
+    if (size1 < size2)
+    {
+        msb = value[size1 - 1];
+        //msb = *((uint8_t *)((uint8_t *)value + size1 - 1));
+        if ((msb & 0x80)!=0)
+            for(uint b=size1;b<size2;b++)value[b] = 0xFF;
+            //memset((uint8_t *)value + size1, 0xFF, size2 - size1);
+        else
+            for(uint b=size1;b<size2;b++)value[b] = 0x0;
+            //memset((uint8_t *)value + size1, 0x0, size2 - size1);
+    }
+}
 
 /*
  Operand's type qualifers (TQ_) handlers' prototypes.
 
 */
-public static TQ[] tq_handlers;
-
-public TQ 
+public static TQ[] tq_handlers = {
 tq_1,
 tq_3,
 tq_A
@@ -1359,7 +2257,418 @@ pref_OPSIZE_set,
 pref_ADDRSIZE_set,
 pref_REPZ_set,
 pref_REPNZ_set,
-pref_LOCK_set;
+pref_LOCK_set};
+
+/********************************************
+* Operand's type qualifiers' (TQ_*) handlers.
+*********************************************
+*/
+public delegate UInt32 TQ(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode);
+
+static UInt32 tq_1(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    instr.ops[op_index].flags |= OPERAND_TYPE_IMM;
+    instr.ops[op_index].size = OPERAND_SIZE_8;
+    instr.ops[op_index].value.imm.imm8 = 0x1;
+    return 0x0;
+}
+
+public static UInt32 tq_3(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    instr.ops[op_index].flags |= OPERAND_TYPE_IMM;
+    instr.ops[op_index].size = OPERAND_SIZE_8;
+    instr.ops[op_index].value.imm.imm8 = 0x3;
+
+    return 0;
+}
+
+public static UInt32 tq_A(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    instr.ops[op_index].flags |= OPERAND_TYPE_DIR;
+    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].value.far_addr.offset = (byte)(offset - origin_offset);
+    instr.ops[op_index].value.far_addr.far_addr_ab = assembly.Image.ReadBytes(offset, instr.ops[op_index].size);
+    return instr.ops[op_index].size;
+}
+
+public static UInt32 tq_C(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_CR, (byte)((instr.modrm >> 0x3) & 0x7), instr.ops[op_index].size);
+
+    return 0x0;
+}
+
+public static UInt32 tq_D(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_DBG, (byte)((instr.modrm >> 0x3) & 0x7), instr.ops[op_index].size);
+
+    return 0x0;
+}
+
+public static UInt32 tq_E(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return parse_rm_operand(origin_offset, offset, ref instr, op_index, opsize, ref idata, mode);
+}
+
+
+public static UInt32 tq_G(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, (byte)((instr.modrm >> 3) & 0x7), opsize.size, PREFIX_REX_R, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_H(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, (byte)(instr.modrm & 0x7), opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+
+public static UInt32 tq_I(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    instr.ops[op_index].flags |= OPERAND_TYPE_IMM;
+    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].value.imm.size = (byte)opsize.size_in_stream;
+    instr.ops[op_index].value.imm.offset = (byte)(offset - origin_offset);
+    instr.ops[op_index].value.imm.immab = assembly.Image.ReadBytes(offset, opsize.size_in_stream);
+    //memcpy(&(instr.ops[op_index].value.imm.imm8), offset, opsize.size_in_stream);
+    movsx(ref instr.ops[op_index].value.imm.immab, opsize.size_in_stream, 0x8);
+    return (byte)opsize.size_in_stream;
+}
+
+public static UInt32 tq_J(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    instr.ops[op_index].flags |= OPERAND_FLAG_REL;
+    return tq_I(origin_offset, offset, ref instr, op_index, opsize, idata, mode);
+}
+
+public static UInt32 tq_M(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res = parse_rm_operand(origin_offset, offset, ref instr, op_index, opsize, ref idata, mode);
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        idata.err = ERRS.ERR_RM_REG;//error: rm encodes memory.
+    }
+    return res;
+}
+
+public static UInt32 tq_N(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_MMX, (byte)(instr.modrm & 0x7), opsize.size);
+
+    return 0x0;
+}
+
+public static UInt32 tq_O(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res;
+
+    res = instr.addrsize;
+    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].value.addr.mod = ADDR_MOD_DISP;
+    instr.disp.value.ab = assembly.Image.ReadBytes(offset, instr.addrsize);
+    get_seg(ref instr, op_index, idata.prefixes, mode);
+
+    return res;
+}
+
+public static UInt32 tq_P(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_MMX, (byte)((instr.modrm >> 0x3) & 0x7), opsize.size);
+
+    return 0x0;
+}
+
+public static UInt32 tq_Q(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res;
+
+    res = 0x0;
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        create_reg_operand(ref instr, op_index, REG_TYPE_MMX, (byte)(instr.modrm & 0x7), opsize.size);
+    }
+    else
+    {
+        res = parse_mem_operand(origin_offset, offset, ref instr, op_index, opsize, idata, mode);
+    }
+
+    return res;
+}
+
+public static UInt32 tq_R(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res = parse_rm_operand(origin_offset, offset, ref instr, op_index, opsize, ref idata, mode);
+    if ((instr.modrm & 0xC0) != 0xC0)
+    {
+        idata.err = ERRS.ERR_RM_MEM;//error: rm encodes memory.
+    }
+    return res;
+}
+
+public static UInt32 tq_S(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, (byte)((instr.modrm >> 3) & 0x7), OPERAND_SIZE_16);
+
+    return 0x0;
+}
+
+public static UInt32 tq_T(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_TR, (byte)((instr.modrm >> 0x3) & 0x7), opsize.size);
+
+    return 0x0;
+}
+
+public static UInt32 tq_U(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_xmmreg_operand(ref instr, op_index, (byte)(instr.modrm & 0x7), opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_V(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_xmmreg_operand(ref instr, op_index, (byte)((instr.modrm >> 0x3) & 0x7), opsize.size, PREFIX_REX_R, ref idata, mode);
+
+    return 0;
+}
+
+public static UInt32 tq_W(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res;
+
+    if ((instr.modrm & 0xC0) == 0xC0)
+    {
+        create_xmmreg_operand(ref instr, op_index, (byte)(instr.modrm & 0x7), opsize.size, PREFIX_REX_B, ref idata, mode);
+        res = 0;
+    }
+    else
+    {
+        res = parse_mem_operand(origin_offset, offset, ref instr, op_index, opsize, idata, mode);
+    }
+
+    return res;
+}
+
+public static UInt32 tq_X(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res;
+
+    res = 0;
+    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].value.addr.mod = ADDR_MOD_BASE;
+    instr.ops[op_index].value.addr.bas = REG_CODE_SI;
+    get_seg(ref instr, op_index, idata.prefixes, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_Y(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = opsize.size;
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+        instr.ops[op_index].value.addr.seg = SREG_CODE_CS;
+    else
+        instr.ops[op_index].value.addr.seg = SREG_CODE_ES;
+    instr.ops[op_index].value.addr.mod = ADDR_MOD_BASE;
+    instr.ops[op_index].value.addr.bas = REG_CODE_DI;
+
+    return 0x0;
+}
+
+public static UInt32 tq_Z(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    byte[] bt = assembly.Image.ReadBytes(offset - 1, 1);
+    //We already consumed opcode, hence we need to look backward.
+    create_genreg_operand(ref instr, op_index, (byte)(bt[0] & 0x7), opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rAX(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_AX, opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rCX(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_CX, opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rDX(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_DX, opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rBX(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_BX, opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rSP(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_SP, opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rBP(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_BP, opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rSI(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_SI, opsize.size, PREFIX_REX_B,ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_rDI(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_genreg_operand(ref instr, op_index, REG_CODE_DI, opsize.size, PREFIX_REX_B, ref idata, mode);
+
+    return 0x0;
+}
+
+public static UInt32 tq_fES(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res;
+
+    if ((instr.modrm & 0xC0) == 0xC0)
+        res = tq_fEST(origin_offset, offset, ref instr, op_index, opsize, idata, mode);
+    else
+        res = tq_M(origin_offset, offset, ref instr, op_index, opsize, idata, mode);
+
+    return res;
+}
+
+public static UInt32 tq_fEST(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_FPU, (byte)(instr.modrm & 0x7), opsize.size);
+
+    return 0;
+}
+
+public static UInt32 tq_fST0(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_FPU, FREG_CODE_ST0, opsize.size);
+
+    return 0;
+}
+
+public static UInt32 tq_CS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_CS, opsize.size);
+
+    return 0;
+}
+
+public static UInt32 tq_DS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_DS, opsize.size);
+
+    return 0;
+}
+
+public static UInt32 tq_ES(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_ES, opsize.size);
+
+    return 0;
+}
+
+public static UInt32 tq_SS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_SS, opsize.size);
+
+    return 0;
+}
+
+public static UInt32 tq_FS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_FS, opsize.size);
+
+    return 0;
+}
+
+public static UInt32 tq_GS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_GS, opsize.size);
+
+    return 0;
+}
+
+public static UInt32 pref_CS_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_SEG_INDEX << 8 | PREF_CS_ID);
+}
+
+public static UInt32 pref_DS_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_SEG_INDEX << 8 | PREF_DS_ID);
+}
+
+public static UInt32 pref_ES_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_SEG_INDEX  << 8 | PREF_ES_ID);
+}
+
+public static UInt32 pref_SS_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_SEG_INDEX  << 8 | PREF_SS_ID);
+}
+
+public static UInt32 pref_FS_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_SEG_INDEX << 8 | PREF_FS_ID);
+}
+    
+public static UInt32 pref_GS_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_SEG_INDEX << 8 | PREF_GS_ID);
+}
+
+public static UInt32 pref_OPSIZE_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_OPSIZE_INDEX << 8 | PREF_OPSIZE_ID);
+}
+
+public static UInt32 pref_ADDRSIZE_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_ADDRSIZE_INDEX << 8 | PREF_ADDRSIZE_ID);
+}
+
+public static UInt32 pref_REPZ_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_REP_INDEX << 8 | PREF_REPZ_ID);
+}
+
+public static UInt32 pref_REPNZ_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_REP_INDEX << 8 | PREF_REPNZ_ID);
+}
+
+public static UInt32 pref_LOCK_set(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
+{
+    return (UInt32)(PREF_LOCK_INDEX << 8 | PREF_LOCK_ID);
+}
 
 /************************
 * Defines and structs for
@@ -1367,11 +2676,6 @@ pref_LOCK_set;
 *************************
 */
 //OPERAND.flags' values:
-static ushort OPERAND_TYPE_REG = 0x01;
-static ushort OPERAND_TYPE_MEM = 0x02;
-static ushort OPERAND_TYPE_IMM = 0x04;
-static ushort OPERAND_TYPE_DIR = 0x08;
-static ushort OPERAND_TYPE_MASK= 0x0F;
 
 static byte OPERAND_FLAG_PRESENT= 0x10;
 static byte OPERAND_FLAG_REL    = 0x20;
@@ -1396,58 +2700,58 @@ static byte ADDR_MOD_IDX  = 0x2;
 static byte ADDR_MOD_DISP = 0x4;
 
 //OPERAND.REG.type's values:
-static ushort REG_TYPE_GEN= 0x0;
-static ushort REG_TYPE_SEG= 0x1;
-static ushort REG_TYPE_CR = 0x2;
-static ushort REG_TYPE_DBG= 0x3;
-static ushort REG_TYPE_TR = 0x4;
-static ushort REG_TYPE_FPU= 0x5;
-static ushort REG_TYPE_MMX= 0x7;
-static ushort REG_TYPE_XMM= 0x8;
+static byte REG_TYPE_GEN = 0x0;
+static byte REG_TYPE_SEG = 0x1;
+static byte REG_TYPE_CR = 0x2;
+static byte REG_TYPE_DBG = 0x3;
+static byte REG_TYPE_TR = 0x4;
+static byte REG_TYPE_FPU = 0x5;
+static byte REG_TYPE_MMX = 0x7;
+static byte REG_TYPE_XMM = 0x8;
 
 //OPERAND.REG.code's values (GPR):
-static ushort REG_CODE_AX = 0x0;
-static ushort REG_CODE_CX = 0x1;
-static ushort REG_CODE_DX = 0x2;
-static ushort REG_CODE_BX = 0x3;
-static ushort REG_CODE_SP = 0x4;
-static ushort REG_CODE_BP = 0x5;
-static ushort REG_CODE_SI = 0x6;
-static ushort REG_CODE_DI = 0x7;
+static byte REG_CODE_AX = 0x0;
+static byte REG_CODE_CX = 0x1;
+static byte REG_CODE_DX = 0x2;
+static byte REG_CODE_BX = 0x3;
+static byte REG_CODE_SP = 0x4;
+static byte REG_CODE_BP = 0x5;
+static byte REG_CODE_SI = 0x6;
+static byte REG_CODE_DI = 0x7;
 
-static ushort REG_CODE_64 = 0x8;
+static byte REG_CODE_64 = 0x8;
 
-static ushort REG_CODE_R8 = 0x8;
-static ushort REG_CODE_R9 = 0x9;
-static ushort REG_CODE_R10= 0xA;
-static ushort REG_CODE_R11= 0xB;
-static ushort REG_CODE_R12= 0xC;
-static ushort REG_CODE_R13= 0xD;
-static ushort REG_CODE_R14= 0xE;
-static ushort REG_CODE_R15= 0xF;
-static ushort REG_CODE_SPL= 0x10;
-static ushort REG_CODE_BPL= 0x11;
-static ushort REG_CODE_SIL= 0x12;
-static ushort REG_CODE_DIL= 0x13;
-static ushort REG_CODE_IP = 0x14;
+static byte REG_CODE_R8 = 0x8;
+static byte REG_CODE_R9 = 0x9;
+static byte REG_CODE_R10 = 0xA;
+static byte REG_CODE_R11 = 0xB;
+static byte REG_CODE_R12 = 0xC;
+static byte REG_CODE_R13 = 0xD;
+static byte REG_CODE_R14 = 0xE;
+static byte REG_CODE_R15 = 0xF;
+static byte REG_CODE_SPL = 0x10;
+static byte REG_CODE_BPL = 0x11;
+static byte REG_CODE_SIL = 0x12;
+static byte REG_CODE_DIL = 0x13;
+static byte REG_CODE_IP = 0x14;
 
 //OPERAND.REG.code's values (segment registers):
-static ushort SREG_CODE_CS= 0x0;
-static ushort SREG_CODE_DS= 0x1;
-static ushort SREG_CODE_ES= 0x2;
-static ushort SREG_CODE_SS= 0x3;
-static ushort SREG_CODE_FS= 0x4;
-static ushort SREG_CODE_GS= 0x5;
+static byte SREG_CODE_CS = 0x0;
+static byte SREG_CODE_DS = 0x1;
+static byte SREG_CODE_ES = 0x2;
+static byte SREG_CODE_SS = 0x3;
+static byte SREG_CODE_FS= 0x4;
+static byte SREG_CODE_GS = 0x5;
 
 //OPERAND.REG.code's values (FPU registers):
-static ushort FREG_CODE_ST0= 0x0;
-static ushort FREG_CODE_ST1= 0x1;
-static ushort FREG_CODE_ST2= 0x2;
-static ushort FREG_CODE_ST3= 0x3;
-static ushort FREG_CODE_ST4= 0x4;
-static ushort FREG_CODE_ST5= 0x5;
-static ushort FREG_CODE_ST6= 0x6;
-static ushort FREG_CODE_ST7= 0x7;
+static byte FREG_CODE_ST0 = 0x0;
+static byte FREG_CODE_ST1 = 0x1;
+static byte FREG_CODE_ST2 = 0x2;
+static byte FREG_CODE_ST3 = 0x3;
+static byte FREG_CODE_ST4 = 0x4;
+static byte FREG_CODE_ST5 = 0x5;
+static byte FREG_CODE_ST6 = 0x6;
+static byte FREG_CODE_ST7 = 0x7;
 
 //OPERAND.REG.code's values (control registers):
 static ushort CREG_CODE_CR0= 0x0;
@@ -1519,8 +2823,8 @@ static byte ADDR_SIZE_32 = 0x4;
 static byte ADDR_SIZE_64 = 0x8;
 
 //DISASM_INOUT_PARAMS.options' bits:
-static byte DISASM_OPTION_APPLY_REL     = 0x1;
-static byte DISASM_OPTION_OPTIMIZE_DISP = 0x2;
+public static byte DISASM_OPTION_APPLY_REL = 0x1;
+public static byte DISASM_OPTION_OPTIMIZE_DISP = 0x2;
 
 
 static char MM_INDICATOR = '*';
@@ -1540,17 +2844,18 @@ public static byte[] pref_opcodes =
     0xF0  //LOCK
 };
 
-static byte ARCH_COMMON = 0x1;
-static byte ARCH_INTEL  = 0x2;
-static byte ARCH_AMD    = 0x4;
-static byte ARCH_ALL = (byte)((int)ARCH_COMMON | (int)ARCH_INTEL | (int)ARCH_AMD);
+public static byte ARCH_COMMON = 0x1;
+public static byte ARCH_INTEL = 0x2;
+public static byte ARCH_AMD = 0x4;
+public static byte ARCH_ALL = (byte)((int)ARCH_COMMON | (int)ARCH_INTEL | (int)ARCH_AMD);
 
 
 //Warning: may contain a lot of tables!
 
 /*60*/
 static MULTI_MNEMONIC pusha = new MULTI_MNEMONIC(MM_INDICATOR, SQ_v, new[] { "pusha", "pushad", "bad_mnem" });
-/*61*/ static MULTI_MNEMONIC popa   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v,   new[]     {"popa",  "popad",   "bad_mnem" });
+/*61*/
+static MULTI_MNEMONIC popa = new MULTI_MNEMONIC(MM_INDICATOR, SQ_v, new[] { "popa", "popad", "bad_mnem" });
 /*6D*/ static MULTI_MNEMONIC ins    = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v,   new[]     { "insw",  "insd",    "bad_mnem" });
 /*6F*/ static MULTI_MNEMONIC outs   = new MULTI_MNEMONIC( MM_INDICATOR, SQ_v,   new[]     { "outsw", "outsd",   "bad_mnem" });
 /*98*/ static MULTI_MNEMONIC cbw    = new MULTI_MNEMONIC( MM_INDICATOR, SQ_vqp, new[]     { "cbw",    "cwde",    "cdqe"    });
@@ -1842,15 +3147,2614 @@ new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new I
 new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_FF, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
 };
 
-public static TABLE_DESCRIPTOR[] tables = new[] {
-    new TABLE_DESCRIPTOR(0x0, 0xFF, 0xFF, 0x0, 0x0, opcodes_1byte) };
-/*0x0 IDX_1BYTE */
-    //min //max //mask //shift //props         //table
-//    {{ 0x0, 0xFF, 0xFF, 0x0, 0x0, "opcodes_1byte" }};
+public static OPCODE_DESCRIPTOR[] opcodes_80 = new[]{
+/*0*/     new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD, 
+                            new[] {
+                                    new INTERNAL_OPERAND(TQ_E, SQ_b),
+                                    new INTERNAL_OPERAND(TQ_I, SQ_b),
+                                    new INTERNAL_OPERAND(TQ_NULL, SQ_NULL)
+                                  },
+                            (ushort)(PROP_LOCK | PROP_MODRM),  0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL,  new MULTI_MNEMONIC("or"), ID_OR, new[] { new INTERNAL_OPERAND(TQ_E, SQ_b), new INTERNAL_OPERAND(TQ_I, SQ_b ), new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC, new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB, new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND, new[] { new INTERNAL_OPERAND( TQ_E, SQ_b ), new INTERNAL_OPERAND(TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB, new[] { new INTERNAL_OPERAND( TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR, new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP, new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
 
+public static OPCODE_DESCRIPTOR[] opcodes_81 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_82 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_I64 | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_I64 | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_I64 | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_I64 | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_I64 | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_I64 | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_I64 | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_I64 | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_83 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("add"), ID_ADD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("or"), ID_OR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("adc"), ID_ADC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sbb"), ID_SBB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("and"), ID_AND,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("sub"), ID_SUB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("xor"), ID_XOR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmp"), ID_CMP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_bs ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_8F = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("pop"), ID_POP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vd64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_C0 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rol"), ID_ROL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("ror"), ID_ROR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcl"), ID_RCL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcr"), ID_RCR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shl"), ID_SHL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shr"), ID_SHR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sal"), ID_SAL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sar"), ID_SAR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x84, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_C1 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rol"), ID_ROL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("ror"), ID_ROR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcl"), ID_RCL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcr"), ID_RCR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shl"), ID_SHL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shr"), ID_SHR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sal"), ID_SAL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sar"), ID_SAR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x84, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_C6 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_C7 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D0 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rol"), ID_ROL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("ror"), ID_ROR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcl"), ID_RCL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcr"), ID_RCR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shl"), ID_SHL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shr"), ID_SHR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sal"), ID_SAL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sar"), ID_SAR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D1 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rol"), ID_ROL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("ror"), ID_ROR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcl"), ID_RCL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcr"), ID_RCR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shl"), ID_SHL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shr"), ID_SHR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sal"), ID_SAL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sar"), ID_SAR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_1, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D2 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rol"), ID_ROL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("ror"), ID_ROR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcl"), ID_RCL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcr"), ID_RCR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shl"), ID_SHL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shr"), ID_SHR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sal"), ID_SAL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sar"), ID_SAR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x84, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D3 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rol"), ID_ROL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("ror"), ID_ROR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcl"), ID_RCL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("rcr"), ID_RCR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x9F, 0x0, 0x0, 0x80, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shl"), ID_SHL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shr"), ID_SHR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sal"), ID_SAL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("sar"), ID_SAR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x4, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F6 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("test"), ID_TEST,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("test"), ID_TEST,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("not"), ID_NOT,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("neg"), ID_NEG,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("mul"), ID_MUL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x1E, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("imul"), ID_IMUL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x1E, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("div"), ID_DIV,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("idiv"), ID_IDIV,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F7 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("test"), ID_TEST,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("test"), ID_TEST,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0x9F, 0x0, 0x81, 0x4, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_LOGICAL, new MULTI_MNEMONIC("not"), ID_NOT,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("neg"), ID_NEG,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("mul"), ID_MUL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x1E, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("imul"), ID_IMUL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x1E, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("div"), ID_DIV,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("idiv"), ID_IDIV,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_FE = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_FF = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("inc"), ID_INC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("dec"), ID_DEC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9E, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("call"), ID_CALL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("callf"), ID_CALLF,new[] { new INTERNAL_OPERAND(TQ_M, SQ_ptp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH, new MULTI_MNEMONIC("jmp"), ID_JMP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH, new MULTI_MNEMONIC("jmpf"), ID_JMPF,new[] { new INTERNAL_OPERAND(TQ_M, SQ_ptp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_STACK, new MULTI_MNEMONIC("push"), ID_PUSH,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vd64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D8_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D8_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D8_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D8_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D8_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D8_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fadd"), ID_FADD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_M, SQ_sr), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmul"), ID_FMUL,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr), new INTERNAL_OPERAND( TQ_M, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcom"), ID_FCOM, new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr), new INTERNAL_OPERAND( TQ_M, SQ_sr), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp"), ID_FCOMP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr), new INTERNAL_OPERAND( TQ_M, SQ_sr), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsub"), ID_FSUB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_M, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubr"), ID_FSUBR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_M, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdiv"), ID_FDIV,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_M, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivr"), ID_FDIVR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_M, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D8_nomem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fadd"), ID_FADD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmul"), ID_FMUL,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcom"), ID_FCOM,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp"), ID_FCOMP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsub"), ID_FSUB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubr"), ID_FSUBR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdiv"), ID_FDIV,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivr"), ID_FDIVR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D9_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D9_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D9_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D9_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_D9_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D9_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fES, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, TQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, TQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fst"), ID_FST,new[] { new INTERNAL_OPERAND(TQ_M, SQ_sr ), new INTERNAL_OPERAND( TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp"), ID_FSTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_sr ), new INTERNAL_OPERAND( TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fldenv"), ID_FLDENV,new[] { new INTERNAL_OPERAND(TQ_M, SQ_e ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fldcw"), ID_FLDCW,new[] { new INTERNAL_OPERAND(TQ_M, SQ_w), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnstenv"), ID_FNSTENV,new[] { new INTERNAL_OPERAND(TQ_M, SQ_e ), new INTERNAL_OPERAND( TQ_NULL, TQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnstcw"), ID_FNSTCW,new[] { new INTERNAL_OPERAND(TQ_M, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_D9_nomem = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD, new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch"), ID_FXCH,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_fEST, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnop"), ID_FNOP,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp1"), ID_FSTP1,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_UNDOC), 0x0, 0xF, 0x0, 0x0, 0xD, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fchs"), ID_FCHS,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fabs"), ID_FABS,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("ftst"), ID_FTST,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_X87FPU, new MULTI_MNEMONIC("fxam"), ID_FXAM,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_LDCONST, new MULTI_MNEMONIC("fld1"), ID_FLD1,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_LDCONST, new MULTI_MNEMONIC("fld2lt"), ID_FLD2LT,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_LDCONST, new MULTI_MNEMONIC("fld2le"), ID_FLD2LE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_LDCONST, new MULTI_MNEMONIC("fldpi"), ID_FLDPI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_LDCONST, new MULTI_MNEMONIC("fldlg2"), ID_FLDLG2,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_LDCONST, new MULTI_MNEMONIC("fldln2"), ID_FLDLN2,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_LDCONST, new MULTI_MNEMONIC("fldz"), ID_FLDZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("f2xm1"), ID_F2XM1,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("fyl2x"), ID_FYL2X,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("fptan"), ID_FPTAN,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x8, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("fpatan"), ID_FPATAN,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fxtract"), ID_FXTRACT,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fprem1"), ID_FPREM1,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fdecstp"), ID_FDECSTP,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fincstp"), ID_FINCSTP,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fprem"), ID_FPREM,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("fyl2xp1"), ID_FYL2XP1,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsqrt"), ID_FSQRT,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("fsincos"), ID_FSINCOS,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x8, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("frndint"), ID_FRNDINT,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fscale"), ID_FSCALE,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("fsin"), ID_FSIN,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x8, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_TRANS, new MULTI_MNEMONIC("fcos"), ID_FCOS,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_sr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x8, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DA_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DA_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DA_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DA_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DA_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DA_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fiadd"), ID_FIADD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fimul"), ID_FIMUL,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("ficom"), ID_FICOM,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM,0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("ficomp"), ID_FICOMP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fisub"), ID_FISUB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fisubr"), ID_FISUBR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fidiv"), ID_FIDIV,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fidivr"), ID_FIDIVR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DA_nomem = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovb"), ID_FCMOVB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovz"), ID_FCMOVZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovbe"), ID_FCMOVBE,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovu"), ID_FCMOVU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_fEST, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucompp"), ID_FUCOMPP,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DB_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DB_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DB_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DB_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON  ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DB_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DB_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fild"), ID_FILD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_SSE3 | GRP_CONVER, new MULTI_MNEMONIC("fisttp"), ID_FISTTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fist"), ID_FIST,new[] { new INTERNAL_OPERAND(TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fistp"), ID_FISTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_di ), new INTERNAL_OPERAND( TQ_fST0, SQ_di ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_M, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp"), ID_FSTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DB_nomem = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnb"), ID_FCMOVNB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnz"), ID_FCMOVNZ,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmova"), ID_FCMOVA,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fcmovnu"), ID_FCMOVNU,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fneni"), ID_FNENI,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fndisi"), ID_FNDISI,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnclex"), ID_FNCLEX,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fninit"), ID_FNINIT,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0xF, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnsetpm"), ID_FNSETPM,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomi"), ID_FUCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomi"), ID_FCOMI,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DC_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DC_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DC_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DC_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DC_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DC_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fadd"), ID_FADD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_M, SQ_dr), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmul"), ID_FMUL,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr), new INTERNAL_OPERAND( TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcom"), ID_FCOM,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr), new INTERNAL_OPERAND( TQ_M, SQ_dr), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp"), ID_FCOMP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr), new INTERNAL_OPERAND( TQ_M, SQ_dr), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsub"), ID_FSUB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubr"), ID_FSUBR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdiv"), ID_FDIV,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivr"), ID_FDIVR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DC_nomem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fadd"), ID_FADD,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmul"), ID_FMUL,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcom2"), ID_FCOM2,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp3"), ID_FCOMP3,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubr"), ID_FSUBR,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsub"), ID_FSUB,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivr"), ID_FDIVR,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdiv"), ID_FDIV,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DD_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DD_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DD_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DD_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DD_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DD_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fld"), ID_FLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_SSE3 | GRP_CONVER, new MULTI_MNEMONIC("fisttp"), ID_FISTTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_qi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x2, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fst"), ID_FST,new[] { new INTERNAL_OPERAND(TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp"), ID_FSTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_dr ), new INTERNAL_OPERAND( TQ_fST0, SQ_dr ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("frstor"), ID_FRSTOR,new[] { new INTERNAL_OPERAND(TQ_M, SQ_st ), new INTERNAL_OPERAND( TQ_NULL, TQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnsave"), ID_FNSAVE,new[] { new INTERNAL_OPERAND(TQ_M, SQ_st ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0xF, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnstsw"), ID_FNSTSW,new[] { new INTERNAL_OPERAND(TQ_M, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DD_nomem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffree"), ID_FFREE,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch4"), ID_FXCH4,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fst"), ID_FST,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp"), ID_FSTP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucom"), ID_FUCOM,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomp"), ID_FUCOMP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DE_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DE_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DE_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DE_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DE_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DE_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fiadd"), ID_FIADD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fimul"), ID_FIMUL,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("ficom"), ID_FICOM,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("ficomp"), ID_FICOMP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fisub"), ID_FISUB,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fisubr"), ID_FISUBR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fidiv"), ID_FIDIV,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fidivr"), ID_FIDIVR,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DE_nomem = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("faddp"), ID_FADDP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fmulp"), ID_FMULP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomp5"), ID_FCOMP5,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcompp"), ID_FCOMPP,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubrp"), ID_FSUBRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fsubp"), ID_FSUBP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivrp"), ID_FDIVRP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_ARITH, new MULTI_MNEMONIC("fdivp"), ID_FDIVP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DF_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DF_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DF_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DF_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_DF_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DF_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fild"), ID_FILD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_SSE3 | GRP_CONVER, new MULTI_MNEMONIC("fisttp"), ID_FISTTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fist"), ID_FIST,new[] { new INTERNAL_OPERAND(TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fistp"), ID_FISTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_wi ), new INTERNAL_OPERAND( TQ_fST0, SQ_wi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fbld"), ID_FBLD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_bcd ), new INTERNAL_OPERAND( TQ_M, SQ_bcd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fild"), ID_FILD,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_qi ), new INTERNAL_OPERAND( TQ_M, SQ_qi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fbstp"), ID_FBSTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_bcd ), new INTERNAL_OPERAND( TQ_fST0, SQ_bcd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fistp"), ID_FISTP,new[] { new INTERNAL_OPERAND(TQ_M, SQ_qi ), new INTERNAL_OPERAND( TQ_fST0, SQ_qi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_DF_nomem = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("ffreep"), ID_FFREEP,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fxch7"), ID_FXCH7,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp8"), ID_FSTP8,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_DATAMOV, new MULTI_MNEMONIC("fstp9"), ID_FSTP9,new[] { new INTERNAL_OPERAND(TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xC, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("fnstsw"), ID_FNSTSW,new[] { new INTERNAL_OPERAND(TQ_rAX, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xF, 0x0, 0x0, 0xF, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fucomip"), ID_FUCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_X87FPU | GRP_COMPAR, new MULTI_MNEMONIC("fcomip"), ID_FCOMIP,new[] { new INTERNAL_OPERAND(TQ_fST0, SQ_er ), new INTERNAL_OPERAND( TQ_fEST, SQ_er ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x2, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_00, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("lar"), ID_LAR,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_wv ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x8, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("lsl"), ID_LSL,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_wv ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x8, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_BRANCH, new MULTI_MNEMONIC("syscall"), ID_SYSCALL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_O64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("clts"), ID_CLTS,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_BRANCH | GRP_TRANS, new MULTI_MNEMONIC("sysret"), ID_SYSRET,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_O64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("invd"), ID_INVD,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("wbinvd"), ID_WBINVD,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONTROL, new MULTI_MNEMONIC("ud2"), ID_UD2,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONTROL, new MULTI_MNEMONIC("nop"), ID_NOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_POST_PROC | POST_PROC_MULTINOP, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movups"), ID_MOVUPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movups"), ID_MOVUPS,new[] { new INTERNAL_OPERAND(TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_12, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movlps"), ID_MOVLPS,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_SHUNPCK, new MULTI_MNEMONIC("unpcklps"), ID_UNPCKLPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_SHUNPCK, new MULTI_MNEMONIC("unpckhps"), ID_UNPCKHPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_16, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movhps"), ID_MOVHPS,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_18, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_19, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_19, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_19, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_19, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_19, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_19, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONTROL, new MULTI_MNEMONIC("nop"), ID_NOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_POST_PROC | POST_PROC_MULTINOP, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_H, SQ_dq64 ), new INTERNAL_OPERAND( TQ_C, SQ_dq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_H, SQ_dq64 ), new INTERNAL_OPERAND( TQ_D, SQ_dq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_C, SQ_dq64 ), new INTERNAL_OPERAND( TQ_H, SQ_dq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0 | PROP_SERIAL, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_D, SQ_dq64 ), new INTERNAL_OPERAND( TQ_H, SQ_dq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0 | PROP_SERIAL, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_H, SQ_d ), new INTERNAL_OPERAND( TQ_T, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("mov"), ID_MOV,new[] { new INTERNAL_OPERAND(TQ_T, SQ_d ), new INTERNAL_OPERAND( TQ_H, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x0, 0x9F, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movaps"), ID_MOVAPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movaps"), ID_MOVAPS,new[] { new INTERNAL_OPERAND(TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CONVER, new MULTI_MNEMONIC("cvtpi2ps"), ID_CVTPI2PS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_Q, SQ_pi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CACHECT, new MULTI_MNEMONIC("movntps"), ID_MOVNTPS,new[] { new INTERNAL_OPERAND(TQ_M, SQ_ps ), new INTERNAL_OPERAND( TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CONVER, new MULTI_MNEMONIC("cvttps2pi"), ID_CVTTPS2PI,new[] { new INTERNAL_OPERAND(TQ_P, SQ_pi ), new INTERNAL_OPERAND( TQ_W, SQ_psq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CONVER, new MULTI_MNEMONIC("cvtps2pi"), ID_CVTPS2PI,new[] { new INTERNAL_OPERAND(TQ_P, SQ_pi ), new INTERNAL_OPERAND( TQ_W, SQ_psq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_COMPAR, new MULTI_MNEMONIC("ucomiss"), ID_UCOMISS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xB, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_COMPAR, new MULTI_MNEMONIC("comiss"), ID_COMISS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xB, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("wrmsr"), ID_WRMSR,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("rdtsc"), ID_RDTSC,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("rdmsr"), ID_RDMSR,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("rdpmc"), ID_RDPMC,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_IOPL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_BRANCH | GRP_TRANS, new MULTI_MNEMONIC("sysenter"), ID_SYSENTER,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x20, 0x0, 0x20, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_BRANCH | GRP_TRANS, new MULTI_MNEMONIC("sysexit"), ID_SYSENTER,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x00, 0x0, 0x00, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_SMX, new MULTI_MNEMONIC("getsec"), ID_GETSEC,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_38, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_3A, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*40*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovo"), ID_CMOVO,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*41*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovno"), ID_CMOVNO,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*42*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovb"), ID_CMOVB,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*43*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovae"), ID_CMOVAE,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*44*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovz"), ID_CMOVZ,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*45*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovnz"), ID_CMOVNZ,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*46*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovbe"), ID_CMOVBE,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*47*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmova"), ID_CMOVA,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*48*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovs"), ID_CMOVS,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*49*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovns"), ID_CMOVNS,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4A*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovp"), ID_CMOVP,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4B*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovnp"), ID_CMOVNP,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4C*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovl"), ID_CMOVL,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4D*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovge"), ID_CMOVGE,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4E*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovle"), ID_CMOVLE,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4F*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("cmovg"), ID_CMOVG,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*50*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movmskps"), ID_MOVMSKPS,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_U, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*51*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("sqrtps"), ID_SQRTPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*52*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("rsqrtps"), ID_RSQRTPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*53*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("rcpps"), ID_RCPPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*54*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_LOGICAL, new MULTI_MNEMONIC("andps"), ID_ANDPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*55*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_LOGICAL, new MULTI_MNEMONIC("andnps"), ID_ANDNPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*56*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_LOGICAL, new MULTI_MNEMONIC("orps"), ID_ORPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*57*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_LOGICAL, new MULTI_MNEMONIC("xorps"), ID_XORPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*58*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("addps"), ID_ADDPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*59*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("mulps"), ID_MULPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5A*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtps2pd"), ID_CVTPS2PD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5B*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSP, new MULTI_MNEMONIC("cvtdq2ps"), ID_CVTDQ2PS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5C*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("subps"), ID_SUBPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5D*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("minps"), ID_MINPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5E*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("divps"), ID_DIVPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5F*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("maxps"), ID_MAXPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*60*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_UNPACK, new MULTI_MNEMONIC("punpcklbw"), ID_PUNPCKLBW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*61*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_UNPACK, new MULTI_MNEMONIC("punpcklwd"), ID_PUNPCKLWD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*62*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_UNPACK, new MULTI_MNEMONIC("punpckldq"), ID_PUNPCKLDQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*63*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_CONVER, new MULTI_MNEMONIC("packsswb"), ID_PACKSSWB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*64*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_COMPAR, new MULTI_MNEMONIC("pcmpgtb"), ID_PCMPGTB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*65*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_COMPAR, new MULTI_MNEMONIC("pcmpgtw"), ID_PCMPGTW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*66*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_COMPAR, new MULTI_MNEMONIC("pcmpgtd"), ID_PCMPGTD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*67*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_CONVER, new MULTI_MNEMONIC("packuswb"), ID_PACKUSWB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*68*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_UNPACK, new MULTI_MNEMONIC("punpckhbw"), ID_PUNPCKHBW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*69*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_UNPACK, new MULTI_MNEMONIC("punpckhwd"), ID_PUNPCKHWD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6A*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_UNPACK, new MULTI_MNEMONIC("punpckhdq"), ID_PUNPCKHDQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6B*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_CONVER, new MULTI_MNEMONIC("packssdw"), ID_PACKSSDW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6E*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_DATAMOV, new MULTI_MNEMONIC("movd"), ID_MOVD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_E, SQ_dqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6F*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_DATAMOV, new MULTI_MNEMONIC("movq"), ID_MOVQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*70*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pshufw"), ID_PSHUFW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*71*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_71, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*72*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_72, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*73*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_73, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*74*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_COMPAR, new MULTI_MNEMONIC("pcmpeqb"), ID_PCMPEQB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*75*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_COMPAR, new MULTI_MNEMONIC("pcmpeqw"), ID_PCMPEQW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*76*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_COMPAR, new MULTI_MNEMONIC("pcmpeqd"), ID_PCMPEQD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*77*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_X87FPU | GRP_CONTROL, new MULTI_MNEMONIC("emms"), ID_EMMS,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*78*/ new OPCODE_DESCRIPTOR(GRP_VMX, new MULTI_MNEMONIC("vmread"), ID_VMREAD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_dq64 ), new INTERNAL_OPERAND( TQ_G, SQ_dq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x9E, 0x0, ARCH_INTEL ),
+/*79*/ new OPCODE_DESCRIPTOR(GRP_VMX, new MULTI_MNEMONIC("vmwrite"), ID_VMWRITE,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dq64 ), new INTERNAL_OPERAND( TQ_E, SQ_dq64 ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x9E, 0x0, ARCH_INTEL ),
+/*7A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7E*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_DATAMOV, new MULTI_MNEMONIC("movd"), ID_MOVD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_dqp ), new INTERNAL_OPERAND( TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7F*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_DATAMOV, new MULTI_MNEMONIC("movq"), ID_MOVQ,new[] { new INTERNAL_OPERAND(TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*80*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jo"), ID_JO,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*81*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jno"), ID_JNO,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*82*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jb"), ID_JB,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*83*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jae"), ID_JAE,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*84*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jz"), ID_JZ,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*85*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jnz"), ID_JNZ,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*86*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jbe"), ID_JBE,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*87*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("ja"), ID_JA,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*88*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("js"), ID_JS,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*89*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jns"), ID_JNS,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8A*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jp"), ID_JP,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8B*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jnp"), ID_JNP,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8C*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jl"), ID_JL,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8D*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jge"), ID_JGE,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8E*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jle"), ID_JLE,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8F*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BRANCH | GRP_COND, new MULTI_MNEMONIC("jg"), ID_JG,new[] { new INTERNAL_OPERAND(TQ_J, SQ_vds ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*90*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("seto"), ID_SETO,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*91*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setno"), ID_SETNO,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x80, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*92*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setb"), ID_SETB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*93*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setae"), ID_SETAE,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x1, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*94*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setz"), ID_SETZ,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*95*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setnz"), ID_SETNZ,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x8, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*96*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setbe"), ID_SETBE,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*97*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("seta"), ID_SETA,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x9, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*98*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("sets"), ID_SETS,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*99*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setns"), ID_SETNS,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x10, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9A*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setp"), ID_SETP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9B*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setnp"), ID_SETNP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x2, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9C*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setl"), ID_SETL,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9D*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setge"), ID_SETGE,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x90, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9E*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setle"), ID_SETLE,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9F*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("setg"), ID_SETG,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x98, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("push"), ID_PUSH,new[] { new INTERNAL_OPERAND(TQ_FS, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("pop"), ID_POP,new[] { new INTERNAL_OPERAND(TQ_FS, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONTROL, new MULTI_MNEMONIC("cpuid"), ID_CPUID,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("bt"), ID_BT,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+/*A4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shld"), ID_SHLD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*A5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shld"), ID_SHLD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*A6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A8*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("push"), ID_PUSH,new[] { new INTERNAL_OPERAND(TQ_GS, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A9*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_STACK | GRP_SEGREG, new MULTI_MNEMONIC("pop"), ID_POP,new[] { new INTERNAL_OPERAND(TQ_GS, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AA*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_BRANCH, new MULTI_MNEMONIC("rsm"), ID_RSM,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AB*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("bts"), ID_BTS,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_LOCK, 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+/*AC*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shrd"), ID_SHRD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*AD*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_SHFTROT, new MULTI_MNEMONIC("shrd"), ID_SHRD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_rCX, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x85, ARCH_COMMON ),
+/*AE*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_AE_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AF*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("imul"), ID_IMUL,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x1E, ARCH_COMMON ),
+/*B0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmpxchg"), ID_CMPXCHG,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_G, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_LOCK | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmpxchg"), ID_CMPXCHG,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_LOCK | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B2*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_SEGREG, new MULTI_MNEMONIC("lss"), ID_LSS,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_M, SQ_ptp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B3*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("btr"), ID_BTR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_LOCK), 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+/*B4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_SEGREG, new MULTI_MNEMONIC("lfs"), ID_LFS,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_M, SQ_ptp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_SEGREG, new MULTI_MNEMONIC("lgs"), ID_LGS,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_M, SQ_ptp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONVER, new MULTI_MNEMONIC("movzx"), ID_MOVZX,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONVER, new MULTI_MNEMONIC("movzx"), ID_MOVZX,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B9*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONTROL, new MULTI_MNEMONIC("ud"), ID_UD,new[] { new INTERNAL_OPERAND(TQ_G, SQ_NULL ), new INTERNAL_OPERAND( TQ_E, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BA*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_BA, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BB*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("btc"), ID_BTC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_LOCK), 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+/*BC*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("bsf"), ID_BSF,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x97, ARCH_COMMON ),
+/*BD*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("bsr"), ID_BSR,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x97, ARCH_COMMON ),
+/*BE*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONVER, new MULTI_MNEMONIC("movsx"), ID_MOVSX,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BF*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_CONVER, new MULTI_MNEMONIC("movsx"), ID_MOVSX,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("xadd"), ID_XADD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_G, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("xadd"), ID_XADD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_LOCK | PROP_MODRM), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C2*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_COMPAR, new MULTI_MNEMONIC("cmpps"), ID_CMPPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C3*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_CACHECT, new MULTI_MNEMONIC("movnti"), ID_MOVNTI,new[] { new INTERNAL_OPERAND(TQ_M, SQ_dqp ), new INTERNAL_OPERAND( TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C4*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pinsrw"), ID_PINSRW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_E, SQ_wdqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C5*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pextrw"), ID_PEXTRW,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_N, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C6*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_SHUNPCK, new MULTI_MNEMONIC("shufps"), ID_SHUFPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C7*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_C7, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C8*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C9*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CA*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CB*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CC*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CD*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CE*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CF*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("bswap"), ID_BSWAP,new[] { new INTERNAL_OPERAND(TQ_Z, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D1*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrlw"), ID_PSRLW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D2*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrld"), ID_PSRLD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D3*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrlq"), ID_PSRLQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D4*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddq"), ID_PADDQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D5*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("pmullw"), ID_PMULLW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D7*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmovmskb"), ID_PMOVMSKB,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_N, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D8*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("psubusb"), ID_PSUBUSB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D9*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("psubusw"), ID_PSUBUSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DA*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pminub"), ID_PMINUB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DB*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_LOGICAL, new MULTI_MNEMONIC("pand"), ID_PAND,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DC*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("paddusb"), ID_PADDUSB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DD*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("paddusw"), ID_PADDUSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DE*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmaxub"), ID_PMAXUB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DF*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_LOGICAL, new MULTI_MNEMONIC("pandn"), ID_PANDN,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E0*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pavgb"), ID_PAVGB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E1*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psraw"), ID_PSRAW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E2*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrad"), ID_PSRAD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E3*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pavgw"), ID_PAVGW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E4*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmulhuw"), ID_PMULHUW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E5*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("pmulhw"), ID_PMULHW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E7*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CACHECT, new MULTI_MNEMONIC("movntq"), ID_MOVNTQ,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E8*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("psubsb"), ID_PSUBSB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E9*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("psubsw"), ID_PSUBSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EA*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pminsw"), ID_PMINSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EB*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_LOGICAL, new MULTI_MNEMONIC("por"), ID_POR,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EC*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("paddsb"), ID_PADDSB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*ED*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("paddsw"), ID_PADDSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EE*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmaxsw"), ID_PMAXSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EF*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_LOGICAL, new MULTI_MNEMONIC("pxor"), ID_PXOR,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F1*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psllw"), ID_PSLLW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F2*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("pslld"), ID_PSLLD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F3*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psllq"), ID_PSLLQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F4*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("pmuludq"), ID_PMULUDQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F5*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("pmaddwd"), ID_PMADDWD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F6*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("psadbw"), ID_PSADBW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F7*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CACHECT, new MULTI_MNEMONIC("maskmovq"), ID_MASKMOVQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_N, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F8*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("psubb"), ID_PSUBB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F9*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("psubw"), ID_PSUBW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FA*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("psubd"), ID_PSUBD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FB*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubq"), ID_PSUBQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FC*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("paddb"), ID_PADDB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FD*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("paddw"), ID_PADDW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FE*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_ARITH, new MULTI_MNEMONIC("paddd"), ID_PADDD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_00 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("sldt"), ID_SLDT,new[] { new INTERNAL_OPERAND(TQ_E, SQ_wvqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("str"), ID_STR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_wvqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("lldt"), ID_LLDT,new[] { new INTERNAL_OPERAND(TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0 | PROP_SERIAL), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("ltr"), ID_LTR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0 | PROP_SERIAL), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("verr"), ID_VERR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x8, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("verw"), ID_VERW,new[] { new INTERNAL_OPERAND(TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x8, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_BRANCH, new MULTI_MNEMONIC("jmpe"), ID_JMPE,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_01_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_NOMEM_SWTCH, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_01_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("sgdt"), ID_SGDT,new[] { new INTERNAL_OPERAND(TQ_M, SQ_s ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("sidt"), ID_SIDT,new[] { new INTERNAL_OPERAND(TQ_M, SQ_s ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("lgdt"), ID_LGDT,new[] { new INTERNAL_OPERAND(TQ_M, SQ_s ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0 | PROP_SERIAL), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("lidt"), ID_LIDT,new[] { new INTERNAL_OPERAND(TQ_M, SQ_s ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0 | PROP_SERIAL), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("smsw"), ID_SMSW,new[] { new INTERNAL_OPERAND(TQ_M, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("lmsw"), ID_LMSW,new[] { new INTERNAL_OPERAND(TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0 | PROP_SERIAL), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("invlpg"), ID_INVLPG,new[] { new INTERNAL_OPERAND(TQ_M, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0 | PROP_SERIAL), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_01_nomem_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_NOMEM_00, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_NOMEM_01, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_NOMEM_02, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("smsw"), ID_SMSW,new[] { new INTERNAL_OPERAND(TQ_R, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("lmsw"), ID_LMSW,new[] { new INTERNAL_OPERAND(TQ_E, SQ_w ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0 | PROP_SERIAL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_01_NOMEM_07, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_01_nomem_00 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_VMX, new MULTI_MNEMONIC("vmcall"), ID_VMCALL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_VMX, new MULTI_MNEMONIC("vmlaunch"), ID_VMLAUNCH,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_VMX, new MULTI_MNEMONIC("vmresume"), ID_VMRESUME,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM | GRP_VMX, new MULTI_MNEMONIC("vmxoff"), ID_VMXOFF,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0), 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_01_nomem_01 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SYNC, new MULTI_MNEMONIC("monitor"), ID_MONITOR,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SYNC, new MULTI_MNEMONIC("mwait"), ID_MWAIT,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, (ushort)(PROP_MODRM | PROP_RING0), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_01_nomem_02 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("xgetbv"), ID_XGETBV,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("xsetbv"), ID_XSETBV,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_01_nomem_07 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("swapgs"), ID_SWAPGS,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0 | PROP_O64, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("rdtscp"), ID_RDTSCP,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_SERIAL, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_12 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movlps"), ID_MOVLPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movlps"), ID_MOVLPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movlps"), ID_MOVLPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movhlps"), ID_MOVHLPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_U, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_16 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movhps"), ID_MOVHPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movhps"), ID_MOVHPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movhps"), ID_MOVHPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movhlps"), ID_MOVHLPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_U, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_18 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_FETCH, new MULTI_MNEMONIC("prefetchnta"), ID_PREFETCHNTA,new[] { new INTERNAL_OPERAND(TQ_M, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_FETCH, new MULTI_MNEMONIC("prefetcht0"), ID_PREFETCHT0,new[] { new INTERNAL_OPERAND(TQ_M, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_FETCH, new MULTI_MNEMONIC("prefetcht1"), ID_PREFETCHT1,new[] { new INTERNAL_OPERAND(TQ_M, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_FETCH, new MULTI_MNEMONIC("prefetcht2"), ID_PREFETCHT2,new[] { new INTERNAL_OPERAND(TQ_M, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_19 = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_CONTROL, new MULTI_MNEMONIC("hint_nop"), ID_HINTNOP,new[] { new INTERNAL_OPERAND(TQ_E, SQ_v ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_UNDOC, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_71 = new[]
+{
+/*2*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrlw"), ID_PSRLW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psraw"), ID_PSRAW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psllw"), ID_PSLLW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_72 = new[]
+{
+/*2*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrld"), ID_PSRLD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrad"), ID_PSRAD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("pslld"), ID_PSLLD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_73 = new[]
+{
+/*2*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psrlq"), ID_PSRLQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_MMX | GRP_SHIFT, new MULTI_MNEMONIC("psllq"), ID_PSLLQ,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_AE_swtch = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_AE_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_AE_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_AE_MEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_0F_AE_NOMEM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_AE_mem = new[]
+{
+/*0*/ new OPCODE_DESCRIPTOR(GRP_SM, new MULTI_MNEMONIC("fxsave"), ID_FXSAVE,new[] { new INTERNAL_OPERAND(TQ_M, SQ_stx ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1*/ new OPCODE_DESCRIPTOR(GRP_SM, new MULTI_MNEMONIC("fxrstor"), ID_FXRSTOR,new[] { new INTERNAL_OPERAND(TQ_M, SQ_stx ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_MXCSRSM, new MULTI_MNEMONIC("ldmxcsr"), ID_LDMXCSR,new[] { new INTERNAL_OPERAND(TQ_M, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_MXCSRSM, new MULTI_MNEMONIC("stmxcsr"), ID_STMXCSR,new[] { new INTERNAL_OPERAND(TQ_M, SQ_d ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("xsave"), ID_XSAVE,new[] { new INTERNAL_OPERAND(TQ_M, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_SYSTEM, new MULTI_MNEMONIC("xrstor"), ID_XRSTOR,new[] { new INTERNAL_OPERAND(TQ_M, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_CACHECT, new MULTI_MNEMONIC("clflush"), ID_CLFLUSH,new[] { new INTERNAL_OPERAND(TQ_M, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_AE_nomem = new[]
+{
+/*5*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_ORDER, new MULTI_MNEMONIC("lfence"), ID_LFENCE,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_ORDER, new MULTI_MNEMONIC("mfence"), ID_MFENCE,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_ORDER, new MULTI_MNEMONIC("sfence"), ID_SFENCE,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON )
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_BA = new[]
+{
+/*4*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("bt"), ID_BT,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("bts"), ID_BTS,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_LOCK | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("btr"), ID_BTR,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_LOCK | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("btc"), ID_BTC,new[] { new INTERNAL_OPERAND(TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_LOCK | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x9E, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_C7 = new[]
+{
+/*1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV | GRP_ARITH | GRP_BINARY, new MULTI_MNEMONIC("cmpxchg8b"), ID_CMPXCHG8B,new[] { new INTERNAL_OPERAND(TQ_M, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_LOCK | PROP_MODRM | PROP_POST_PROC | POST_PROC_CMPXCHG8B, 0x0, 0x8, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_VMX, new MULTI_MNEMONIC("vmptrld"), ID_VMPTRLD,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0 | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_VMX, new MULTI_MNEMONIC("vmptrst"), ID_VMPTRST,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0 | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0F_jmp = new[]
+{
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_66_0F, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),	
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0F = new[]
+{
+/*10*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movupd"), ID_MOVUPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movupd"), ID_MOVUPD,new[] { new INTERNAL_OPERAND(TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movlpd"), ID_MOVLPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movlpd"), ID_MOVLPD,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_SHUNPCK, new MULTI_MNEMONIC("unpcklpd"), ID_UNPCKLPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_SHUNPCK, new MULTI_MNEMONIC("unpckhpd"), ID_UNPCKHPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movhpd"), ID_MOVHPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movhpd"), ID_MOVHPD,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movapd"), ID_MOVAPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movapd"), ID_MOVAPD,new[] { new INTERNAL_OPERAND(TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtpi2pd"), ID_CVTPI2PD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_Q, SQ_pi ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_CACHECT, new MULTI_MNEMONIC("movntpd"), ID_MOVNTPD,new[] { new INTERNAL_OPERAND(TQ_M, SQ_pd ), new INTERNAL_OPERAND( TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvttpd2pi"), ID_CVTTPD2PI,new[] { new INTERNAL_OPERAND(TQ_P, SQ_pi ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtpd2pi"), ID_CVTPD2PI,new[] { new INTERNAL_OPERAND(TQ_P, SQ_pi ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_COMPAR, new MULTI_MNEMONIC("ucomisd"), ID_UCOMISD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xB, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_COMPAR, new MULTI_MNEMONIC("comisd"), ID_COMISD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0xB, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_66_0F38, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_66_0F3A, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*40*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*41*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*42*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*43*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*44*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*45*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*46*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*47*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*48*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*49*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*50*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movmskpd"), ID_MOVMSKPD,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_U, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*51*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("sqrtpd"), ID_SQRTPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*52*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*53*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*54*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_LOGICAL, new MULTI_MNEMONIC("andpd"), ID_ANDPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*55*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_LOGICAL, new MULTI_MNEMONIC("andnpd"), ID_ANDNPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*56*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_LOGICAL, new MULTI_MNEMONIC("orpd"), ID_ORPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*57*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_LOGICAL, new MULTI_MNEMONIC("xorpd"), ID_XORPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*58*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("addpd"), ID_ADDPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*59*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("mulpd"), ID_MULPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5A*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtpd2ps"), ID_CVTPD2PS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5B*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSP, new MULTI_MNEMONIC("cvtps2dq"), ID_CVTPS2DQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5C*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("subpd"), ID_SUBPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5D*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("minpd"), ID_MINPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5E*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("divpd"), ID_DIVPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5F*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("maxpd"), ID_MAXPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*60*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpcklbw"), ID_PUNPCKLBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*61*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpcklwd"), ID_PUNPCKLWD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*62*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpckldq"), ID_PUNPCKLDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*63*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("packsswb"), ID_PACKSSWB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*64*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpgtb"), ID_PCMPGTB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*65*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpgtw"), ID_PCMPGTW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*66*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpgtd"), ID_PCMPGTD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*67*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("packuswb"), ID_PACKUSWB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*68*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpckhbw"), ID_PUNPCKHBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*69*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpckhbd"), ID_PUNPCKHBD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6A*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpckhbdq"), ID_PUNPCKHBDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6B*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("packssdw"), ID_PACKSSDW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6C*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpcklqdq"), ID_PUNPCKLQDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6D*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("punpckhqdq"), ID_PUNPCKHQDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6E*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movd"), ID_MOVD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_E, SQ_dqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6F*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movdqa"), ID_MOVDQA,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*70*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("pshufd"), ID_PSHUFD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*71*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_66_0F71, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*72*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_66_0F72, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*73*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_66_0F73, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*74*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpeqb"), ID_PCMPEQB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*75*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpeqw"), ID_PCMPEQW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*76*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpeqd"), ID_PCMPEQD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*77*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*78*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*79*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7C*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("haddpd"), ID_HADDPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7D*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("hsubpd"), ID_HSUBPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7E*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movd"), ID_MOVD,new[] { new INTERNAL_OPERAND(TQ_E, SQ_dqp ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7F*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movdqa"), ID_MOVDQA,new[] { new INTERNAL_OPERAND(TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*80*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*81*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*82*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*83*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*84*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*85*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*86*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*87*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*88*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*89*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*90*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*91*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*92*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*93*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*94*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*95*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*96*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*97*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*98*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*99*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_COMPAR, new MULTI_MNEMONIC("cmppd"), ID_CMPPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C4*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pinsrw"), ID_PINSRW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_E, SQ_wdqp ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C5*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pextrw"), ID_PEXTRW,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_SHUNPCK, new MULTI_MNEMONIC("shufpd"), ID_SHUFPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C7*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_66_0FC7, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D0*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("addsubpd"), ID_ADDSUBPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D1*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psrlw"), ID_PSRLW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psrld"), ID_PSRLD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D3*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psrlq"), ID_PSRLQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D4*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddq"), ID_PADDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D5*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("pmullw"), ID_PMULLW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movq"), ID_MOVQ,new[] { new INTERNAL_OPERAND(TQ_W, SQ_q ), new INTERNAL_OPERAND( TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D7*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmovmskb"), ID_PMOVMSKB,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D8*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubusb"), ID_PSUBUSB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D9*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubusw"), ID_PSUBUSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DA*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pminub"), ID_PMINUB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DB*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_LOGICAL, new MULTI_MNEMONIC("pand"), ID_PAND,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DC*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddusb"), ID_PADDUSB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DD*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddusw"), ID_PADDUSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DE*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmaxub"), ID_PMAXUB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DF*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_LOGICAL, new MULTI_MNEMONIC("pandn"), ID_PANDN,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E0*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pavgb"), ID_PAVGB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E1*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psraw"), ID_PSRAW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psrad"), ID_PSRAD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E3*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pavgw"), ID_PAVGW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E4*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmulhuw"), ID_PMULHUW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E5*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("pmulhw"), ID_PMULHW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvttpd2dq"), ID_CVTTPD2DQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E7*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_CACHECT, new MULTI_MNEMONIC("movntdq"), ID_MOVNTDQ,new[] { new INTERNAL_OPERAND(TQ_M, SQ_dq ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E8*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubsb"), ID_PSUBSB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E9*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubsw"), ID_PSUBSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EA*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pminsw"), ID_PMINSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EB*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_LOGICAL, new MULTI_MNEMONIC("por"), ID_POR,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EC*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddsb"), ID_PADDSB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*ED*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddsw"), ID_PADDSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EE*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("pmaxsw"), ID_PMAXSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EF*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_LOGICAL, new MULTI_MNEMONIC("pxor"), ID_XOR,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F1*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psllw"), ID_PSLLW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("pslld"), ID_PSLLD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F3*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psllq"), ID_PSLLQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F4*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("pmuludq"), ID_PMULUDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F5*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("pmaddwd"), ID_PMADDWD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F6*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDINT, new MULTI_MNEMONIC("psadbw"), ID_PSADBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F7*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_CACHECT, new MULTI_MNEMONIC("maskmovdqu"), ID_MASKMOVDQU,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F8*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubb"), ID_PSUBB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F9*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubw"), ID_PSUBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FA*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubd"), ID_PSUBD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FB*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("psubq"), ID_PSUBQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FC*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddb"), ID_PADDB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FD*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddw"), ID_PADDW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*FE*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("paddd"), ID_PADDD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0F71 = new[]
+{
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("psrlw"), ID_PSRLW,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("psraw"), ID_PSRAW,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("psllw"), ID_PSLLW,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0F72 = new[]
+{
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("psrld"), ID_PSRLD,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("psrad"), ID_PSRAD,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("pslld"), ID_PSLLD,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0F73 = new[]
+{
+/*2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("psrlq"), ID_PSRLQ,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("psrldq"), ID_PSRLDQ,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SHIFT, new MULTI_MNEMONIC("psllq"), ID_PSLLQ,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHIFT, new MULTI_MNEMONIC("pslldq"), ID_PSLLDQ,new[] { new INTERNAL_OPERAND(TQ_U, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0FC7 = new[]
+{
+/*6*/ new OPCODE_DESCRIPTOR(GRP_VMX, new MULTI_MNEMONIC("vmclear"), ID_VMCLEAR,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0 | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F2_0F_jmp = new[]
+{
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_F2_0F, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),	
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F2_0F = new[]
+{
+/*10*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movsd"), ID_MOVSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_DATAMOV, new MULTI_MNEMONIC("movsd"), ID_MOVSD,new[] { new INTERNAL_OPERAND(TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movddup"), ID_MOVDDUP,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_W, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtsi2sd"), ID_CVTSI2SD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_E, SQ_dqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvttsd2si"), ID_CVTTSD2SI,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtsd2si"), ID_CVTSD2SI,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_F2_0F38, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*40*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*41*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*42*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*43*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*44*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*45*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*46*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*47*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*48*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*49*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*50*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*51*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("sqrtsd"), ID_SQRTSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*52*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*53*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*54*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*55*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*56*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*57*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*58*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("addsd"), ID_ADDSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*59*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("mulsd"), ID_MULSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5A*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtsd2ss"), ID_CVTSD2SS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5C*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("subsd"), ID_SUBSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5D*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("minsd"), ID_MINSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5E*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("divsd"), ID_DIVSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5F*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_ARITH, new MULTI_MNEMONIC("maxsd"), ID_MAXSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*60*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*61*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*62*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*63*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*64*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*65*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*66*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*67*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*68*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*69*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*70*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("pshuflw"), ID_PSHUFLW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*71*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*72*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*73*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*74*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*75*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*76*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*77*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*78*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*79*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7C*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("haddps"), ID_HADDPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7D*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("hsubps"), ID_HSUBPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*80*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*81*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*82*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*83*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*84*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*85*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*86*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*87*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*88*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*89*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*90*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*91*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*92*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*93*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*94*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*95*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*96*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*97*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*98*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*99*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C2*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_COMPAR, new MULTI_MNEMONIC("cmpsd"), ID_CMPSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D0*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("addsubps"), ID_ADDSUBPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movdq2q"), ID_MOVDQ2Q,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_U, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtpd2dq"), ID_CVTPD2DQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*ED*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F0*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_CACHECT, new MULTI_MNEMONIC("lddqu"), ID_LDDQU,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_M, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F3_0F_jmp = new[]
+{
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_F3_0F, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),	
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F3_0F = new[]
+{
+/*10*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movss"), ID_MOVSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movss"), ID_MOVSS,new[] { new INTERNAL_OPERAND(TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movsldup"), ID_MOVSLDUP,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_W, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_SSE3 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("movshdup"), ID_MOVSHDUP,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_W, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CONVER, new MULTI_MNEMONIC("cvtsi2ss"), ID_CVTSI2SS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_E, SQ_dqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CONVER, new MULTI_MNEMONIC("cvttss2si"), ID_CVTTSS2SI,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_CONVER, new MULTI_MNEMONIC("cvtss2si"), ID_CVTSS2SI,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*40*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*41*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*42*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*43*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*44*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*45*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*46*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*47*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*48*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*49*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*50*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*51*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("sqrtss"), ID_SQRTSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*52*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("rsqrtss"), ID_RSQRTSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*53*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("rcpss"), ID_RCPSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*54*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*55*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*56*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*57*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*58*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("addss"), ID_ADDSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*59*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("mulss"), ID_MULSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5A*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtss2sd"), ID_CVTSS2SD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5B*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSP, new MULTI_MNEMONIC("cvttps2dq"), ID_CVTTPS2DQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5C*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("subss"), ID_SUBSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5D*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("minss"), ID_MINSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5E*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("divss"), ID_DIVSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5F*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("maxss"), ID_MAXSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*60*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*61*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*62*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*63*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*64*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*65*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*66*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*67*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*68*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*69*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6F*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movdqu"), ID_MOVDQU,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*70*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_SHUNPCK, new MULTI_MNEMONIC("pshufhw"), ID_PSHUFHW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*71*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*72*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*73*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*74*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*75*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*76*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*77*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*78*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*79*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7E*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movq"), ID_MOVQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_q ), new INTERNAL_OPERAND( TQ_W, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7F*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movdqu"), ID_MOVDQU,new[] { new INTERNAL_OPERAND(TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*80*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*81*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*82*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*83*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*84*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*85*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*86*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*87*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*88*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*89*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*90*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*91*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*92*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*93*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*94*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*95*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*96*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*97*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*98*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*99*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B8*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_BIT, new MULTI_MNEMONIC("popcnt"), ID_POPCNT,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x97, 0x0, ARCH_COMMON ),
+/*B9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C2*/ new OPCODE_DESCRIPTOR(GRP_SSE1 | GRP_SIMDFP | GRP_COMPAR, new MULTI_MNEMONIC("cmpss"), ID_CMPSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C7*/ new OPCODE_DESCRIPTOR(GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, IDX_F3_0FC7, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("movq2dq"), ID_MOVQ2DQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_N, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E6*/ new OPCODE_DESCRIPTOR(GRP_SSE2 | GRP_PCKSCLR | GRP_CONVER, new MULTI_MNEMONIC("cvtdq2pd"), ID_CVTDQ2PD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F3_0FC7 = new[]
+{
+/*6*/ new OPCODE_DESCRIPTOR(GRP_VMX, new MULTI_MNEMONIC("vmxon"), ID_VMXON,new[] { new INTERNAL_OPERAND(TQ_M, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_RING0 | PROP_MODRM, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_38 = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pshufb"), ID_PSHUFB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phaddw"), ID_PHADDW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phaddd"), ID_PHADDD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phaddsw"), ID_PHADDSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pmaddubsw"), ID_PMADDUBSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phsubw"), ID_PHSUBW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phsubd"), ID_PHSUBD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phsubsw"), ID_PHSUBSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("psignb"), ID_PSIGNB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("psignw"), ID_PSIGNW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("psignd"), ID_PSIGND,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pmulhrsw"), ID_PMULHRSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pabsb"), ID_PABSB,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pabsw"), ID_PABSW,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pabsd"), ID_PABSD,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*40*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*41*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*42*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*43*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*44*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*45*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*46*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*47*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*48*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*49*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*50*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*51*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*52*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*53*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*54*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*55*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*56*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*57*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*58*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*59*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*60*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*61*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*62*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*63*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*64*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*65*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*66*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*67*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*68*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*69*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*70*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*71*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*72*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*73*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*74*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*75*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*76*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*77*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*78*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*79*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*80*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*81*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*82*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*83*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*84*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*85*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*86*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*87*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*88*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*89*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*8F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*90*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*91*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*92*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*93*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*94*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*95*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*96*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*97*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*98*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*99*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*9F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*A9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*AF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*B9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*BF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*C9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*CF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*D9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DD*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*DF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E0*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E1*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E2*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E3*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E4*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E5*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E6*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E7*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E8*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*E9*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EA*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EB*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EC*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*ED*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EE*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*EF*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F0*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("movbe"), ID_MOVBE,new[] { new INTERNAL_OPERAND(TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_M, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F1*/ new OPCODE_DESCRIPTOR(GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("movbe"), ID_MOVBE,new[] { new INTERNAL_OPERAND(TQ_M, SQ_vqp ), new INTERNAL_OPERAND( TQ_G, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0F38 = new[]
+{
+/*00*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pshufb"), ID_PSHUFB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*01*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phaddw"), ID_PHADDW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*02*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phaddd"), ID_PHADDD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*03*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phaddsw"), ID_PHADDSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*04*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pmaddubsw"), ID_PMADDUBSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*05*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phsubw"), ID_PHSUBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*06*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phsubd"), ID_PHSUBD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*07*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("phsubsw"), ID_PHSUBSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*08*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("psignb"), ID_PSIGNB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("psignw"), ID_PSIGNW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("psignd"), ID_PSIGND,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pmulhrsw"), ID_PMULHRSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("pblendvb"), ID_PBLENDVB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("blendvps"), ID_BLENDVPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("blendvpd"), ID_BLENDVPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_SSE41, new MULTI_MNEMONIC("ptest"), ID_PTEST,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x96, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pabsb"), ID_PABSB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pabsw"), ID_PABSW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("pabsd"), ID_PABSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovsxbw"), ID_PMOVSXBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_qdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovsxbd"), ID_PMOVSXBD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_ddq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovsxbq"), ID_PMOVSXBQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_wdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovsxwd"), ID_PMOVSXWD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_qdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovsxwq"), ID_PMOVSXWQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_ddq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovsxdq"), ID_PMOVSXDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_qdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("pmuldq"), ID_PMULDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpeqq"), ID_PCMPEQQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_CACHECT, new MULTI_MNEMONIC("movntdqa"), ID_MOVNTDQA,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_M, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("packusdw"), ID_PACKUSDW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovzxbw"), ID_PMOVZXBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_qdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovzxbd"), ID_PMOVZXBD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_ddq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovzxbq"), ID_PMOVZXBQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_wdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovzxwd"), ID_PMOVZXWD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_qdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovzxwq"), ID_PMOVZXWQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_ddq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_CONVER, new MULTI_MNEMONIC("pmovzxdq"), ID_PMOVZXDQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_U, SQ_qdq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_SSE42 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pcmpgtq"), ID_PCMPGTQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pminsb"), ID_PMINSB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pminsd"), ID_PMINSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pminuw"), ID_PMINUW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pminud"), ID_PMINUD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pmaxsb"), ID_PMAXSB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pmaxsd"), ID_PMAXSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pmaxuw"), ID_PMAXUW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("pmaxud"), ID_PMAXUD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*40*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("pmulld"), ID_PMULLD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*41*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_COMPAR, new MULTI_MNEMONIC("phminposuw"), ID_PHMINPOSUW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*42*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*43*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*44*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*45*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*46*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*47*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*48*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*49*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*50*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*51*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*52*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*53*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*54*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*55*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*56*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*57*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*58*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*59*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*60*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*61*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*62*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*63*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*64*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*65*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*66*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*67*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*68*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*69*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*6F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*70*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*71*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*72*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*73*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*74*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*75*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*76*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*77*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*78*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*79*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*7F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*80*/ new OPCODE_DESCRIPTOR(GRP_VMX , new MULTI_MNEMONIC("invept"), ID_INVEPT,new[] { new INTERNAL_OPERAND(TQ_G, SQ_d ), new INTERNAL_OPERAND( TQ_M, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+/*81*/ new OPCODE_DESCRIPTOR(GRP_VMX, new MULTI_MNEMONIC("invvpid"), ID_INVVPID,new[] { new INTERNAL_OPERAND(TQ_G, SQ_d ), new INTERNAL_OPERAND( TQ_M, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM | PROP_RING0, 0x0, 0x9F, 0x0, 0x0, 0x0, ARCH_INTEL ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_F2_0F38 = new[]
+{
+/*F0*/ new OPCODE_DESCRIPTOR(GRP_SSE42, new MULTI_MNEMONIC("crc32"), ID_CRC32,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_E, SQ_b ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*F1*/ new OPCODE_DESCRIPTOR(GRP_SSE42, new MULTI_MNEMONIC("crc32"), ID_CRC32,new[] { new INTERNAL_OPERAND(TQ_G, SQ_dqp ), new INTERNAL_OPERAND( TQ_E, SQ_vqp ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_0F_3A = new[]
+{
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("palignr"), ID_PALIGNR,new[] { new INTERNAL_OPERAND(TQ_P, SQ_q ), new INTERNAL_OPERAND( TQ_Q, SQ_q ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+};
+
+public static OPCODE_DESCRIPTOR[] opcodes_66_0F3A = new[]
+{
+/*08*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_CONVER, new MULTI_MNEMONIC("roundps"), ID_ROUNDPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*09*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_CONVER, new MULTI_MNEMONIC("roundpd"), ID_ROUNDPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0A*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_CONVER, new MULTI_MNEMONIC("roundss"), ID_ROUNDSS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ss ), new INTERNAL_OPERAND( TQ_W, SQ_ss ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0B*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_CONVER, new MULTI_MNEMONIC("roundsd"), ID_ROUNDSD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_sd ), new INTERNAL_OPERAND( TQ_W, SQ_sd ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0C*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("blendps"), ID_BLENDPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0D*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("blendpd"), ID_BLENDPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0E*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("pblendw"), ID_PBLENDW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*0F*/ new OPCODE_DESCRIPTOR(GRP_SSSE3 | GRP_SIMDINT, new MULTI_MNEMONIC("palignr"), ID_PALIGNR,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*10*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*11*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*12*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*13*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*14*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("pextrb"), ID_PEXTRB,new[] { new INTERNAL_OPERAND(TQ_E, SQ_bdqp ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*15*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("pextrw"), ID_PEXTRW,new[] { new INTERNAL_OPERAND(TQ_E, SQ_wdqp ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*16*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("pextrq"), ID_PEXTRQ,new[] { new INTERNAL_OPERAND(TQ_E, SQ_d ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*17*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("extractps"), ID_EXTRACTPS,new[] { new INTERNAL_OPERAND(TQ_E, SQ_d ), new INTERNAL_OPERAND( TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*18*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*19*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*1F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*20*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("pinsrb"), ID_PINSRB,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_M, SQ_b ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*21*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_DATAMOV, new MULTI_MNEMONIC("insertps"), ID_INSERTPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_M, SQ_d ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*22*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_DATAMOV, new MULTI_MNEMONIC("pinsrq"), ID_PINSRQ,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_E, SQ_d ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*23*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*24*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*25*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*26*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*27*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*28*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*29*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*2F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*30*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*31*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*32*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*33*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*34*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*35*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*36*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*37*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*38*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*39*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*3F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*40*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("dpps"), ID_DPPS,new[] { new INTERNAL_OPERAND(TQ_V, SQ_ps ), new INTERNAL_OPERAND( TQ_W, SQ_ps ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*41*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDFP | GRP_ARITH, new MULTI_MNEMONIC("dppd"), ID_DPPD,new[] { new INTERNAL_OPERAND(TQ_V, SQ_pd ), new INTERNAL_OPERAND( TQ_W, SQ_pd ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*42*/ new OPCODE_DESCRIPTOR(GRP_SSE41 | GRP_SIMDINT | GRP_ARITH, new MULTI_MNEMONIC("mpsadbw"), ID_MPSADBW,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*43*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*44*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*45*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*46*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*47*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*48*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*49*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*4F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*50*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*51*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*52*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*53*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*54*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*55*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*56*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*57*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*58*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*59*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5A*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5B*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5C*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5D*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5E*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*5F*/ new OPCODE_DESCRIPTOR(GRP_NULL, new MULTI_MNEMONIC(""), ID_NULL,new[] { new INTERNAL_OPERAND(TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ), new INTERNAL_OPERAND( TQ_NULL, SQ_NULL ) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+/*60*/ new OPCODE_DESCRIPTOR(GRP_SSE42 | GRP_STRTXT, new MULTI_MNEMONIC("pcmpestrm"), ID_PCMPESTRM,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x6, 0x0, ARCH_COMMON ),
+/*61*/ new OPCODE_DESCRIPTOR(GRP_SSE42 | GRP_STRTXT, new MULTI_MNEMONIC("pcmpestri"), ID_PCMPESTRI,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x6, 0x0, ARCH_COMMON ),
+/*62*/ new OPCODE_DESCRIPTOR(GRP_SSE42 | GRP_STRTXT, new MULTI_MNEMONIC("pcmpistrm"), ID_PCMPISTRM,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x6, 0x0, ARCH_COMMON ),
+/*63*/ new OPCODE_DESCRIPTOR(GRP_SSE42 | GRP_STRTXT, new MULTI_MNEMONIC("pcmpistri"), ID_PCMPISTRI,new[] { new INTERNAL_OPERAND(TQ_V, SQ_dq ), new INTERNAL_OPERAND( TQ_W, SQ_dq ), new INTERNAL_OPERAND( TQ_I, SQ_b ) }, PROP_MODRM, 0x0, 0x9F, 0x0, 0x6, 0x0, ARCH_COMMON ),
+};
+
+/********************
+* Tables descriptors.
+*********************
+*/
+
+public static TABLE_DESCRIPTOR[] tables = new[] {
+/*0x0 IDX_1BYTE */
+	                    //min //max //mask //shift //props         //table
+    new TABLE_DESCRIPTOR(0x0, 0xFF, 0xFF,  0x0,    0x0,            opcodes_1byte),
+/*0x1 IDX_80 */
+	                    //min //max //mask //shift //props         //table
+    new TABLE_DESCRIPTOR(0x0,  0x7,  0x7,  0x3,    TBL_PROP_MODRM, opcodes_80 ),
+/*0x2 IDX_81 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_81 ),
+/*0x3 IDX_82 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_82 ),
+/*0x4 IDX_83 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_83 ),
+/*0x5 IDX_8F */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x0,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_8F ),
+/*0x6 IDX_C0 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_C0 ),
+/*0x7 IDX_C1 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_C1 ),
+/*0x8 IDX_C6 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x0,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_C6 ),
+/*0x9 IDX_C7 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x0,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_C7 ),
+/*0xA IDX_D0 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_D0 ),
+/*0xB IDX_D1 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_D1 ),
+/*0xC IDX_D2 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_D2 ),
+/*0xD IDX_D3 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_D3 ),
+/*0xE IDX_F6 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_F6 ),
+/*0xF IDX_F7 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_F7 ),
+/*0x10 IDX_FE */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x1,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_FE ),
+/*0x11 IDX_FF */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x6,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_FF ),
+
+
+/*0x12 IDX_D8_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_D8_swtch ),
+/*0x13 IDX_D8_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_D8_mem   ),
+/*0x14 IDX_D8_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_D8_nomem ),
+
+/*0x15 IDX_D9_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_D9_swtch ),
+/*0x16 IDX_D9_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_D9_mem   ),
+/*0x17 IDX_D9_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x3F, 0x3F, 0x0,   TBL_PROP_MODRM, opcodes_D9_nomem ),
+
+/*0x18 IDX_DA_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_DA_swtch ),
+/*0x19 IDX_DA_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DA_mem   ),
+/*0x1A IDX_DA_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x29, 0x3F, 0x0,   TBL_PROP_MODRM, opcodes_DA_nomem ),
+
+/*0x1B IDX_DB_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_DB_swtch ),
+/*0x1C IDX_DB_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DB_mem   ),
+/*0x1D IDX_DB_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x37, 0x3F, 0x0,   TBL_PROP_MODRM, opcodes_DB_nomem ),
+
+/*0x1E IDX_DC_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_DC_swtch ),
+/*0x1F IDX_DC_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DC_mem   ),
+/*0x20 IDX_DC_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DC_nomem ),
+
+/*0x21 IDX_DD_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_DD_swtch ),
+/*0x22 IDX_DD_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DD_mem   ),
+/*0x23 IDX_DD_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x05, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DD_nomem ),
+
+/*0x24 IDX_DE_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_DE_swtch ),
+/*0x25 IDX_DE_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DE_mem   ),
+/*0x26 IDX_DE_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x3F, 0x3F, 0x0,   TBL_PROP_MODRM, opcodes_DE_nomem ),
+
+/*0x27 IDX_DF_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x3,  0x6,   TBL_PROP_MODRM, opcodes_DF_swtch ),
+/*0x28 IDX_DF_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_DF_mem   ),
+/*0x29 IDX_DF_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x37, 0x3F, 0x0,   TBL_PROP_MODRM, opcodes_DF_nomem ),			
+
+
+/*0x2A IDX_0F*/
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0xFE, 0xFF, 0x0,   0x0,            opcodes_0F      ),
+/*0x2B IDX_0F_00 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x05, 0x07, 0x3,   TBL_PROP_MODRM, opcodes_0F_00   ),
+/*0x2C IDX_0F_01_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x03, 0x03, 0x6,   TBL_PROP_MODRM, opcodes_0F_01_swtch ),
+/*0x2D IDX_0F_01_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x07, 0x3,   TBL_PROP_MODRM, opcodes_0F_01_mem   ),
+/*0x2E IDX_0F_01_NOMEM_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x07, 0x07, 0x3,   TBL_PROP_MODRM, opcodes_0F_01_nomem_swtch ),
+/*0x2F IDX_0F_01_NOMEM_00 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x1,  0x04, 0x07, 0x0,   TBL_PROP_MODRM, opcodes_0F_01_nomem_00 ),
+/*0x30 IDX_0F_01_NOMEM_01 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x02, 0x07, 0x0,   TBL_PROP_MODRM, opcodes_0F_01_nomem_01 ),
+/*0x31 IDX_0F_01_NOMEM_02 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x02, 0x07, 0x0,   TBL_PROP_MODRM, opcodes_0F_01_nomem_02 ),
+/*0x32 IDX_0F_01_NOMEM_07 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x02, 0x07, 0x0,   TBL_PROP_MODRM, opcodes_0F_01_nomem_07 ),			
+/*0x33 IDX_0F_12 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x4,  0x3,  0x6,   TBL_PROP_MODRM, opcodes_0F_12   ),
+/*0x34 IDX_0F_16 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x4,  0x3,  0x6,   TBL_PROP_MODRM, opcodes_0F_16   ),		
+/*0x35 IDX_0F_18 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_0F_18   ),
+/*0x36 IDX_0F_19 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_0F_19   ),
+/*0x37 IDX_0F_71 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x2,  0x6,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_0F_71   ),
+/*0x38 IDX_0F_72 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x2,  0x6,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_0F_72   ),
+/*0x39 IDX_0F_73 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x2,  0x6,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_0F_73   ),
+/*0x3A IDX_0F_AE_SWTCH */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x4,  0x3,  0x6,   TBL_PROP_MODRM, opcodes_0F_AE_swtch ),
+/*0x3B IDX_0F_AE_MEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x7,  0x7,  0x3,  TBL_PROP_MODRM, opcodes_0F_AE_mem   ),
+/*0x3C IDX_0F_AE_NOMEM */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x5,  0x7,  0x7,  0x3,  TBL_PROP_MODRM, opcodes_0F_AE_nomem ),		
+/*0x3D IDX_0F_BA */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x4,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_0F_BA   ),
+/*0x3E IDX_0F_C7 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x1,  0x07, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_0F_C7   ),
+/*0x3F IDX_66_0F_JMP */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0xF, 0xF, 0xFF,  0x0,    0x0,            opcodes_66_0F_jmp ),
+/*0x40 IDX_66_0F */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x10, 0xFE, 0xFF, 0x0,   0x0,            opcodes_66_0F   ),	
+/*0x41 IDX_66_0F71 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x2,  0x06, 0x7,  0x3,   TBL_PROP_MODRM, opcodes_66_0F71 ),
+/*0x42 IDX_66_0F72 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x2,  0x6,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_66_0F72 ),
+/*0x43 IDX_66_0F73 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x2,  0x7,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_66_0F73 ),
+/*0x44 IDX_66_0FC7 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x6,  0x6,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_66_0FC7 ),
+/*0x45 IDX_F2_0F_JMP */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0xF, 0xF,  0xFF, 0x0,    0x0,            opcodes_F2_0F_jmp ),
+/*0x46 IDX_F2_0F */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x10, 0xF0, 0xFF, 0x0,   0x0,            opcodes_F2_0F     ),
+/*0x47 IDX_F3_0F_JMP */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0xF, 0xF,  0xFF, 0x0,    0x0,            opcodes_F3_0F_jmp ),	
+/*0x48 IDX_F3_0F */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x10, 0xE6, 0xFF,  0x0,  0x0,            opcodes_F3_0F   ),
+/*0x49 IDX_F3_0FC7 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x6,  0x6,  0x7,  0x3,   TBL_PROP_MODRM, opcodes_F3_0FC7 ),
+/*0x4A IDX_0F_38 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0xF1, 0xFF, 0x0,   0x0,            opcodes_0F_38   ),
+/*0x4B IDX_66_0F38 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x0,  0x41, 0xFF, 0x0,   0x0,            opcodes_66_0F38 ),
+/*0x4C IDX_F2_0F38 */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0xF0, 0xF1, 0xFF, 0x0,   0x0,            opcodes_F2_0F38 ),
+/*0x4D IDX_0F_3A */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0xF,  0xF,  0xFF, 0x0,   0x0,            opcodes_0F_3A   ),
+/*0x4E IDX_66_0F3A */
+	//min //max //mask //shift //props         //table
+	new TABLE_DESCRIPTOR( 0x8,  0x63, 0x0,  0x0,   0x0,            opcodes_66_0F3A )
+};
 
 //If DISASM_INOUT_PARAMS.sf_prefixes != NULL, copies superfluous prefix's value to the array.
-static void add_sf_prefix_value(byte[] prefixes, int index, byte value, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
+static void add_sf_prefix_value(byte[] prefixes, int index, byte value, ref INSTRUCTION instr, ref DISASM_INOUT_PARAMS param)
 {
     instr.flags |= INSTR_FLAG_SF_PREFIXES;
 
@@ -1860,9 +5764,9 @@ static void add_sf_prefix_value(byte[] prefixes, int index, byte value, INSTRUCT
 }
 
 //Gets superfluous prefix's value by its index and call to function above :).
-static void add_sf_prefix(byte[] prefixes, int index, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
+static void add_sf_prefix(byte[] prefixes, int index, ref INSTRUCTION instr, ref DISASM_INOUT_PARAMS param)
 {
-    add_sf_prefix_value(prefixes, index, pref_opcodes[prefixes[index]], instr, param);
+    add_sf_prefix_value(prefixes, index, pref_opcodes[prefixes[index]], ref instr, ref param);
 }
 
 //Main function for parsing prefixes. Reads input stream until meets non-prefix byte
@@ -1870,7 +5774,7 @@ static void add_sf_prefix(byte[] prefixes, int index, INSTRUCTION instr, DISASM_
 // was already met and if so, replaces old prefix with a new one.
 // Old prefix is added to superfluous prefixes array.
  // The function also checks if a prefix is opcode-extension.
-static UInt32 parse_prefixes(ulong offset, INSTRUCTION instr, INTERNAL_DATA idata, byte ext_table_index, byte ext_pref_index, DISASM_INOUT_PARAMS param)
+static UInt32 parse_prefixes(long offset, ref INSTRUCTION instr, INTERNAL_DATA idata, byte ext_table_index, byte ext_pref_index, ref DISASM_INOUT_PARAMS param)
 {
     byte pref_code;
     byte rex_found;
@@ -1885,18 +5789,19 @@ static UInt32 parse_prefixes(ulong offset, INSTRUCTION instr, INTERNAL_DATA idat
 
     while(true)
     {
+        
         //pref_code = *offset;
-        pref_code = 0;
+        pref_code = assembly.Image.ReadBytes(offset, 1)[0];
 
         if (res > MAX_INSTRUCTION_LEN)
         {
-            idata.severe_err = ERR_TOO_LONG;//error: instruction too long.
+            idata.severe_err = ERRS.ERR_TOO_LONG;//error: instruction too long.
             break;
         }
 
         ptr = tables[IDX_1BYTE].opcodes[pref_code];
         if ( !( ((ptr.groups & GRP_PREFIX)!=0) ||
-                (param.mode == DISASSEMBLE_MODE_64 && (pref_code >= 0x40) && (pref_code <= 0x4F) && (rex_found==0)) ) )
+                (param.mode == DISMODE.DISASSEMBLE_MODE_64 && (pref_code >= 0x40) && (pref_code <= 0x4F) && (rex_found == 0))))
         {
             break;
         }
@@ -1904,11 +5809,11 @@ static UInt32 parse_prefixes(ulong offset, INSTRUCTION instr, INTERNAL_DATA idat
         {
             if (rex_found!=0)
             {
-                idata.severe_err = ERR_REX_NOOPCD;//error: an opcode should follow after rex.
+                idata.severe_err = ERRS.ERR_REX_NOOPCD;//error: an opcode should follow after rex.
                 break;
             }
 
-            if ( (rex_found!=0) && (param.mode == DISASSEMBLE_MODE_64))
+            if ((rex_found != 0) && (param.mode == DISMODE.DISASSEMBLE_MODE_64))
             {
                 if ( (pref_code >= 0x40) && (pref_code <= 0x4F) )
                 {
@@ -1922,12 +5827,12 @@ static UInt32 parse_prefixes(ulong offset, INSTRUCTION instr, INTERNAL_DATA idat
                 }
             }
 
-            tmp = tq_handlers[ptr.ops[0].type](0, 0, instr, 0, new OPERAND_SIZE(), new INTERNAL_DATA(), param.mode);
+            tmp = tq_handlers[ptr.ops[0].type](0, 0, ref instr, 0, new OPERAND_SIZE(), new INTERNAL_DATA(), param.mode);
             pref_index = (byte)(tmp >> 8);
             pref_id = (byte)tmp;// &0xFF;
             if (idata.prefixes[pref_index] != 0xFF)
             {
-                add_sf_prefix(idata.prefixes, pref_index, instr, param);
+                add_sf_prefix(idata.prefixes, pref_index, ref instr, ref param);
             }
             idata.prefixes[pref_index] = pref_id;
 
@@ -1948,7 +5853,7 @@ static UInt32 parse_prefixes(ulong offset, INSTRUCTION instr, INTERNAL_DATA idat
 
 //Reads input stream and iterates through tables looking up appropriate struct OPCODE_DESCRIPTOR.
 // Byte value at [offset] is used as index, the function checks tables limits and max instruction's length.
-static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_descr, INTERNAL_DATA idata)
+static UInt32 lookup_opcode(long offset, byte table, ref OPCODE_DESCRIPTOR opcode_descr, INTERNAL_DATA idata)
 {
     byte max;
     byte opcode;
@@ -1958,8 +5863,8 @@ static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_d
     //opcode_descr = NULL;
     do
     {
-        //opcode = *offset;
-        opcode = 0;
+        opcode = assembly.Image.ReadBytes(offset, 1)[0];
+        
 
         opcode >>= tables[table].shift;
         opcode &= tables[table].mask;
@@ -1969,17 +5874,17 @@ static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_d
         max = (byte)(tables[table].max - tables[table].min);
         if (opcode > max)
         {
-            idata.severe_err = ERR_BADCODE;
+            idata.severe_err = ERRS.ERR_BADCODE;
             break;
         }
 
         if (res > MAX_INSTRUCTION_LEN)
         {
-            idata.severe_err = ERR_TOO_LONG;
+            idata.severe_err = ERRS.ERR_TOO_LONG;
             break;
         }
 
-        if ( (tables[table].props & TBL_PROP_MODRM)!=0 )
+        if ( (tables[table].props & TBL_PROP_MODRM)==0 )
         {
             res++;
             offset++;
@@ -1994,19 +5899,19 @@ static UInt32 lookup_opcode(ulong offset, byte table, OPCODE_DESCRIPTOR opcode_d
     }
     while(true);
 
-    if (idata.severe_err!=0)
+    if (idata.severe_err == ERRS.ERR_OK)
         opcode_descr = tables[table].opcodes[opcode];
 
     return res;
 }
 
 //Checks opcode-extension prefixes (repz, repnz, opsize) are superfluous.
-static void check_ext_sf_prefixes(byte[] prefixes, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
+static void check_ext_sf_prefixes(byte[] prefixes, ref INSTRUCTION instr, ref DISASM_INOUT_PARAMS param)
 {
     if (prefixes[PREF_OPSIZE_INDEX] != 0xFF)
-        add_sf_prefix(prefixes, PREF_OPSIZE_INDEX, instr, param);
+        add_sf_prefix(prefixes, PREF_OPSIZE_INDEX, ref instr, ref param);
     if (prefixes[PREF_REP_INDEX] != 0xFF)
-        add_sf_prefix(prefixes, PREF_OPSIZE_INDEX, instr, param);
+        add_sf_prefix(prefixes, PREF_OPSIZE_INDEX, ref instr, ref param);
 }
 //Main function for parsing opcode and prefixes. First of all it parses all prefixes and then
 // looks up for struct OPCODE_DESCRIPTOR. The following algorithm is used to handle instructions that
@@ -2024,14 +5929,14 @@ static void check_ext_sf_prefixes(byte[] prefixes, INSTRUCTION instr, DISASM_INO
 //                No: Error.
 //                Yes: Success.
 //          Yes: Success.
-static UInt32 parse_opcode(ulong offset, OPCODE_DESCRIPTOR opcode_descr, INSTRUCTION instr, INTERNAL_DATA idata, DISASM_INOUT_PARAMS param)
+static UInt32 parse_opcode(long offset, ref OPCODE_DESCRIPTOR opcode_descr, ref INSTRUCTION instr, INTERNAL_DATA idata, ref DISASM_INOUT_PARAMS param)
 {
     byte ext_table_index  = 0xFF;
     byte ext_prefix_index = 0;
     UInt32 res;
     UInt32 tmp;
 
-    res = parse_prefixes(offset, instr, idata, ext_table_index, ext_prefix_index, param);
+    res = parse_prefixes(offset, ref instr, idata, ext_table_index, ext_prefix_index, ref param);
     if (idata.severe_err==0)
     {
         instr.opcode_offset = (byte)res;
@@ -2039,27 +5944,27 @@ static UInt32 parse_opcode(ulong offset, OPCODE_DESCRIPTOR opcode_descr, INSTRUC
 
         if ((ext_table_index != 0xFF) && (offset == 0xF))
         {
-            tmp = lookup_opcode(offset, ext_table_index, opcode_descr, idata);
+            tmp = lookup_opcode(offset, ext_table_index, ref opcode_descr, idata);
             if ((idata.severe_err==0) && (opcode_descr.id != ID_NULL))
             {
                 idata.prefixes[ext_prefix_index] = 0xFF;
-                check_ext_sf_prefixes(idata.prefixes, instr, param);
+                check_ext_sf_prefixes(idata.prefixes, ref instr, ref param);
                 res += tmp;
             }
             else
             {
                 idata.severe_err = 0;
-                res += lookup_opcode(offset, IDX_1BYTE, opcode_descr, idata);
+                res += lookup_opcode(offset, IDX_1BYTE, ref opcode_descr, idata);
             }
         }
         else
         {
-            res += lookup_opcode(offset, IDX_1BYTE, opcode_descr, idata);
+            res += lookup_opcode(offset, IDX_1BYTE, ref opcode_descr, idata);
         }
 
         if ((idata.severe_err==0) && (opcode_descr.id == ID_NULL))
         {
-            idata.severe_err = ERR_BADCODE;//error: invalid opcode.
+            idata.severe_err = ERRS.ERR_BADCODE;//error: invalid opcode.
         }
     }
 
@@ -2067,7 +5972,7 @@ static UInt32 parse_opcode(ulong offset, OPCODE_DESCRIPTOR opcode_descr, INSTRUC
 }
 
 //Applies disassembling options.
-static void apply_disasm_options(INSTRUCTION instr, UInt32 len, DISASM_INOUT_PARAMS param)
+static void apply_disasm_options(ref INSTRUCTION instr, UInt32 len, DISASM_INOUT_PARAMS param)
 {
     for (int i = 0; i < 3; i++)
     {
@@ -2090,7 +5995,7 @@ static void apply_disasm_options(INSTRUCTION instr, UInt32 len, DISASM_INOUT_PAR
     }
 }
 
-static UInt32 parse_operand( ulong origin_offset, ulong offset, INTERNAL_OPERAND iop, INSTRUCTION instr, int op_index, INTERNAL_DATA idata, byte mode)
+static UInt32 parse_operand(long origin_offset, long offset, INTERNAL_OPERAND iop, INSTRUCTION instr, int op_index, INTERNAL_DATA idata, DISMODE mode)
 {
     UInt32 res = 0;
     OPERAND_SIZE opsize = new OPERAND_SIZE();
@@ -2100,20 +6005,20 @@ static UInt32 parse_operand( ulong origin_offset, ulong offset, INTERNAL_OPERAND
         instr.ops[op_index].flags |= OPERAND_FLAG_PRESENT;
         if (iop.size >= sq_handlers.Count())
         {
-            idata.severe_err = ERR_INTERNAL;
+            idata.severe_err = ERRS.ERR_INTERNAL;
         }
         else
         {
-            sq_handlers[iop.size](opsize, instr, idata, mode);
+            sq_handlers[iop.size](ref opsize, ref instr, idata, mode);
         }
         
         if (iop.size >= tq_handlers.Count())
         {
-            idata.severe_err = ERR_INTERNAL;
+            idata.severe_err = ERRS.ERR_INTERNAL;
         }
         else
         {
-            res = tq_handlers[iop.type](origin_offset, offset, instr, op_index, opsize, idata, mode);
+            res = tq_handlers[iop.type](origin_offset, offset, ref instr, op_index, opsize, idata, mode);
         }
     }
 
@@ -2121,9 +6026,9 @@ static UInt32 parse_operand( ulong origin_offset, ulong offset, INTERNAL_OPERAND
 }
 
 //Returns address size. Address size is common for all operands.
-static void get_address_size(INSTRUCTION instr, byte[] prefixes, byte mode)
+static void get_address_size(ref INSTRUCTION instr, byte[] prefixes, DISMODE mode)
 {
-    if (mode == DISASSEMBLE_MODE_64)
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
     {
         if (prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
             instr.addrsize = ADDR_SIZE_32;
@@ -2133,9 +6038,9 @@ static void get_address_size(INSTRUCTION instr, byte[] prefixes, byte mode)
     else
     {
         if (prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
-            mode ^= (byte)(DISASSEMBLE_MODE_16 | DISASSEMBLE_MODE_32);
+            mode ^= (DISMODE.DISASSEMBLE_MODE_16 | DISMODE.DISASSEMBLE_MODE_32);
 
-        if (mode == DISASSEMBLE_MODE_16)
+        if (mode == DISMODE.DISASSEMBLE_MODE_16)
             instr.addrsize = ADDR_SIZE_16;
         else
             instr.addrsize = ADDR_SIZE_32;
@@ -2143,7 +6048,7 @@ static void get_address_size(INSTRUCTION instr, byte[] prefixes, byte mode)
 }
 
 //Copies MODRM and SIB bytes to struct INSTRUCTION.
-static byte parse_modrm_sib(ulong offset, INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
+static byte parse_modrm_sib(long offset, ref INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
 {
     byte len = 0;
 
@@ -2168,7 +6073,7 @@ static byte parse_modrm_sib(ulong offset, INSTRUCTION instr, OPCODE_DESCRIPTOR o
     return len;
 }
 
-static void copy_eflags(INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
+static void copy_eflags(ref INSTRUCTION instr, ref OPCODE_DESCRIPTOR opcode)
 {
     instr.tested_flags = opcode.tested_flags;
     instr.modified_flags = opcode.modified_flags;
@@ -2179,7 +6084,7 @@ static void copy_eflags(INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
 
 
 //Copies instruction's flags from struct OPCODE_DESCRIPTOR to struct INSTRUCTION.
-static void copy_instr_flags(INSTRUCTION instr, OPCODE_DESCRIPTOR opcode)
+static void copy_instr_flags(ref INSTRUCTION instr, ref  OPCODE_DESCRIPTOR opcode)
 {
     if ((opcode.props & PROP_IOPL)!=0)
         instr.flags |= INSTR_FLAG_IOPL;
@@ -2207,17 +6112,17 @@ static byte bsr(byte src)
 
 //Get instruction's size. Well, really this is size of implicit operand
 // that influences on instruction's mnemonic.
-static void get_instruction_opsize(MULTI_MNEMONIC multi_mnemonic, INSTRUCTION instr, INTERNAL_DATA idata, byte mode)
+static void get_instruction_opsize(MULTI_MNEMONIC multi_mnemonic, INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
     OPERAND_SIZE opsize = new OPERAND_SIZE();
 
     if (multi_mnemonic.size >= sq_handlers.Count())
     {
-        idata.severe_err = ERR_INTERNAL;
+        idata.severe_err = ERRS.ERR_INTERNAL;
     }
     else
     {
-        sq_handlers[multi_mnemonic.size](opsize, instr, idata, mode);
+        sq_handlers[multi_mnemonic.size](ref opsize, ref instr, idata, mode);
     }
 
     instr.opsize = (byte)opsize.size; //Possible sizes are 2/4/8.
@@ -2227,7 +6132,7 @@ static void get_instruction_opsize(MULTI_MNEMONIC multi_mnemonic, INSTRUCTION in
 // struct INSTRUCTION. If mnemonic contains has multi mnemonic indicator (MM_INDICATOR)
 // at first character then it depends on implicit operand's size. In this case the function
 // calls get_instruction_opsize and builds choses mnemonic basing on result.
-static void parse_mnemonic(OPCODE_DESCRIPTOR opcode, INSTRUCTION instr, INTERNAL_DATA idata, byte mode)
+static void parse_mnemonic(OPCODE_DESCRIPTOR opcode, INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
     if (opcode.mnemonic.value[0] != MM_INDICATOR)
     {
@@ -2253,11 +6158,11 @@ static void check_seg_sf_prefixes(INSTRUCTION instr, byte[] prefixes, DISASM_INO
         {
             if ((instr.ops[i].flags & OPERAND_TYPE_MEM)!=0)
             {
-                if (param.mode == DISASSEMBLE_MODE_64)
+                if (param.mode == DISMODE.DISASSEMBLE_MODE_64)
                 {
                     if ( !((prefixes[PREF_SEG_INDEX] == PREF_FS_ID) || (prefixes[PREF_SEG_INDEX] == PREF_GS_ID)) )
                     {
-                        add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                        add_sf_prefix(prefixes, PREF_SEG_INDEX, ref instr, ref param);
                     }
                 }
                 else
@@ -2265,19 +6170,19 @@ static void check_seg_sf_prefixes(INSTRUCTION instr, byte[] prefixes, DISASM_INO
                     if ( (instr.ops[i].value.addr.mod & ADDR_MOD_BASE)==0 )
                     {
                         if (instr.ops[i].value.addr.seg == SREG_CODE_DS)
-                            add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                            add_sf_prefix(prefixes, PREF_SEG_INDEX, ref instr, ref param);
                     }
                     else
                     {
                         if ((instr.ops[i].value.addr.bas == REG_CODE_BP) || (instr.ops[i].value.addr.bas == REG_CODE_SP))
                         {
                             if (instr.ops[i].value.addr.seg == SREG_CODE_SS)
-                                add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                                add_sf_prefix(prefixes, PREF_SEG_INDEX, ref instr, ref param);
                         }
                         else
                         {
                             if (instr.ops[i].value.addr.seg == SREG_CODE_DS)
-                                add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+                                add_sf_prefix(prefixes, PREF_SEG_INDEX, ref instr, ref param);
                         }
                     }
                 }
@@ -2287,7 +6192,7 @@ static void check_seg_sf_prefixes(INSTRUCTION instr, byte[] prefixes, DISASM_INO
         }
 
         if (!mem_op_found)
-            add_sf_prefix(prefixes, PREF_SEG_INDEX, instr, param);
+            add_sf_prefix(prefixes, PREF_SEG_INDEX, ref instr, ref param);
     }
 }
 
@@ -2303,14 +6208,12 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
 }
 
 
-        Win32Assembly a;
-        public OPERAND b;
-        public mediana(Win32Assembly assembly)
+        public static Win32Assembly assembly;
+        public mediana(Win32Assembly _assembly)
         {
-            a = assembly;
-            //tables = new TABLE_DESCRIPTOR[1]() = {0x0, 0xFF, 0xFF, 0x0, 0x0, "opcodes_1byte" };
+            assembly = _assembly;
         }
-        public UInt32 medi_disassemble(ulong offset, INSTRUCTION instr, DISASM_INOUT_PARAMS param)
+        public UInt32 medi_disassemble(long offset, ref INSTRUCTION instr, ref DISASM_INOUT_PARAMS param)
         {
             UInt32 len;
             UInt32 res;
@@ -2325,8 +6228,8 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
             param.errcode = 0;
             len = res = 0;
             //Lookup opcode.
-            res = parse_opcode(offset, opcode, instr, idata, param);
-            if (idata.severe_err!=ERR_OK)
+            res = parse_opcode(offset, ref opcode, ref instr, idata, ref param);
+            if (idata.severe_err != ERRS.ERR_OK)
             {
                 param.errcode = idata.severe_err;
                 return 0;
@@ -2335,29 +6238,29 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
 
 	if (len > MAX_INSTRUCTION_LEN)
     {
-        param.errcode = ERR_TOO_LONG;
+        param.errcode = ERRS.ERR_TOO_LONG;
         return 0;
     }
 
-    get_address_size(instr, idata.prefixes, param.mode);
+    get_address_size(ref instr, idata.prefixes, param.mode);
 
     //Parse MODRM and SIB bytes.
-    len += parse_modrm_sib(offset + len, instr, opcode);
+    len += parse_modrm_sib(offset + len, ref instr, opcode);
     if (len > MAX_INSTRUCTION_LEN)
     {
-        param.errcode = ERR_TOO_LONG;
+        param.errcode = ERRS.ERR_TOO_LONG;
         return 0;
     }
 
     //Copy flags, eflags, id, groups.
-    copy_eflags(instr, opcode);
-    copy_instr_flags(instr, opcode);
+    copy_eflags(ref instr, ref opcode);
+    copy_instr_flags(ref instr, ref opcode);
     instr.id = opcode.id;
     instr.groups = opcode.groups;
 
     //Parse mnemonic.
     parse_mnemonic(opcode, instr, idata, param.mode);
-    if (idata.severe_err!=ERR_OK)
+    if (idata.severe_err != ERRS.ERR_OK)
     {
         param.errcode = idata.severe_err;
         return 0;
@@ -2365,7 +6268,7 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
 
     //Deal with operands.
     res = parse_operand(offset, offset + len, opcode.ops[0], instr, 0, idata, param.mode);
-    if (idata.severe_err!=ERR_OK)
+    if (idata.severe_err != ERRS.ERR_OK)
     {
         param.errcode = idata.severe_err;
         return 0;
@@ -2373,12 +6276,12 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
     len += res;
     if (len > MAX_INSTRUCTION_LEN)
     {
-        param.errcode = ERR_TOO_LONG;
+        param.errcode = ERRS.ERR_TOO_LONG;
         return 0;
     }
 
     res = parse_operand(offset, offset + len, opcode.ops[1], instr, 1, idata, param.mode);
-    if (idata.severe_err!=ERR_OK)
+    if (idata.severe_err != ERRS.ERR_OK)
     {
         param.errcode = idata.severe_err;
         return 0;
@@ -2386,12 +6289,12 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
     len += res;
     if (len > MAX_INSTRUCTION_LEN)
     {
-        param.errcode = ERR_TOO_LONG;
+        param.errcode = ERRS.ERR_TOO_LONG;
         return 0;
     }
 
     res = parse_operand(offset, offset + len, opcode.ops[2], instr, 2, idata, param.mode);
-    if (idata.severe_err!=ERR_OK)
+    if (idata.severe_err != ERRS.ERR_OK)
     {
         param.errcode = idata.severe_err;
         return 0;
@@ -2399,7 +6302,7 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
     len += res;
     if (len > MAX_INSTRUCTION_LEN)
     {
-        param.errcode = ERR_TOO_LONG;
+        param.errcode = ERRS.ERR_TOO_LONG;
         return 0;
     }
 
@@ -2407,7 +6310,7 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
     if ((opcode.props & PROP_POST_PROC)!=0)
     {
         res = postprocs[opcode.props >> POST_PROC_SHIFT](offset, offset, instr, idata, param.mode);
-        if (idata.severe_err!=ERR_OK)
+        if (idata.severe_err != ERRS.ERR_OK)
         {
             param.errcode = idata.severe_err;
             return 0;
@@ -2417,23 +6320,23 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
             len = res;
             if (len > MAX_INSTRUCTION_LEN)
             {
-                param.errcode = ERR_TOO_LONG;
+                param.errcode = ERRS.ERR_TOO_LONG;
                 return 0;
             }
         }
     }
 
     //Check if REX is superfluous.
-    if ((param.mode == DISASSEMBLE_MODE_64) && (idata.is_rex_used!=0))
-        add_sf_prefix_value(idata.prefixes, PREF_REX_INDEX, instr.rex, instr, param);
+    if ((param.mode == DISMODE.DISASSEMBLE_MODE_64) && (idata.is_rex_used != 0))
+        add_sf_prefix_value(idata.prefixes, PREF_REX_INDEX, instr.rex, ref instr, ref param);
     //Check if segment prefix is superfluous.
     check_seg_sf_prefixes(instr, idata.prefixes, param);
     //Check if opsize is superfluous. 
     if ((idata.is_opsize_used!=0) && idata.prefixes[PREF_OPSIZE_INDEX] != 0xFF)
-        add_sf_prefix(idata.prefixes, PREF_OPSIZE_INDEX, instr, param);
+        add_sf_prefix(idata.prefixes, PREF_OPSIZE_INDEX, ref instr, ref param);
     //Check if addrsize is superfluous. 
     if ((idata.is_addrsize_used!=0) && idata.prefixes[PREF_ADDRSIZE_INDEX] != 0xFF)
-        add_sf_prefix(idata.prefixes, PREF_ADDRSIZE_INDEX, instr, param);
+        add_sf_prefix(idata.prefixes, PREF_ADDRSIZE_INDEX, ref instr, ref param);
 
     //Convert prefixes to output representation.
     convert_prefixes(instr, idata.prefixes);
@@ -2443,15 +6346,15 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
 
     //And post checks.
     if ((param.arch & opcode.arch)!=0)
-        param.errcode = ERR_ANOT_ARCH;//error: another architecture.
+        param.errcode = ERRS.ERR_ANOT_ARCH;//error: another architecture.
     else if ( ((instr.prefixes & INSTR_PREFIX_LOCK)!=0) && ((opcode.props & PROP_LOCK)==0) )
-        param.errcode = ERR_NON_LOCKABLE;//error: prefix lock non-lockable instruction.
-    else if (((opcode.props & PROP_I64)!=0) && (param.mode == DISASSEMBLE_MODE_64))
-        param.errcode = ERR_16_32_ONLY;//error: instruction is 16/32bit mode only.
-    else if (((opcode.props & PROP_O64)!=0) && (param.mode != DISASSEMBLE_MODE_64))
-        param.errcode = ERR_64_ONLY;//error: instruction is 64bit mode only.
+        param.errcode = ERRS.ERR_NON_LOCKABLE;//error: prefix lock non-lockable instruction.
+    else if (((opcode.props & PROP_I64) != 0) && (param.mode == DISMODE.DISASSEMBLE_MODE_64))
+        param.errcode = ERRS.ERR_16_32_ONLY;//error: instruction is 16/32bit mode only.
+    else if (((opcode.props & PROP_O64) != 0) && (param.mode != DISMODE.DISASSEMBLE_MODE_64))
+        param.errcode = ERRS.ERR_64_ONLY;//error: instruction is 64bit mode only.
 
-    apply_disasm_options(instr, len, param);
+    apply_disasm_options(ref instr, len, param);
 
             return len;
         }

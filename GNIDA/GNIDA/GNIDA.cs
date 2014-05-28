@@ -61,7 +61,7 @@ namespace GNIDA
                 }
         }
     }
-    public class MyDictionary : Dictionary<ulong, TFunc>
+    public class MyDictionary : Dictionary<long, TFunc>
     {
         public GNIDA Parent;
         public void AddFunc(TFunc value)
@@ -78,14 +78,14 @@ namespace GNIDA
     }
     public static class X86Extensions
     {
-        private static string AddProc(Offset x, MyDictionary ProcList, Dictionary<ulong, TFunc> NewSubs)
+        private static string AddProc(Offset x, MyDictionary ProcList, Dictionary<long, TFunc> NewSubs)
         {
-            if (ProcList.ContainsKey(x.Va)) return ProcList[x.Va].FName + "();";
-            TFunc tmpfunc = new TFunc(x.Va, 1);
-            if (!NewSubs.ContainsKey(x.Va)) NewSubs.Add(x.Va, tmpfunc);
+            if (ProcList.ContainsKey((long)x.Va)) return ProcList[(long)x.Va].FName + "();";
+            TFunc tmpfunc = new TFunc((long)x.Va, 1);
+            if (!NewSubs.ContainsKey((long)x.Va)) NewSubs.Add((long)x.Va, tmpfunc);
             return "Sub_" + x.Va.ToString("X8") + "();";
         }
-        public static string ToCmmString(this x86Instruction inst, MyDictionary ProcList, VarDictionary VarDict, Dictionary<ulong, TFunc> NewSubs)
+        public static string ToCmmString(this x86Instruction inst, MyDictionary ProcList, VarDictionary VarDict, Dictionary<long, TFunc> NewSubs)
         {
             switch(inst.OpCode.OpCodeBytes[0])
             {
@@ -127,13 +127,13 @@ namespace GNIDA
     }
     public class TFunc
     {
-        public ulong Addr;
+        public long Addr;
         public uint Length;
         public string FName;
         public string LibraryName;
         public uint type;
         public uint Ordinal;
-        public TFunc(ulong addr, uint Type, uint Ord = 0, string Name = "", string LibName = "")
+        public TFunc(long addr, uint Type, uint Ord = 0, string Name = "", string LibName = "")
         {
             Addr = addr;
             type = Type;
@@ -185,7 +185,7 @@ namespace GNIDA
                 SubComment = SubC;
                 addr = Ins.Offset.FileOffset;
             }
-            public string ToCmmString(Dictionary<ulong, TFunc> NewSubs)
+            public string ToCmmString(Dictionary<long, TFunc> NewSubs)
             {
                 string tmp = "";
                 if (Label != "") tmp = "/*" + (Inst.Offset.Rva + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
@@ -196,21 +196,33 @@ namespace GNIDA
                 return tmp;
             }
         }
-        public List<Stroka> DisasmFunc(ulong addr, MyDictionary ProcList)
+        public List<Stroka> DisasmFunc(long addr, MyDictionary ProcList)
         {
             List<Stroka> lst = new List<Stroka>();
-            List<ulong> Tasks = new List<ulong>();
+            List<long> Tasks = new List<long>();
             List<int> LabelList = new List<int>();
             x86Instruction instruction;
+
+            mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
+            mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
+            uint Len = 0;
+            byte[] sf_prefixes = new byte[mediana.MAX_INSTRUCTION_LEN];
+            param.arch = mediana.ARCH_ALL;
+            param.sf_prefixes = sf_prefixes;
+            param.mode = mediana.DISMODE.DISASSEMBLE_MODE_32;
+            param.options = (byte)(mediana.DISASM_OPTION_APPLY_REL | mediana.DISASM_OPTION_OPTIMIZE_DISP);
+            param.bas = assembly.NTHeader.OptionalHeader.ImageBase;
+
             Tasks.Add(addr);
             for (uint i = 0; Tasks.Count > 0; i++)
             {
                 assembly.Disassembler.CurrentOffset = (uint)Tasks[0];
-                Console.WriteLine(((uint)Tasks[0]).ToString("X"));
+                Len = MeDisasm.medi_disassemble((uint)Tasks[0], ref instr1, ref param);
+                //Console.WriteLine(((uint)Tasks[0]).ToString("X"));
                 Tasks.Remove(Tasks[0]);
                 instruction = assembly.Disassembler.DisassembleNextInstruction();
                 lst.Add(new Stroka(this, instruction));
-                Console.WriteLine(instruction.ToAsmString());
+                //Console.WriteLine(instruction.ToAsmString());
                 switch (instruction.OpCode.OpCodeBytes[0])
                 {
                               //Jxx
@@ -250,7 +262,7 @@ namespace GNIDA
                     case 0xFF:
                         if (instruction.OpCode.OpCodeBytes[1] == 0x15)//Call
                             {
-                                ulong a = ((Offset)instruction.Operand1.Value).Va;
+                                long a = (long)((Offset)instruction.Operand1.Value).Va;
                                 if(ProcList.ContainsKey(a))
                                     if(ProcList[a].FName.Contains("ExitProcess"))continue;
                             }
@@ -275,6 +287,8 @@ namespace GNIDA
         {
             mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
             mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
+            byte[] sf_prefixes = new byte[mediana.MAX_INSTRUCTION_LEN];
+
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);
             //assembly.Disassembler = new CmmDisassembler(assembly);
@@ -287,9 +301,15 @@ namespace GNIDA
             }
 
             TFunc fnc = new TFunc((uint)assembly.NTHeader.OptionalHeader.ImageBase + assembly.NTHeader.OptionalHeader.Entrypoint.Rva, 0, 0, "main");
-            
-            MeDisasm.medi_disassemble(fnc.Addr, instr1, param);
 
+            param.arch = mediana.ARCH_ALL;
+            param.sf_prefixes = sf_prefixes;
+            param.mode = mediana.DISMODE.DISASSEMBLE_MODE_32;
+            param.options = (byte)(mediana.DISASM_OPTION_APPLY_REL | mediana.DISASM_OPTION_OPTIMIZE_DISP);
+            param.bas = assembly.NTHeader.OptionalHeader.ImageBase;
+            MeDisasm.medi_disassemble(RVA2FO(fnc.Addr), ref instr1, ref param);
+            Console.WriteLine(instr1.mnemonic);
+            //MeDisasm.medi_dump(instr, buff, OUT_BUFF_SIZE, DUMP_OPTION_IMM_UHEX | DUMP_OPTION_DISP_HEX);
             FullProcList.AddFunc(fnc);
             foreach (ExportMethod func in assembly.LibraryExports)
             {
@@ -316,16 +336,16 @@ namespace GNIDA
         {
             if (NewSubs.Count > 0)
             {
-                foreach (KeyValuePair<ulong, TFunc> dct1 in NewSubs)
+                foreach (KeyValuePair<long, TFunc> dct1 in NewSubs)
                     FullProcList.AddFunc(dct1.Value);
                 NewSubs.Clear();
                 (sender as BackgroundWorker).RunWorkerAsync();
             }
         }
-        public ulong RVA2FO(ulong RVA)
+        public long RVA2FO(long RVA)
         {
             uint addr = 0;
-            RVA -= assembly.NTHeader.OptionalHeader.ImageBase;
+            RVA -= (long)assembly.NTHeader.OptionalHeader.ImageBase;
             foreach (Section sct in assembly.NTHeader.Sections)
             {
                 if (sct.ContainsRva((uint)RVA)) addr = sct.RVAToFileOffset((uint)RVA);
@@ -336,7 +356,7 @@ namespace GNIDA
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            foreach (KeyValuePair<ulong, TFunc> dct in ToDisasmFuncList)
+            foreach (KeyValuePair<long, TFunc> dct in ToDisasmFuncList)
             { 
                 if ((worker.CancellationPending == true))
                 {

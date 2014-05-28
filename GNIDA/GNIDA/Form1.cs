@@ -223,7 +223,7 @@ namespace GNIDA
             e.ChangedRange.ClearStyle(blueStyle);
             e.ChangedRange.SetStyle(blueStyle, @"Loc_[\dA-Fa-f]+");
             if(MyGNIDA!=null)
-            foreach(KeyValuePair<ulong, TFunc> fnc in MyGNIDA.FullProcList)
+            foreach(KeyValuePair<long, TFunc> fnc in MyGNIDA.FullProcList)
             {
                 e.ChangedRange.SetStyle(funcStyle, ' '+fnc.Value.FName);
             }
