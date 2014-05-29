@@ -189,7 +189,7 @@ namespace GNIDA
             {
                 string tmp = "";
                 if (Label != "") tmp = "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
-                tmp += "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/  " + Inst.mnemonic;//Inst.ToCmmString(Parent.FullProcList, Parent.VarDict, NewSubs);
+                tmp += "/*" + (Inst.Addr).ToString("X8") + "*/  $" + Inst.ToString();//Inst.ToCmmString(Parent.FullProcList, Parent.VarDict, NewSubs);
                 if (Comment != "") tmp += "// " + Comment;
                 tmp += "\n";
                 if (SubComment != "") tmp += "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ // " + SubComment + "\n";
@@ -210,19 +210,20 @@ namespace GNIDA
             param.sf_prefixes = sf_prefixes;
             param.mode = mediana.DISMODE.DISASSEMBLE_MODE_32;
             param.options = (byte)(mediana.DISASM_OPTION_APPLY_REL | mediana.DISASM_OPTION_OPTIMIZE_DISP);
-            param.bas = assembly.NTHeader.OptionalHeader.ImageBase;
+            param.bas = assembly.NTHeader.OptionalHeader.ImageBase+2000;
+            mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
 
             Tasks.Add(addr);
             for (uint i = 0; Tasks.Count > 0; i++)
             {
-                mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
+                instr1 = new mediana.INSTRUCTION();
                 Len = MeDisasm.medi_disassemble(Tasks[0], ref instr1, ref param);
                 assembly.Disassembler.CurrentOffset = (uint)Tasks[0];
                 Console.WriteLine(instr1.mnemonic);
                 Console.WriteLine(((uint)Tasks[0]).ToString("X"));
                 Console.WriteLine(Len.ToString("X"));
                 Tasks.Remove(Tasks[0]);
-                instruction = assembly.Disassembler.DisassembleNextInstruction();
+                //instruction = assembly.Disassembler.DisassembleNextInstruction();
                 lst.Add(new Stroka(this, instr1));
                 switch (instr1.bytes[0])
                 {
@@ -230,7 +231,8 @@ namespace GNIDA
                     case 0x74://Jz
                     case 0x75://Jnz
                         {
-                            int val = instruction.OperandBytes[0] + (int)instruction.Offset.FileOffset + instruction.Size;
+                            int val = (int)(instr1.ops[0].value.imm.imm8 + (int)instr1.Addr + Len);
+
                             if (!LabelList.Contains(val))
                             {
                                 LabelList.Add(val);
@@ -241,7 +243,7 @@ namespace GNIDA
                     case 0xC3://retn
                         continue;// Don't disasm after it
                     case 0xEB://jmp;
-                        int val1 = instruction.OperandBytes[0] + (int)instruction.Offset.FileOffset + instruction.Size;
+                        int val1 = (int)(instr1.ops[0].value.imm.imm8 + (int)instr1.Addr + Len);
                         if (!LabelList.Contains(val1))
                         {
                             LabelList.Add(val1);
@@ -249,21 +251,25 @@ namespace GNIDA
                         }
                         continue;// Don't disasm after it
                     case 0xE9://jmp;
-                        int val2 = instruction.OperandBytes[0]
-                                    + instruction.OperandBytes[1] * 255
-                                    + instruction.OperandBytes[2] * 255 * 255
-                                    + instruction.OperandBytes[3] * 255 * 255 * 255
-                                    + (int)instruction.Offset.FileOffset + instruction.Size;
+
+                        int val2 =  (int)instr1.ops[0].value.imm.imm64 + (int)Len;
+                        //instr1.ops[0].value.imm.imm32 = 0x40100F;
+                        //val2 = 0x40100F;
+                        //if (instr1.ops[i].flags & OPERAND_FLAG_PRESENT)
+                        //{
+                        //    internal_dump_operand(&stream, instr1, 0);
+                        //}
+                        Console.WriteLine(val2.ToString("X"));
                         if (!LabelList.Contains(val2))
                         {
                             LabelList.Add(val2);
-                            Tasks.Add((uint)val2);//Add jmp adress to disasm tasks
+                            //Tasks.Add((uint)val2);//Add jmp adress to disasm tasks
                         }
                         continue;// Don't disasm after it
                     case 0xFF:
-                        if (instruction.OpCode.OpCodeBytes[1] == 0x15)//Call
+                        if (instr1.bytes[1] == 0x15)//Call
                             {
-                                long a = (long)((Offset)instruction.Operand1.Value).Va;
+                                long a = (long)instr1.disp.value.d64;
                                 if(ProcList.ContainsKey(a))
                                     if(ProcList[a].FName.Contains("ExitProcess"))continue;
                             }
@@ -271,8 +277,10 @@ namespace GNIDA
                 }
                 //Tasks.Add( instruction.Offset.FileOffset + (uint)instruction.Size);
                 Tasks.Add((long)instr1.Addr + Len);
-                
+                instr1.Addr = FO2RVA((ulong)instr1.Addr);
+                //                 += assembly.NTHeader.OptionalHeader.ImageBase;
             }
+            instr1.Addr = FO2RVA((ulong)instr1.Addr);
             foreach (uint Addr in LabelList)
             {
                 Stroka result = lst.Find(
@@ -344,6 +352,18 @@ namespace GNIDA
                 NewSubs.Clear();
                 (sender as BackgroundWorker).RunWorkerAsync();
             }
+        }
+        public ulong FO2RVA(ulong FO)
+        {
+            ulong addr = 0;
+            foreach (Section sct in assembly.NTHeader.Sections)
+            {
+                if (sct.ContainsRawOffset((uint)FO))
+                {
+                    addr = (ulong)(sct.RVA + FO - sct.RawOffset + assembly.NTHeader.OptionalHeader.ImageBase);
+                }
+            }
+            return addr;
         }
         public long RVA2FO(long RVA)
         {

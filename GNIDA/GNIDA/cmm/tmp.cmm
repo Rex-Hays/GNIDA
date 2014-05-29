@@ -8,22 +8,14 @@
 #jumptomain NONE
 #include "Windows.h";
 #include "msvcrt.h--";
-dword dword_00401000;
-dword dword_00401004;
 /*00402000*/ void main(){
-/*00402000*/  $CLD 
-/*00402001*/  $PUSH 0x00
-/*00402003*/  GetModuleHandleA();
-/*00402009*/  dword_00401000 = EAX;
-/*0040200E*/  GetCommandLineA();
-/*00402014*/  dword_00401004 = EAX;
-/*00402019*/  Sub_00402030();
-/*0040201E*/  $PUSH EAX 
-/*0040201F*/  ExitProcess();
+/*00400200*/  $cld
+/*00400201*/  $push 0x0
+/*00400203*/  $call 0x12
+/*00400209*/  $mov 0x12, eax
+/*0040020E*/  $call 0x12
+/*00400214*/  $mov 0x12, eax
+/*00400219*/  $call 0x400017
+/*0040021E*/  $push eax
+/*0040021F*/  $call 0x12
 };//main
-/*00402030*/ void Sub_00402030(){
-/*00402030*/  $PUSH 0x0040203F
-/*00402035*/  printf();
-/*0040203B*/  $ADD ESP, 0x04
-/*0040203E*/  $RET 
-};//Sub_00402030

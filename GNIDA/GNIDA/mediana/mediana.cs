@@ -10,13 +10,14 @@ using System.Runtime.InteropServices;
 
 namespace GNIDA
 {
+
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct reg1
     {
         [FieldOffset(0)]
         public byte code;
         [FieldOffset(1)]
-        public byte type;
+        public mediana.REG_TYPE type;
     };
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct far_addr321
@@ -1088,8 +1089,251 @@ public struct DISPLACEMENT
         //public byte[] ab;
     }
 };
+
+
+
+
+
+
 public class INSTRUCTION
 {
+    public string ToString()
+    {
+        string ret = mnemonic;
+        if (ops[0].size > 0) ret += " " + OpToString(0);
+        if (ops[1].size > 0) ret += ", " + OpToString(1);
+        if (ops[2].size > 0) ret += ", " + OpToString(2);
+        return ret;
+    }
+public static string[] regs8 = 
+{
+	"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh",
+	"r8b", "r9b", "r10b", "r11b", "r12b", "r13b", "r14b", "r15b",
+	"spl", "bpl", "sil", "dil", "badreg8"
+};
+
+public static string[] regs16 = 
+{
+	"ax", "cx", "dx", "bx", "sp", "bp", "si", "di",
+	"r8w", "r9w", "r10w", "r11w", "r12w", "r13w", "r14w", "r15w",
+	"badreg16_1", "badreg16_2", "badreg16_3", "badreg16_4", "badreg16_5"
+};
+
+    public static string[] regs32 = 
+{
+	"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi",
+	"r8d", "r9d", "r10d", "r11d", "r12d", "r13d", "r14d", "r15d",
+	"badreg32_1", "badreg32_2", "badreg32_3", "badreg32_4", "eip"
+};
+
+  public static string[] regs64 = 
+{
+	"rax", "rcx", "rdx", "rbx", "rsp", "rbp", "rsi", "rdi",
+	"r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15",
+	"badreg64_1", "badreg64_2", "badreg64_3", "badreg64_4", "rip"
+};
+public static string[]  sregs = 
+{
+	"cs", "ds", "es", "ss", "fs", "gs", "badsreg7", "badsreg8"
+};
+
+public static string[] fregs = 
+{
+	"st0", "st1", "st2", "st3", "st4", "st5", "st6", "st7", "badfreg8"
+};
+
+public static string[]  cregs = 
+{
+	"cr0", "cr1", "cr2", "cr3", "cr4", "cr5", "cr6", "cr7", "cr8", "badcreg9"
+};
+
+public static string[]  dregs = 
+{
+	"dr0", "dr1", "dr2", "dr3", "dr4", "dr5", "dr6", "dr7", "baddreg"
+};
+
+public static string[]  tregs = 
+{
+	"tr0", "tr1", "tr2", "tr3", "tr4", "tr5", "tr6", "tr7", "badtreg"
+};
+
+public static string[]  mregs = 
+{
+	"mm0", "mm1", "mm2", "mm3", "mm4", "mm5", "mm6", "mm7", "badmreg8"
+};
+
+public static string[]  xregs = 
+{
+	"xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6", "xmm7",
+	"xmm8", "xmm9", "xmm10", "xmm11", "xmm12", "xmm13", "xmm14", "xmm15",
+	"badxreg16"
+};
+
+static string dump_reg_gen(byte code, ushort size)
+{
+    switch ((OP_SIZE)size)
+	{
+        case OP_SIZE.OPERAND_SIZE_8:
+		return regs8[code];
+        case OP_SIZE.OPERAND_SIZE_16:
+		return regs16[code];
+        case OP_SIZE.OPERAND_SIZE_32:
+		return regs32[code];
+        case OP_SIZE.OPERAND_SIZE_64:
+		return regs64[code];
+	}
+    return "";
+}
+
+static string dump_reg_sreg(byte code)
+{
+    return sregs[code];
+}
+static string dump_reg_freg(byte code)
+{
+	return fregs[code];
+}
+
+static string dump_reg_creg(byte code)
+{
+	return cregs[code];
+}
+
+static string dump_reg_dreg(byte code)
+{
+	return dregs[code];
+}
+
+static string dump_reg_treg(byte code)
+{
+	return tregs[code];
+}
+
+static string dump_reg_mreg(byte code)
+{
+	return mregs[code];
+}
+
+static string dump_reg_xreg(byte code)
+{
+	return xregs[code];
+}
+
+static string dump_reg(REG_TYPE type, byte code, ushort size)
+{
+	switch(type)
+	{
+	case REG_TYPE.REG_TYPE_GEN:
+            return dump_reg_gen(code, size);
+    case REG_TYPE.REG_TYPE_SEG:
+            return dump_reg_sreg(code);
+    case REG_TYPE.REG_TYPE_FPU:
+            return  dump_reg_freg(code);
+    case REG_TYPE.REG_TYPE_CR:
+            return dump_reg_creg(code);
+    case REG_TYPE.REG_TYPE_DBG:
+            return dump_reg_dreg(code);
+    case REG_TYPE.REG_TYPE_TR:
+            return dump_reg_treg(code);
+    case REG_TYPE.REG_TYPE_MMX:
+            return dump_reg_mreg(code);
+    case REG_TYPE.REG_TYPE_XMM:
+            return dump_reg_xreg(code);
+	default:
+        return ("internal error");
+	}
+}
+
+static string dump_dir(OPERAND op)
+{
+    switch ((OP_SIZE)op.size)
+	{
+        case OP_SIZE.OPERAND_SIZE_32:
+            return op.value.far_addr.far_addr32.seg.ToString("X") + ":" + op.value.far_addr.far_addr32.offset.ToString("X");
+        case OP_SIZE.OPERAND_SIZE_48:
+            return op.value.far_addr.far_addr48.seg.ToString("X") + ":" + op.value.far_addr.far_addr48.offset.ToString("X");
+        default:
+		return "internal error";
+	}
+}
+static string dump_imm(OPERAND op)
+{
+	return op.value.imm.imm64.ToString("X");
+}
+    public string OpToString(byte N)
+    {
+        string ss = "";
+        OPERAND op = ops[N];
+	if ((op.flags & OPERAND_FLAG_PRESENT)!=0)
+	{
+        switch ((OP_TYPE)(op.flags & OPERAND_TYPE_MASK))
+		{
+            case OP_TYPE.OPERAND_TYPE_REG:
+			ss = dump_reg(op.value.reg.type, op.value.reg.code, op.size);
+			break;
+            case OP_TYPE.OPERAND_TYPE_MEM:
+			ss = dump_addr(this, op);
+			break;
+            case OP_TYPE.OPERAND_TYPE_IMM:
+			ss = dump_imm(op);
+			break;
+            case OP_TYPE.OPERAND_TYPE_DIR:
+			ss = dump_dir(op);
+			break;
+		default:
+			return("internal error");
+			break;
+		}
+	}
+
+	return ss;
+}
+static string dump_addr(INSTRUCTION instr, OPERAND op)
+{
+    string res = "dword ptr";
+	//dump_ptr_size(stream, op);
+    res += ' ' + sregs[op.value.addr.seg] + ":[";
+	if ((op.value.addr.mod & ADDR_MOD_BASE)!=0)
+	{
+        res += dump_reg_gen(op.value.addr.bas, instr.addrsize);
+	}
+	if ((op.value.addr.mod & ADDR_MOD_IDX)!=0)
+	{
+		if ((op.value.addr.mod & ADDR_MOD_BASE)!=0)
+		{
+            res += "+";
+		}
+        res += dump_reg_gen(op.value.addr.index, instr.addrsize);
+		if (op.value.addr.scale != 0x1)
+		{
+            res += '*' + op.value.addr.scale.ToString("X");
+		}
+	}
+	if ((op.value.addr.mod & ADDR_MOD_DISP)!=0)
+	{
+		if ((op.value.addr.mod & ~ADDR_MOD_DISP)!=0)
+		{
+           res += '+';
+		}
+        res += instr.disp.value.d64.ToString("X");
+	}
+    res += ']';
+    return res;
+}
+
+    /*
+        switch (ops[N].flags)
+        {
+            case 0: return "";
+            case 17: return regs32[ops[N].value.reg.code];
+            case 18: return "0x" + ops[N].flags.ToString("X");
+            case 20: return "0x" + ops[N].value.imm.imm8.ToString("X");
+            case 52: return "0x" + (ops[N].value.far_addr.far_addr48.offset).ToString("X");
+            default: return flags.ToString();
+        }
+
+        return ops[N].ToString();
+    }*/
     public ulong Addr;
     public byte[] bytes;
     public UInt64 groups;
@@ -1270,8 +1514,8 @@ public struct TABLE_DESCRIPTOR
 
 public struct OPERAND_SIZE
 {
-    public UInt16 size_in_stream;
-    public UInt16 size;
+    public OP_SIZE size_in_stream;
+    public OP_SIZE size;
     public byte sign;
 }
 class ADDR
@@ -1407,8 +1651,8 @@ public static void sq_a(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL
 }
 public static void sq_b(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_8;
-    opsize.size = OPERAND_SIZE_8;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_8;
+    opsize.size = OP_SIZE.OPERAND_SIZE_8;
     opsize.sign = 0;
 }
 
@@ -1431,17 +1675,17 @@ public static void sq_bdqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTER
 
 public static void sq_bs(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_8;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_8;
     switch(mode)
     {
         case DISMODE.DISASSEMBLE_MODE_16:
-        opsize.size = OPERAND_SIZE_16;
+            opsize.size = OP_SIZE.OPERAND_SIZE_16;
         break;
         case DISMODE.DISASSEMBLE_MODE_32:
-        opsize.size = OPERAND_SIZE_32;
+        opsize.size = OP_SIZE.OPERAND_SIZE_32;
         break;
         case DISMODE.DISASSEMBLE_MODE_64:
-        opsize.size = OPERAND_SIZE_64;
+        opsize.size = OP_SIZE.OPERAND_SIZE_64;
         break;
     }
     opsize.sign = 1;
@@ -1454,8 +1698,8 @@ public static void sq_bss(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERN
 
 public static void sq_d(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_32;
-    opsize.size = OPERAND_SIZE_32;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_32;
+    opsize.size = OP_SIZE.OPERAND_SIZE_32;
     opsize.sign = 0;
 }
 
@@ -1473,14 +1717,14 @@ public static void sq_ddq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERN
 
 public static void sq_di(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_32;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_32;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
 
 public static void sq_dq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_128;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_128;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1513,7 +1757,7 @@ public static void sq_dqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERN
 
 public static void sq_dr(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_64;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_64;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1526,13 +1770,13 @@ public static void sq_ds(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNA
 
 public static void sq_e(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    if (get_operand_size_16_32(ref idata, mode) == OPERAND_SIZE_16)
+    if (get_operand_size_16_32(ref idata, mode) == OP_SIZE.OPERAND_SIZE_16)
     {
-        opsize.size_in_stream = OPERAND_SIZE_14;
+        opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_14;
     }
     else
     {
-        opsize.size_in_stream = OPERAND_SIZE_28;
+        opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_28;
     }
 
     opsize.size = opsize.size_in_stream;
@@ -1541,14 +1785,14 @@ public static void sq_e(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL
 
 public static void sq_er(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_80;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_80;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
 
 public static void sq_p(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = (ushort)(get_operand_size_16_32(ref idata, mode) + OPERAND_SIZE_16);
+    opsize.size_in_stream = (OP_SIZE)((uint)get_operand_size_16_32(ref idata, mode) + (uint)OP_SIZE.OPERAND_SIZE_16);
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1565,7 +1809,7 @@ public static void sq_pi(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNA
 
 public static void sq_ps(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_128;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_128;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1579,7 +1823,7 @@ public static void sq_ptp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERN
 {
     if (mode == DISMODE.DISASSEMBLE_MODE_64)
     {
-        opsize.size_in_stream = (ushort)(get_operand_size(instr, ref idata, mode) + OPERAND_SIZE_16);
+        opsize.size_in_stream = (OP_SIZE)((uint)get_operand_size(instr, ref idata, mode) + (uint)OP_SIZE.OPERAND_SIZE_16);
         opsize.size = opsize.size_in_stream;
         opsize.sign = 0;
     }
@@ -1591,7 +1835,7 @@ public static void sq_ptp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERN
 
 public static void sq_q(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_64;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_64;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1610,14 +1854,14 @@ public static void sq_qdq(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERN
 
 public static void sq_qi(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_64;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_64;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
 
 public static void sq_s(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_48;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_48;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1629,7 +1873,7 @@ public static void sq_sd(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNA
 
 public static void sq_sr(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_32;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_32;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1641,13 +1885,13 @@ public static void sq_ss(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNA
 
 public static void sq_st(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    if (get_operand_size_16_32(ref idata, mode) == OPERAND_SIZE_16)
+    if (get_operand_size_16_32(ref idata, mode) == OP_SIZE.OPERAND_SIZE_16)
     {
-        opsize.size_in_stream = OPERAND_SIZE_94;
+        opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_94;
     }
     else
     {
-        opsize.size_in_stream = OPERAND_SIZE_108;
+        opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_108;
     }
 
     opsize.size = opsize.size_in_stream;
@@ -1656,7 +1900,7 @@ public static void sq_st(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNA
 
 public static void sq_stx(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_512;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_512;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1717,8 +1961,8 @@ public static void sq_vds(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERN
 {
     if (mode == DISMODE.DISASSEMBLE_MODE_64)
     {
-        opsize.size_in_stream = OPERAND_SIZE_32;
-        opsize.size = OPERAND_SIZE_64;
+        opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_32;
+        opsize.size = OP_SIZE.OPERAND_SIZE_64;
         opsize.sign = 1;
     }
     else
@@ -1764,19 +2008,19 @@ public static void sq_vs(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNA
         opsize.size_in_stream = get_operand_size_16_32(ref idata, mode);
         if (idata.prefixes[PREF_OPSIZE_INDEX] != 0xFF)
         {
-            opsize.size = OPERAND_SIZE_16;
+            opsize.size = OP_SIZE.OPERAND_SIZE_16;
         }
         else
         {
-            opsize.size = OPERAND_SIZE_64;
+            opsize.size = OP_SIZE.OPERAND_SIZE_64;
         }
     }
 }
 
 public static void sq_w(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_16;
-    opsize.size = OPERAND_SIZE_16;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_16;
+    opsize.size = OP_SIZE.OPERAND_SIZE_16;
     opsize.sign = 0;
 }
 
@@ -1806,7 +2050,7 @@ public static void sq_wdqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTER
 
 public static void sq_wi(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
 {
-    opsize.size_in_stream = OPERAND_SIZE_16;
+    opsize.size_in_stream = OP_SIZE.OPERAND_SIZE_16;
     opsize.size = opsize.size_in_stream;
     opsize.sign = 0;
 }
@@ -1837,9 +2081,9 @@ public static void sq_wvqp(ref OPERAND_SIZE opsize, ref INSTRUCTION instr, INTER
 
 
 //Returns size accordingly to disassemble mode and opsize prefix.
-public static ushort get_operand_size_16_32(ref INTERNAL_DATA idata, DISMODE mode)
+public static OP_SIZE get_operand_size_16_32(ref INTERNAL_DATA idata, DISMODE mode)
 {
-    ushort res;
+    OP_SIZE res;
     if (mode == DISMODE.DISASSEMBLE_MODE_64)
         mode = DISMODE.DISASSEMBLE_MODE_32;
 
@@ -1850,23 +2094,23 @@ public static ushort get_operand_size_16_32(ref INTERNAL_DATA idata, DISMODE mod
     }
 
     if (mode == DISMODE.DISASSEMBLE_MODE_16)
-        res = OPERAND_SIZE_16;
+        res = OP_SIZE.OPERAND_SIZE_16;
     else
-        res = OPERAND_SIZE_32;
+        res = OP_SIZE.OPERAND_SIZE_32;
 
     return res;
 }
 
 //Returns size accordingly to disassemble mode, size override and REX.W prefixes.
-public static ushort get_operand_size(INSTRUCTION instr, ref INTERNAL_DATA idata, DISMODE mode)
+public static OP_SIZE get_operand_size(INSTRUCTION instr, ref INTERNAL_DATA idata, DISMODE mode)
 {
-    ushort res;
+    OP_SIZE res;
 
     if (mode == DISMODE.DISASSEMBLE_MODE_64)
     {
         if (idata.prefixes[PREF_REX_INDEX] != (instr.rex & PREFIX_REX_W))
         {
-            res = OPERAND_SIZE_64;
+            res = OP_SIZE.OPERAND_SIZE_64;
             idata.is_rex_used = 1;
         }
         else
@@ -1898,26 +2142,29 @@ public PP
     post_proc_multinop,
     post_proc_cmpxchg8b;
 
-static byte OPERAND_TYPE_REG  = 0x01;
-static byte OPERAND_TYPE_MEM  = 0x02;
-static byte OPERAND_TYPE_IMM  = 0x04;
-static byte OPERAND_TYPE_DIR  = 0x08;
+public enum OP_TYPE
+{
+OPERAND_TYPE_REG  = 0x01,
+OPERAND_TYPE_MEM  = 0x02,
+OPERAND_TYPE_IMM  = 0x04,
+OPERAND_TYPE_DIR  = 0x08
+}
 static byte OPERAND_TYPE_MASK = 0x0F;
 
 //Creates OPERAND_TYPE_REG operand of given type.
-static void create_reg_operand(ref INSTRUCTION instr, int op_index, byte type, byte code, ushort size)
+static void create_reg_operand(ref INSTRUCTION instr, int op_index, REG_TYPE type, byte code, OP_SIZE size)
 {
-    instr.ops[op_index].flags |= OPERAND_TYPE_REG;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_REG;
     instr.ops[op_index].value.reg.type = type;
     instr.ops[op_index].value.reg.code = code;
-    instr.ops[op_index].size = size;
+    instr.ops[op_index].size = (ushort)size;
 }
 
-static void create_genreg_operand(ref INSTRUCTION instr, int op_index, byte code, ushort size, byte rex, ref INTERNAL_DATA idata, DISMODE mode)
+static void create_genreg_operand(ref INSTRUCTION instr, int op_index, byte code, OP_SIZE size, byte rex, ref INTERNAL_DATA idata, DISMODE mode)
 {
     if (mode == DISMODE.DISASSEMBLE_MODE_64 && idata.prefixes[PREF_REX_INDEX] != 0xFF)
     {
-        if (code > REG_CODE_BX && size == OPERAND_SIZE_8)
+        if (code > REG_CODE_BX && size == OP_SIZE.OPERAND_SIZE_8)
         {
             code |= REG_CODE_64;
             code += 0x4;
@@ -1929,10 +2176,10 @@ static void create_genreg_operand(ref INSTRUCTION instr, int op_index, byte code
             idata.is_rex_used = 1;
         }
     }
-    create_reg_operand(ref instr, op_index, REG_TYPE_GEN, code, size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_GEN, code, size);
 }
 
-static void create_xmmreg_operand(ref INSTRUCTION instr, int op_index, byte code, ushort size, byte rex, ref INTERNAL_DATA idata, DISMODE mode)
+static void create_xmmreg_operand(ref INSTRUCTION instr, int op_index, byte code, OP_SIZE size, byte rex, ref INTERNAL_DATA idata, DISMODE mode)
 {
     if ((mode == DISMODE.DISASSEMBLE_MODE_64) && (idata.prefixes[PREF_REX_INDEX] != 0xFF))
     {
@@ -1942,7 +2189,7 @@ static void create_xmmreg_operand(ref INSTRUCTION instr, int op_index, byte code
             idata.is_rex_used = 1;
         }
     }
-    create_reg_operand(ref instr, op_index, REG_TYPE_XMM, code, size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_XMM, code, size);
 }
 
 //Parses operand accordingly to MODRM value.
@@ -1967,8 +2214,8 @@ static UInt32 parse_mem_operand(long origin_offset, long offset, ref INSTRUCTION
 {
     UInt32 len;
 
-    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
-    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = (ushort)opsize.size;
     if (instr.addrsize == ADDR_SIZE_16)
     {
         len = parse_mem_operand_16(origin_offset, offset, ref instr, op_index, mode);
@@ -2294,16 +2541,16 @@ public delegate UInt32 TQ(long origin_offset, long offset, ref INSTRUCTION instr
 
 static UInt32 tq_1(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    instr.ops[op_index].flags |= OPERAND_TYPE_IMM;
-    instr.ops[op_index].size = OPERAND_SIZE_8;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_IMM;
+    instr.ops[op_index].size = (ushort)OP_SIZE.OPERAND_SIZE_8;
     instr.ops[op_index].value.imm.imm8 = 0x1;
     return 0x0;
 }
 
 public static UInt32 tq_3(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    instr.ops[op_index].flags |= OPERAND_TYPE_IMM;
-    instr.ops[op_index].size = OPERAND_SIZE_8;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_IMM;
+    instr.ops[op_index].size = (ushort)OP_SIZE.OPERAND_SIZE_8;
     instr.ops[op_index].value.imm.imm8 = 0x3;
 
     return 0;
@@ -2311,8 +2558,8 @@ public static UInt32 tq_3(long origin_offset, long offset, ref INSTRUCTION instr
 
 public static UInt32 tq_A(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    instr.ops[op_index].flags |= OPERAND_TYPE_DIR;
-    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_DIR;
+    instr.ops[op_index].size = (ushort)opsize.size;
     instr.ops[op_index].value.far_addr.offset = (byte)(offset - origin_offset);
     //instr.ops[op_index].value.far_addr.far_addr_ab = assembly.Image.ReadBytes(offset, instr.ops[op_index].size);
     byte[] bt = assembly.Image.ReadBytes(offset, instr.ops[op_index].size);
@@ -2327,14 +2574,14 @@ public static UInt32 tq_A(long origin_offset, long offset, ref INSTRUCTION instr
 
 public static UInt32 tq_C(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_CR, (byte)((instr.modrm >> 0x3) & 0x7), instr.ops[op_index].size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_CR, (byte)((instr.modrm >> 0x3) & 0x7), (OP_SIZE)(instr.ops[op_index].size));
 
     return 0x0;
 }
 
 public static UInt32 tq_D(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_DBG, (byte)((instr.modrm >> 0x3) & 0x7), instr.ops[op_index].size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_DBG, (byte)((instr.modrm >> 0x3) & 0x7), (OP_SIZE)instr.ops[op_index].size);
 
     return 0x0;
 }
@@ -2362,13 +2609,13 @@ public static UInt32 tq_H(long origin_offset, long offset, ref INSTRUCTION instr
 
 public static UInt32 tq_I(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    instr.ops[op_index].flags |= OPERAND_TYPE_IMM;
-    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_IMM;
+    instr.ops[op_index].size = (ushort)opsize.size;
     instr.ops[op_index].value.imm.size = (byte)opsize.size_in_stream;
     instr.ops[op_index].value.imm .offset = (byte)(offset - origin_offset);
     //instr.ops[op_index].value.imm.immab = assembly.Image.ReadBytes(offset, opsize.size_in_stream);
 
-    byte[] bt = assembly.Image.ReadBytes(offset, opsize.size_in_stream);
+    byte[] bt = assembly.Image.ReadBytes(offset, (int)opsize.size_in_stream);
     instr.ops[op_index].value.imm.imm64 = 0;
     foreach (byte bb in bt.Reverse())
     {
@@ -2400,7 +2647,7 @@ public static UInt32 tq_M(long origin_offset, long offset, ref INSTRUCTION instr
 
 public static UInt32 tq_N(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_MMX, (byte)(instr.modrm & 0x7), opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_MMX, (byte)(instr.modrm & 0x7), opsize.size);
 
     return 0x0;
 }
@@ -2410,8 +2657,8 @@ public static UInt32 tq_O(long origin_offset, long offset, ref INSTRUCTION instr
     UInt32 res;
 
     res = instr.addrsize;
-    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
-    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].flags |= (byte) OP_TYPE.OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = (ushort)opsize.size;
     instr.ops[op_index].value.addr.mod = ADDR_MOD_DISP;
     //instr.disp.value.ab = assembly.Image.ReadBytes(offset, instr.addrsize);
     byte[] bt = assembly.Image.ReadBytes(offset, instr.addrsize);
@@ -2429,7 +2676,7 @@ public static UInt32 tq_O(long origin_offset, long offset, ref INSTRUCTION instr
 
 public static UInt32 tq_P(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_MMX, (byte)((instr.modrm >> 0x3) & 0x7), opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_MMX, (byte)((instr.modrm >> 0x3) & 0x7), opsize.size);
 
     return 0x0;
 }
@@ -2441,7 +2688,7 @@ public static UInt32 tq_Q(long origin_offset, long offset, ref INSTRUCTION instr
     res = 0x0;
     if ((instr.modrm & 0xC0) == 0xC0)
     {
-        create_reg_operand(ref instr, op_index, REG_TYPE_MMX, (byte)(instr.modrm & 0x7), opsize.size);
+        create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_MMX, (byte)(instr.modrm & 0x7), opsize.size);
     }
     else
     {
@@ -2463,14 +2710,14 @@ public static UInt32 tq_R(long origin_offset, long offset, ref INSTRUCTION instr
 
 public static UInt32 tq_S(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, (byte)((instr.modrm >> 3) & 0x7), OPERAND_SIZE_16);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_SEG, (byte)((instr.modrm >> 3) & 0x7), OP_SIZE.OPERAND_SIZE_16);
 
     return 0x0;
 }
 
 public static UInt32 tq_T(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_TR, (byte)((instr.modrm >> 0x3) & 0x7), opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_TR, (byte)((instr.modrm >> 0x3) & 0x7), opsize.size);
 
     return 0x0;
 }
@@ -2511,8 +2758,8 @@ public static UInt32 tq_X(long origin_offset, long offset, ref INSTRUCTION instr
     UInt32 res;
 
     res = 0;
-    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
-    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = (ushort)opsize.size;
     instr.ops[op_index].value.addr.mod = ADDR_MOD_BASE;
     instr.ops[op_index].value.addr.bas = REG_CODE_SI;
     get_seg(ref instr, op_index, idata.prefixes, mode);
@@ -2522,8 +2769,8 @@ public static UInt32 tq_X(long origin_offset, long offset, ref INSTRUCTION instr
 
 public static UInt32 tq_Y(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    instr.ops[op_index].flags |= OPERAND_TYPE_MEM;
-    instr.ops[op_index].size = opsize.size;
+    instr.ops[op_index].flags |= (byte)OP_TYPE.OPERAND_TYPE_MEM;
+    instr.ops[op_index].size = (ushort)opsize.size;
     if (mode == DISMODE.DISASSEMBLE_MODE_64)
         instr.ops[op_index].value.addr.seg = SREG_CODE_CS;
     else
@@ -2613,56 +2860,56 @@ public static UInt32 tq_fES(long origin_offset, long offset, ref INSTRUCTION ins
 
 public static UInt32 tq_fEST(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_FPU, (byte)(instr.modrm & 0x7), opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_FPU, (byte)(instr.modrm & 0x7), opsize.size);
 
     return 0;
 }
 
 public static UInt32 tq_fST0(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_FPU, FREG_CODE_ST0, opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_FPU, FREG_CODE_ST0, opsize.size);
 
     return 0;
 }
 
 public static UInt32 tq_CS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_CS, opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_SEG, SREG_CODE_CS, opsize.size);
 
     return 0;
 }
 
 public static UInt32 tq_DS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_DS, opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_SEG, SREG_CODE_DS, opsize.size);
 
     return 0;
 }
 
 public static UInt32 tq_ES(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_ES, opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_SEG, SREG_CODE_ES, opsize.size);
 
     return 0;
 }
 
 public static UInt32 tq_SS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_SS, opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_SEG, SREG_CODE_SS, opsize.size);
 
     return 0;
 }
 
 public static UInt32 tq_FS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_FS, opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_SEG, SREG_CODE_FS, opsize.size);
 
     return 0;
 }
 
 public static UInt32 tq_GS(long origin_offset, long offset, ref INSTRUCTION instr, int op_index, OPERAND_SIZE opsize, INTERNAL_DATA idata, DISMODE mode)
 {
-    create_reg_operand(ref instr, op_index, REG_TYPE_SEG, SREG_CODE_GS, opsize.size);
+    create_reg_operand(ref instr, op_index, REG_TYPE.REG_TYPE_SEG, SREG_CODE_GS, opsize.size);
 
     return 0;
 }
@@ -2732,35 +2979,39 @@ public static UInt32 pref_LOCK_set(long origin_offset, long offset, ref INSTRUCT
 static byte OPERAND_FLAG_PRESENT= 0x10;
 static byte OPERAND_FLAG_REL    = 0x20;
 
+public enum OP_SIZE
+{ 
 //OPERAND.size's values:
-static ushort OPERAND_SIZE_8   = 0x0001;
-static ushort OPERAND_SIZE_16  = 0x0002;
-static ushort OPERAND_SIZE_32  = 0x0004;
-static ushort OPERAND_SIZE_48  = 0x0006;
-static ushort OPERAND_SIZE_64  = 0x0008;
-static ushort OPERAND_SIZE_80  = 0x000A;
-static ushort OPERAND_SIZE_128 = 0x0010;
-static ushort OPERAND_SIZE_14  = 0x000E;
-static ushort OPERAND_SIZE_28  = 0x001C;
-static ushort OPERAND_SIZE_94  = 0x005E;
-static ushort OPERAND_SIZE_108 = 0x006C;
-static ushort OPERAND_SIZE_512 = 0x0200;
-
+OPERAND_SIZE_8   = 0x0001,
+OPERAND_SIZE_16  = 0x0002,
+OPERAND_SIZE_32  = 0x0004,
+OPERAND_SIZE_48  = 0x0006,
+OPERAND_SIZE_64  = 0x0008,
+OPERAND_SIZE_80  = 0x000A,
+OPERAND_SIZE_128 = 0x0010,
+OPERAND_SIZE_14  = 0x000E,
+OPERAND_SIZE_28  = 0x001C,
+OPERAND_SIZE_94  = 0x005E,
+OPERAND_SIZE_108 = 0x006C,
+OPERAND_SIZE_512 = 0x0200
+    }
 //OPERAND.ADDR.mod's bits:
 static byte ADDR_MOD_BASE = 0x1;
 static byte ADDR_MOD_IDX  = 0x2;
 static byte ADDR_MOD_DISP = 0x4;
 
 //OPERAND.REG.type's values:
-static byte REG_TYPE_GEN = 0x0;
-static byte REG_TYPE_SEG = 0x1;
-static byte REG_TYPE_CR = 0x2;
-static byte REG_TYPE_DBG = 0x3;
-static byte REG_TYPE_TR = 0x4;
-static byte REG_TYPE_FPU = 0x5;
-static byte REG_TYPE_MMX = 0x7;
-static byte REG_TYPE_XMM = 0x8;
-
+public enum REG_TYPE
+{ 
+REG_TYPE_GEN = 0x0,
+REG_TYPE_SEG = 0x1,
+REG_TYPE_CR = 0x2,
+REG_TYPE_DBG = 0x3,
+REG_TYPE_TR = 0x4,
+REG_TYPE_FPU = 0x5,
+REG_TYPE_MMX = 0x7,
+REG_TYPE_XMM = 0x8
+}
 //OPERAND.REG.code's values (GPR):
 static byte REG_CODE_AX = 0x0;
 static byte REG_CODE_CX = 0x1;
@@ -6019,8 +6270,6 @@ static UInt32 parse_opcode(long offset, ref OPCODE_DESCRIPTOR opcode_descr, ref 
             idata.severe_err = ERRS.ERR_BADCODE;//error: invalid opcode.
         }
     }
-    instr.Addr = (ulong)offset;
-    instr.bytes = assembly.Image.ReadBytes(offset, (int)res);
     return res;
 }
 
@@ -6039,7 +6288,7 @@ static void apply_disasm_options(ref INSTRUCTION instr, UInt32 len, DISASM_INOUT
 
         if ((param.options & DISASM_OPTION_OPTIMIZE_DISP)!=0)
         {
-            if (((instr.ops[i].flags & OPERAND_TYPE_MEM)!=0) && (instr.ops[i].value.addr.mod != ADDR_MOD_DISP))
+            if (((instr.ops[i].flags & (byte)OP_TYPE.OPERAND_TYPE_MEM)!=0) && (instr.ops[i].value.addr.mod != ADDR_MOD_DISP))
             {
                 if (instr.disp.value.d64 == 0x0)
                     instr.ops[i].value.addr.mod &= (byte)(~(uint)ADDR_MOD_DISP);
@@ -6208,7 +6457,7 @@ static void check_seg_sf_prefixes(INSTRUCTION instr, byte[] prefixes, DISASM_INO
     {
         for (i = 0; i < 3; i++)
         {
-            if ((instr.ops[i].flags & OPERAND_TYPE_MEM)!=0)
+            if ((instr.ops[i].flags & (byte)OP_TYPE.OPERAND_TYPE_MEM)!=0)
             {
                 if (param.mode == DISMODE.DISASSEMBLE_MODE_64)
                 {
@@ -6407,7 +6656,9 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
         param.errcode = ERRS.ERR_64_ONLY;//error: instruction is 64bit mode only.
 
     apply_disasm_options(ref instr, len, param);
+    instr.bytes = assembly.Image.ReadBytes(offset, (int)len);
 
+            instr.Addr = (ulong)offset;
             return len;
         }
     }
