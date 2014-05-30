@@ -1102,7 +1102,7 @@ public class INSTRUCTION
         if (ProcList.ContainsKey(x)) return ProcList[x].FName + "();";
         TFunc tmpfunc = new TFunc(x, 1);
         if (!NewSubs.ContainsKey(x)) NewSubs.Add(x, tmpfunc);
-        return "Sub_" + x.ToString("X8") + "();";
+        return "proc_" + x.ToString("X8") + "();";
     }
 
     public string ToString(MyDictionary ProcList, VarDictionary VarDict, Dictionary<long, TFunc> NewSubs)

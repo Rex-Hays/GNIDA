@@ -4,23 +4,43 @@
 //|                          Free 4 use                                 |
 //|                         Writed AS IS                                |
 //+---------------------------------------------------------------------+
-#pragma option W32C
+#pragma option W32
 #jumptomain NONE
 #include "Windows.h";
 #include "msvcrt.h--";
-/*00401000*/ void main(){
-/*00401000*/  $mov ecx, 0x10203040
-/*00401005*/  $cmp ebx, 0x5A
-/*00401008*/  $jnz Loc_40100F
-/*0000020A*/  $jmp Loc_401014
-/*0080100F*/ Loc_40100F:
-/*0040100F*/  Sub_0040102B();
-/*00801014*/ Loc_401014:
-/*00401014*/  $push 0x401023
-/*00401019*/  printf();
-/*0040101F*/  $add esp, 0x4
-/*00401022*/  $ret
-};//main
-/*0040102B*/ void Sub_0040102B(){
-/*0040102B*/  $ret
-};//Sub_0040102B
+dword dword_00401000;
+dword dword_00401004;
+/*00402000*/ void main(){
+/*00402000*/  $cld
+/*00402001*/  $push 0x0
+/*00402003*/  GetModuleHandleA();
+/*00402009*/  dword_00401000 = EAX;
+/*0040200E*/  GetCommandLineA();
+/*00402014*/  dword_00401004 = EAX;
+/*00402019*/  proc_00402030();
+/*0040201E*/  $push EAX
+/*0040201F*/  ExitProcess();
+};//main  Length:0x25 bytes 
+
+/*00402030*/ void proc_00402030(){
+/*00402030*/  $push ebp
+/*00402031*/  $mov ebp, esp
+/*00402033*/  $push ebx
+/*00402034*/  $push esi
+/*00402035*/  $push edi
+/*00402036*/  $test esi, esi
+/*00402038*/  $cmp esi, 0x1
+/*0040203B*/  $cmp esi, 0x2
+/*0040203E*/  $test EAX, EAX
+/*00402040*/  $push edi
+/*00402041*/  $push esi
+/*00402042*/  $push ebx
+/*00402043*/  $test EAX, EAX
+/*00402045*/  $push edi
+/*00402046*/  $push esi
+/*00402047*/  $push ebx
+/*00402048*/  $test EAX, EAX
+/*0040204A*/  $xor EAX, EAX
+/*0040204C*/  $ret
+};//proc_00402030  Length:0x1D bytes 
+

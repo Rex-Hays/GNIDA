@@ -13,7 +13,6 @@ C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\FastColoredTextBox\FastColoredTextBox
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\FastColoredTextBox\FastColoredTextBox\bin\Release\FastColoredTextBox.dll.lastcodeanalysissucceeded
 C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.dll
 C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb
-C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojResolveAssemblyReference.cache
 C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources
 C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources
 C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources

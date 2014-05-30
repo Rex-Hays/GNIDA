@@ -6,17 +6,10 @@ using System.Threading.Tasks;
 using TUP.AsmResolver;
 using TUP.AsmResolver.ASM;
 using System.ComponentModel;
+using AlphaOmega.Debug;
 
 namespace GNIDA
 {
-    public static class stringExt
-    {
-        static object obj;
-        public static void SetObj(this string ss, object Obj)
-        {
-            obj = Obj;
-        }
-    }
     public class VarDictionary : Dictionary<ulong, TVar>
     {
         public GNIDA Parent;
@@ -76,59 +69,11 @@ namespace GNIDA
             }
         }
     }
-    public static class X86Extensions
-    {
-        private static string AddProc(Offset x, MyDictionary ProcList, Dictionary<long, TFunc> NewSubs)
-        {
-            if (ProcList.ContainsKey((long)x.Va)) return ProcList[(long)x.Va].FName + "();";
-            TFunc tmpfunc = new TFunc((long)x.Va, 1);
-            if (!NewSubs.ContainsKey((long)x.Va)) NewSubs.Add((long)x.Va, tmpfunc);
-            return "Sub_" + x.Va.ToString("X8") + "();";
-        }
-        public static string ToCmmString(this x86Instruction inst, MyDictionary ProcList, VarDictionary VarDict, Dictionary<long, TFunc> NewSubs)
-        {
-            switch (inst.OpCode.OpCodeBytes[0])
-            {
-                case 0x74: return "$JZ Loc_" + inst.Operand1.ToString(true);
-                case 0x75: return "$JNZ Loc_" + inst.Operand1.ToString(true);
-                case 0xA3://mov somevar, EAX
-                    {
-                        TVar Var1 = new TVar(((Offset)inst.Operand1.Value).Va, "", 4);
-                        if (!VarDict.ContainsKey(((Offset)inst.Operand1.Value).Va))
-                        {
-                            VarDict.AddVar(Var1);
-                        };
-                        return VarDict[((Offset)inst.Operand1.Value).Va].FName + " = EAX;";
-                    }
-                case 0xEB: return "$JMP Loc_" + inst.Operand1.ToString(true);
-                case 0xE8:
-                    {
-                        if (inst.Operand1.ValueType == OperandType.Normal)
-                        {
-                            return AddProc((Offset)inst.Operand1.Value, ProcList, NewSubs);
-                        }
-                    } break;
-                case 0xE9://jmp;
-                    return "$JMP Loc_" + inst.Operand1.ToString(true);
-                case 0xFF:
-                    {
-                        if (inst.OpCode.OpCodeBytes[1] == 0x15)
-                            if (inst.Operand1.ValueType == OperandType.DwordPointer)
-                            {
-                                return AddProc((Offset)inst.Operand1.Value, ProcList, NewSubs);
-                            }
-                    } break;
-            }
-            string str = inst.ToAsmString();
-            if (str[0] != '$') str += ";";
-            //str = str.Replace(" PTR ", "");
-            return str;
-        }
-    }
     public class TFunc
     {
         public long Addr;
-        public uint Length;
+        public long Length;
+        public byte[] bytes;
         public string FName;
         public string LibraryName;
         public uint type;
@@ -140,7 +85,7 @@ namespace GNIDA
             Ordinal = Ord;
             LibraryName = LibName;
             if (Name != "") FName = Name;
-            else FName = "Sub_" + Addr.ToString("X8");
+            else FName = "proc_" + Addr.ToString("X8");
         }
     }
     public class GNIDA
@@ -152,18 +97,22 @@ namespace GNIDA
         public MyDictionary ToDisasmFuncList = new MyDictionary();
         public MyDictionary DisasmedFuncList = new MyDictionary();
         public VarDictionary VarDict = new VarDictionary();
+        public StreamLoader PE;
+        public PEDirectory info;
+        public Flirt flirt;
+        MyDictionary NewSubs = new MyDictionary();
         public GNIDA()
         {
+            flirt = new Flirt();
             FullProcList.Parent = this;
             VarDict.Parent = this;
         }
-        public void StopWork()
+        public int RenameFunction(long addr, string NName)
         {
-            bw.CancelAsync();
-        }
-        public List<Section> Sections()
-        {
-            return assembly.NTHeader.Sections;
+            TFunc func;
+            FullProcList.TryGetValue(addr, out func);
+            if (func != null) { func.FName = NName; RaiseFuncChanged(this, func); return 1; }
+            return 0;
         }
         public class Stroka
         {
@@ -194,13 +143,14 @@ namespace GNIDA
                 return tmp;
             }
         }
-        public List<Stroka> DisasmFunc(long addr, MyDictionary ProcList)
+        public long DisasmFunc(List<Stroka> lst, long addr, MyDictionary ProcList)
         {
-            List<Stroka> lst = new List<Stroka>();
+            //List<Stroka> lst = new List<Stroka>();
             List<long> Tasks = new List<long>();
             List<long> DTasks = new List<long>();
             List<int> LabelList = new List<int>();
-
+            long StartAdr = addr;
+            long EndAddr = addr;
             mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
             uint Len = 0;
             byte[] sf_prefixes = new byte[mediana.MAX_INSTRUCTION_LEN];
@@ -216,6 +166,7 @@ namespace GNIDA
             {
                 instr1 = new mediana.INSTRUCTION();
                 Len = MeDisasm.medi_disassemble(Tasks[0], ref instr1, ref param);
+                if (EndAddr < (Tasks[0] + Len)) EndAddr = Tasks[0] + Len;
                 Console.WriteLine(instr1.mnemonic);
                 DTasks.Add(Tasks[0]);
                 Tasks.Remove(Tasks[0]);
@@ -252,7 +203,7 @@ namespace GNIDA
                             }
                         } break;
                     case 0xC2://retn XX;
-                    case 0xC3://retn
+                    case 0xC3://retn                        
                         goto _end;
                         //continue;// Don't disasm after it
                     case 0xE8://Call;
@@ -315,14 +266,18 @@ namespace GNIDA
                     result.Label = "Loc_" + result.Inst.Addr.ToString("X8").Remove(0,2);
                 }
             }
-            return lst;
+            return EndAddr-StartAdr;
         }
 
+        #region Загружаем и работаем
         public void LoadFile(string FName)
         {
             byte[] sf_prefixes = new byte[mediana.MAX_INSTRUCTION_LEN];
             mediana.INSTRUCTION instr1 = new mediana.INSTRUCTION();
             mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
+
+            PE = StreamLoader.FromFile(FName);
+            info = new PEDirectory(PE);
 
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);
@@ -365,7 +320,11 @@ namespace GNIDA
             bw.RunWorkerCompleted += bw_RunWorkerCompleted;
             bw.RunWorkerAsync();
         }
-        MyDictionary NewSubs = new MyDictionary();
+        public void StopWork()
+        {
+            bw.CancelAsync();
+        }
+
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (NewSubs.Count > 0)
@@ -376,6 +335,35 @@ namespace GNIDA
                 (sender as BackgroundWorker).RunWorkerAsync();
             }
         }
+
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            foreach (KeyValuePair<long, TFunc> dct in ToDisasmFuncList)
+            { 
+                if ((worker.CancellationPending == true))
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                RaiseAddStrEvent("/*" + dct.Key.ToString("X8") + "*/ void " + dct.Value.FName + "(){\n");
+                List<Stroka> tmp = new List<Stroka>();
+                long Len = DisasmFunc(tmp, RVA2FO(dct.Key), FullProcList);
+                dct.Value.Length = Len;
+                dct.Value.bytes = assembly.Image.ReadBytes(RVA2FO(dct.Key), (int)Len);
+                foreach(Stroka t in tmp)
+                {
+                    RaiseAddStrEvent(t.ToCmmString(NewSubs));
+                }
+                DisasmedFuncList.Add(dct.Key, dct.Value);
+                RaiseAddStrEvent("};//" + dct.Value.FName  + "  Length:0x"+ dct.Value.Length.ToString("X") + " bytes \n\n");
+
+            }
+            ToDisasmFuncList.Clear();
+        }
+        #endregion
+
+        #region Some stuff
         public ulong FO2RVA(ulong FO)
         {
             ulong addr = 0;
@@ -398,36 +386,24 @@ namespace GNIDA
             }
             return addr;
         }
+        #endregion
 
-        private void bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            foreach (KeyValuePair<long, TFunc> dct in ToDisasmFuncList)
-            { 
-                if ((worker.CancellationPending == true))
-                {
-                    e.Cancel = true;
-                    break;
-                }
-                RaiseAddStrEvent("/*" + dct.Key.ToString("X8") + "*/ void " + dct.Value.FName + "(){\n");
-                List<Stroka> tmp = DisasmFunc(RVA2FO(dct.Key), FullProcList);
-                foreach(Stroka t in tmp)
-                {
-                    RaiseAddStrEvent(t.ToCmmString(NewSubs));
-                }
-                DisasmedFuncList.Add(dct.Key, dct.Value);
-                RaiseAddStrEvent("};//" + dct.Value.FName + "\n");
-            }
-            ToDisasmFuncList.Clear();
-        }
+        #region Обработчики событий
+
+        public delegate void FuncChanged(object sender, TFunc Func);
         public delegate void LogEvent(object sender, string LogStr);
         public delegate void VarEvent(object sender, TVar Var);
         public delegate void AddFuncEvent(object sender, TFunc Func);
         public delegate void AddStrEvent(string Str);
         public event LogEvent OnLogEvent;
+        public event FuncChanged OnFuncChanged;
         public event VarEvent OnVarEvent;
         public event AddFuncEvent OnAddFunc;
         public event AddStrEvent OnAddStr;
+        public void RaiseFuncChanged(object sender, TFunc Func)
+        {
+            if (OnFuncChanged != null) OnFuncChanged(sender, Func);
+        }
         public void RaiseVarFuncEvent(object sender, TVar Var)
         {
             if (OnVarEvent != null) OnVarEvent(sender, Var);
@@ -444,7 +420,8 @@ namespace GNIDA
         {
             if (OnAddStr != null) OnAddStr(Str);
         }
-        
+        #endregion
+
     }
 
 }

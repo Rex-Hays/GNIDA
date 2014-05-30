@@ -9,3 +9,14 @@ C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\FastColoredTextBox\FastColoredTextBox
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.Cache
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll
 C:\Users\Damir\Documents\GNIDA\GNIDA\GNIDA\FastColoredTextBox\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FastColoredTextBox.resources
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FindForm.resources
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.GoToForm.resources
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.HotkeysEditorForm.resources
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.ReplaceForm.resources
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.Cache
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll
+C:\Users\Damir\Source\Repos\GNIDA\GNIDA\GNIDA\FCTB\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb

@@ -11,6 +11,7 @@ using System.IO;
 using TUP.AsmResolver;
 using Be.Windows.Forms;
 using FastColoredTextBoxNS;
+using AlphaOmega.Debug;
 
 namespace GNIDA
 {
@@ -88,6 +89,17 @@ namespace GNIDA
             Log.Items.Add(LogStr);
             //Log.SelectedIndex = Log.Items.Count-1;
         }
+        public void OnFuncChanged1(object sender, TFunc Func)
+        {
+            foreach(ListViewItem itm in listView3.Items)
+                if ((itm.Tag as TFunc).Equals(Func))
+                {
+                    fastColoredTextBox1.BeginUpdate();
+                    fastColoredTextBox1.Text = fastColoredTextBox1.Text.Replace(itm.Text, Func.FName);
+                    fastColoredTextBox1.EndUpdate();
+                    itm.Text = Func.FName;
+                }
+        }
         private void AppendText(string text)
         {
             //some stuffs for best performance
@@ -135,7 +147,7 @@ namespace GNIDA
             MyGNIDA.OnAddFunc += AddFuncEvent1;
             MyGNIDA.OnAddStr += AddText;
             MyGNIDA.OnVarEvent += AddVarEvent1;
-
+            MyGNIDA.OnFuncChanged += OnFuncChanged1;
             MyGNIDA.LoadFile(openFileDialog1.FileName);
 
             dynamicFileByteProvider = new DynamicFileByteProvider(openFileDialog1.FileName, true);
@@ -149,20 +161,21 @@ namespace GNIDA
                               "\n//|                         Writed AS IS                                |" +
                               "\n//+---------------------------------------------------------------------+\n";
             //if( & DynamicLoadedLibraryFile)
-            if ( (MyGNIDA.assembly.NTHeader.FileHeader.ExecutableFlags & TUP.AsmResolver.ExecutableFlags.DynamicLoadedLibraryFile) != 0)
+
+
+            if ((MyGNIDA.info.Header.HeaderNT32.FileHeader.Characteristics & WinNT.IMAGE_FILE.DLL) != 0)
             { fastColoredTextBox1.Text += "#pragma option DLL\n"; }
             else {
-                    switch (MyGNIDA.assembly.NTHeader.OptionalHeader.SubSystem)
+                switch (MyGNIDA.info.Header.HeaderNT32.OptionalHeader.Subsystem)
                     {
-                        case SubSystem.WindowsGraphicalUI: fastColoredTextBox1.Text += "#pragma option W32\n"; break;
-                        case SubSystem.WindowsConsoleUI: fastColoredTextBox1.Text += "#pragma option W32C\n"; break;
+                        case WinNT.IMAGE_SUBSYSTEM.WINDOWS_GUI: fastColoredTextBox1.Text += "#pragma option W32\n"; break;
+                        case WinNT.IMAGE_SUBSYSTEM.WINDOWS_CUI: fastColoredTextBox1.Text += "#pragma option W32C\n"; break;
                         default: fastColoredTextBox1.Text += "#pragma option W32;//TO-DO!!!\n"; break;
                     }
                 }
             IncludedFiles.Add("Windows.h");
             IncludedFiles.Add("msvcrt.h--");
             fastColoredTextBox1.Text += "#jumptomain NONE\n";
-            fastColoredTextBox1.Text += sss;
             foreach (string s in IncludedFiles)
             {
                 fastColoredTextBox1.Text += "#include \"" + s + "\";\n";
@@ -237,20 +250,40 @@ namespace GNIDA
         {
             if (listView3.SelectedItems.Count == 1)
             {
-                char c;
                 Form2 Fm = new Form2();
                 Fm.NName = (listView3.SelectedItems[0].Tag as TFunc).FName;
-                string on = Fm.NName;
                 if (Fm.ShowDialog() == DialogResult.OK)
-                {
-                    (listView3.SelectedItems[0].Tag as TFunc).FName = Fm.NName;
-                    listView3.SelectedItems[0].Text = Fm.NName;
-                    fastColoredTextBox1.BeginUpdate();
-                    fastColoredTextBox1.Text = fastColoredTextBox1.Text.Replace(on, Fm.NName);
-                    fastColoredTextBox1.EndUpdate();
-                }
+                    MyGNIDA.RenameFunction((listView3.SelectedItems[0].Tag as TFunc).Addr, Fm.NName);
             };
         }
-    }
 
+        private void renameToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+            Place place = fastColoredTextBox1.Selection.Start;
+            var r = new Range(fastColoredTextBox1, place, place);
+            string hoveredWord = r.GetFragment("[_a-zA-Z0-9]").Text;
+            ListViewItem itm = listView3.FindItemWithText(hoveredWord);
+            if (itm != null)
+            {
+                Form2 Fm = new Form2();
+                Fm.NName = (itm.Tag as TFunc).FName;
+                if (Fm.ShowDialog() == DialogResult.OK)
+                    MyGNIDA.RenameFunction((itm.Tag as TFunc).Addr, Fm.NName);
+            }
+        }
+
+        private void fastColoredTextBox1_DoubleClick(object sender, EventArgs e)
+        {
+            Place place = fastColoredTextBox1.Selection.Start;
+            var r = new Range(fastColoredTextBox1, place, place);
+            string hoveredWord = r.GetFragment("[_a-zA-Z0-9]").Text;
+            ListViewItem itm = listView3.FindItemWithText(hoveredWord);
+            if (itm != null)
+            {
+                //foreach(Line L in fastColoredTextBox1.Lines)
+                //Console.WriteLine(hoveredWord);
+            }
+        }
+    }
 }
