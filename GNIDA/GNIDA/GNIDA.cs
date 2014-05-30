@@ -87,7 +87,7 @@ namespace GNIDA
         }
         public static string ToCmmString(this x86Instruction inst, MyDictionary ProcList, VarDictionary VarDict, Dictionary<long, TFunc> NewSubs)
         {
-            switch(inst.OpCode.OpCodeBytes[0])
+            switch (inst.OpCode.OpCodeBytes[0])
             {
                 case 0x74: return "$JZ Loc_" + inst.Operand1.ToString(true);
                 case 0x75: return "$JNZ Loc_" + inst.Operand1.ToString(true);
@@ -113,11 +113,11 @@ namespace GNIDA
                 case 0xFF:
                     {
                         if (inst.OpCode.OpCodeBytes[1] == 0x15)
-                        if (inst.Operand1.ValueType == OperandType.DwordPointer)
-                        {
-                            return AddProc((Offset)inst.Operand1.Value, ProcList, NewSubs);
-                        }
-                    }break;
+                            if (inst.Operand1.ValueType == OperandType.DwordPointer)
+                            {
+                                return AddProc((Offset)inst.Operand1.Value, ProcList, NewSubs);
+                            }
+                    } break;
             }
             string str = inst.ToAsmString();
             if (str[0] != '$') str += ";";
@@ -154,8 +154,6 @@ namespace GNIDA
         public VarDictionary VarDict = new VarDictionary();
         public GNIDA()
         {
-            //assembly = new Win32Assembly();
-            //assembly.Disassembler = new CmmDisassembler();
             FullProcList.Parent = this;
             VarDict.Parent = this;
         }
@@ -183,13 +181,13 @@ namespace GNIDA
                 UpComment = UpC;
                 Comment = Com;
                 SubComment = SubC;
-                addr = Ins.opcode_offset;
+                addr = (uint)Prnt.FO2RVA(Ins.Addr);
             }
             public string ToCmmString(Dictionary<long, TFunc> NewSubs)
             {
                 string tmp = "";
                 if (Label != "") tmp = "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ " + Label + ":\n";
-                tmp += "/*" + (Inst.Addr).ToString("X8") + "*/  $" + Inst.ToString();//Inst.ToCmmString(Parent.FullProcList, Parent.VarDict, NewSubs);
+                tmp += "/*" + (Inst.Addr).ToString("X8") + "*/  " + Inst.ToString(Parent.FullProcList, Parent.VarDict, NewSubs);
                 if (Comment != "") tmp += "// " + Comment;
                 tmp += "\n";
                 if (SubComment != "") tmp += "/*" + (Inst.Addr + Parent.assembly.NTHeader.OptionalHeader.ImageBase).ToString("X8") + "*/ // " + SubComment + "\n";
@@ -200,8 +198,8 @@ namespace GNIDA
         {
             List<Stroka> lst = new List<Stroka>();
             List<long> Tasks = new List<long>();
+            List<long> DTasks = new List<long>();
             List<int> LabelList = new List<int>();
-            x86Instruction instruction;
 
             mediana.DISASM_INOUT_PARAMS param = new mediana.DISASM_INOUT_PARAMS();
             uint Len = 0;
@@ -218,69 +216,95 @@ namespace GNIDA
             {
                 instr1 = new mediana.INSTRUCTION();
                 Len = MeDisasm.medi_disassemble(Tasks[0], ref instr1, ref param);
-                assembly.Disassembler.CurrentOffset = (uint)Tasks[0];
                 Console.WriteLine(instr1.mnemonic);
-                Console.WriteLine(((uint)Tasks[0]).ToString("X"));
-                Console.WriteLine(Len.ToString("X"));
+                DTasks.Add(Tasks[0]);
                 Tasks.Remove(Tasks[0]);
-                //instruction = assembly.Disassembler.DisassembleNextInstruction();
                 lst.Add(new Stroka(this, instr1));
                 switch (instr1.bytes[0])
                 {
-                              //Jxx
+                    case 0x0F: switch(instr1.bytes[1])
+                        {
+                            case 0x84://jz
+                            case 0x85://jz
+                            case 0x86://jbe
+                                int val = (int)((int)instr1.bytes[2] + (int)instr1.Addr + Len);
+                                if (!LabelList.Contains(val))
+                                {
+                                    if ((!DTasks.Contains((uint)val)) && (!Tasks.Contains((uint)val))) Tasks.Add((uint)val);
+                                    //Tasks.Add((uint)val);//Add jmp adress to disasm tasks
+                                    val = (int)FO2RVA((ulong)val);
+                                    instr1.ops[0].value.imm.imm64 = (ulong)val;
+                                    LabelList.Add(val);
+                                }break;
+                        }
+                        break;        
                     case 0x74://Jz
                     case 0x75://Jnz
                         {
-                            int val = (int)(instr1.ops[0].value.imm.imm8 + (int)instr1.Addr + Len);
-
+                            int val = (int)((int)instr1.bytes[1] + (int)instr1.Addr + Len);
                             if (!LabelList.Contains(val))
                             {
+                                if ((!DTasks.Contains((uint)val)) && (!Tasks.Contains((uint)val))) Tasks.Add((uint)val);
+                                //Tasks.Add((uint)val);//Add jmp adress to disasm tasks
+                                val = (int)FO2RVA((ulong)val);
+                                instr1.ops[0].value.imm.imm64 = (ulong)val;
                                 LabelList.Add(val);
-                                Tasks.Add((uint)val);//Add jmp adress to disasm tasks
                             }
-                        }break;
+                        } break;
                     case 0xC2://retn XX;
                     case 0xC3://retn
-                        continue;// Don't disasm after it
+                        goto _end;
+                        //continue;// Don't disasm after it
+                    case 0xE8://Call;
+                        int val3 = (int)instr1.bytes[1] + (int)Len + (int)instr1.Addr;
+                        val3 = (int)FO2RVA((ulong)val3);
+                        instr1.ops[0].value.imm.imm64 = (ulong)val3;
+                        break;
                     case 0xEB://jmp;
-                        int val1 = (int)(instr1.ops[0].value.imm.imm8 + (int)instr1.Addr + Len);
+                        int val1 = (int)instr1.bytes[1] + (int)Len + (int)instr1.Addr;
                         if (!LabelList.Contains(val1))
                         {
                             LabelList.Add(val1);
-                            Tasks.Add((uint)val1);//Add jmp adress to disasm tasks
+                            if((!DTasks.Contains((uint)val1)) && (!Tasks.Contains((uint)val1))) Tasks.Add((uint)val1);
+                            //Tasks.Add((uint)val1);//Add jmp adress to disasm tasks
                         }
                         continue;// Don't disasm after it
                     case 0xE9://jmp;
 
-                        int val2 =  (int)instr1.ops[0].value.imm.imm64 + (int)Len;
-                        //instr1.ops[0].value.imm.imm32 = 0x40100F;
-                        //val2 = 0x40100F;
-                        //if (instr1.ops[i].flags & OPERAND_FLAG_PRESENT)
-                        //{
-                        //    internal_dump_operand(&stream, instr1, 0);
-                        //}
-                        Console.WriteLine(val2.ToString("X"));
+                        int val2 = (int)instr1.bytes[1] + (int)Len + (int)instr1.Addr;
                         if (!LabelList.Contains(val2))
                         {
-                            LabelList.Add(val2);
+                            if ((!DTasks.Contains((uint)val2)) && (!Tasks.Contains((uint)val2))) Tasks.Add((uint)val2);
                             //Tasks.Add((uint)val2);//Add jmp adress to disasm tasks
+                            val2 = (int)FO2RVA((ulong)val2);
+                            instr1.ops[0].value.imm.imm64 = (ulong)val2;
+                            LabelList.Add(val2);
                         }
                         continue;// Don't disasm after it
                     case 0xFF:
                         if (instr1.bytes[1] == 0x15)//Call
-                            {
+                        {
                                 long a = (long)instr1.disp.value.d64;
+                                Console.WriteLine(a.ToString("X"));
                                 if(ProcList.ContainsKey(a))
                                     if(ProcList[a].FName.Contains("ExitProcess"))continue;
                             }
                             break;
                 }
                 //Tasks.Add( instruction.Offset.FileOffset + (uint)instruction.Size);
-                Tasks.Add((long)instr1.Addr + Len);
+                if ((!DTasks.Contains((long)instr1.Addr + Len)) && (!Tasks.Contains((long)instr1.Addr + Len)))
+                    Tasks.Add((long)instr1.Addr + Len);
                 instr1.Addr = FO2RVA((ulong)instr1.Addr);
                 //                 += assembly.NTHeader.OptionalHeader.ImageBase;
             }
+            _end:
             instr1.Addr = FO2RVA((ulong)instr1.Addr);
+            lst.Sort(delegate(Stroka x, Stroka y)
+            {
+                if (x.addr > y.addr) return 1;
+                if (x.addr == y.addr) return 0;
+                return -1;
+            });
             foreach (uint Addr in LabelList)
             {
                 Stroka result = lst.Find(
@@ -288,7 +312,7 @@ namespace GNIDA
                     );
                 if (result != null)
                 {
-                    result.Label = "Loc_" + result.Inst.opcode_offset.ToString("X8");
+                    result.Label = "Loc_" + result.Inst.Addr.ToString("X8").Remove(0,2);
                 }
             }
             return lst;
@@ -302,7 +326,6 @@ namespace GNIDA
 
             RaiseLogEvent(this, "Loading " + FName);
             assembly = Win32Assembly.LoadFile(FName);
-            //assembly.Disassembler = new CmmDisassembler(assembly);
             MeDisasm = new mediana(assembly);
             int i = 0;
             foreach (Section sect in assembly.NTHeader.Sections)

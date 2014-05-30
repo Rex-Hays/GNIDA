@@ -1097,9 +1097,45 @@ public struct DISPLACEMENT
 
 public class INSTRUCTION
 {
-    public string ToString()
+    private static string AddProc(long x, MyDictionary ProcList, Dictionary<long, TFunc> NewSubs)
     {
-        string ret = mnemonic;
+        if (ProcList.ContainsKey(x)) return ProcList[x].FName + "();";
+        TFunc tmpfunc = new TFunc(x, 1);
+        if (!NewSubs.ContainsKey(x)) NewSubs.Add(x, tmpfunc);
+        return "Sub_" + x.ToString("X8") + "();";
+    }
+
+    public string ToString(MyDictionary ProcList, VarDictionary VarDict, Dictionary<long, TFunc> NewSubs)
+    {
+        switch (bytes[0])
+        {
+            case 0x74: return "$jz Loc_" + OpToString(0).Remove(0, 2);
+            case 0x75: return "$jnz Loc_" + OpToString(0).Remove(0, 2);
+            case 0xE8://call;
+                return AddProc((long)ops[0].value.imm.imm64, ProcList, NewSubs);
+            case 0xE9://jmp;
+                return "$jmp Loc_" + OpToString(0).Remove(0, 2);
+            case 0xA3://mov somevar, EAX
+                {
+                    TVar Var1 = new TVar((ulong)disp.value.d64, "", 4);
+                    if (!VarDict.ContainsKey((ulong)disp.value.d64))
+                    {
+                        VarDict.AddVar(Var1);
+                    };
+                    return VarDict[(ulong)disp.value.d64].FName + " = " + OpToString(1) + ";";
+                }
+            case 0xFF:
+                {
+                    if (this.bytes[1] == 0x15)
+                        return AddProc((long)disp.value.d64, ProcList, NewSubs);
+                } break;
+            case 0x0F:
+                {
+                    if (this.bytes[1] == 0x86)
+                        return "$jbe Loc_" + OpToString(0).Remove(0, 2);
+                }break;
+        }
+        string ret = "$"+mnemonic;
         if (ops[0].size > 0) ret += " " + OpToString(0);
         if (ops[1].size > 0) ret += ", " + OpToString(1);
         if (ops[2].size > 0) ret += ", " + OpToString(2);
@@ -1121,7 +1157,7 @@ public static string[] regs16 =
 
     public static string[] regs32 = 
 {
-	"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi",
+	"EAX", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi",
 	"r8d", "r9d", "r10d", "r11d", "r12d", "r13d", "r14d", "r15d",
 	"badreg32_1", "badreg32_2", "badreg32_3", "badreg32_4", "eip"
 };
@@ -1258,7 +1294,7 @@ static string dump_dir(OPERAND op)
 }
 static string dump_imm(OPERAND op)
 {
-	return op.value.imm.imm64.ToString("X");
+	return "0x"+op.value.imm.imm64.ToString("X");
 }
     public string OpToString(byte N)
     {
@@ -1290,9 +1326,7 @@ static string dump_imm(OPERAND op)
 }
 static string dump_addr(INSTRUCTION instr, OPERAND op)
 {
-    string res = "dword ptr";
-	//dump_ptr_size(stream, op);
-    res += ' ' + sregs[op.value.addr.seg] + ":[";
+    string res = "[";
 	if ((op.value.addr.mod & ADDR_MOD_BASE)!=0)
 	{
         res += dump_reg_gen(op.value.addr.bas, instr.addrsize);
@@ -1315,7 +1349,7 @@ static string dump_addr(INSTRUCTION instr, OPERAND op)
 		{
            res += '+';
 		}
-        res += instr.disp.value.d64.ToString("X");
+        res += "0x"+instr.disp.value.d64.ToString("X");
 	}
     res += ']';
     return res;
@@ -2127,20 +2161,106 @@ public static OP_SIZE get_operand_size(INSTRUCTION instr, ref INTERNAL_DATA idat
 }
 
 
+/*************************
+* Postprocessing routines.
+**************************
+*/
+static UInt32 post_proc_arpl_movsxd(long origin_offset, long offset, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    UInt32 res;
+    res = 0;
+    if (mode == DISMODE.DISASSEMBLE_MODE_64)
+    {
+        OPERAND_SIZE opsize = new OPERAND_SIZE();
+
+        instr.id = ID_MOVSXD;
+        instr.groups = GRP_GEN | GRP_CONVER;
+        instr.tested_flags = 0;
+        instr.modified_flags = 0;
+        instr.set_flags = 0;
+        instr.cleared_flags = 0;
+        instr.flags &= (ushort)(INSTR_FLAG_MODRM | INSTR_FLAG_SIB);
+
+        instr.mnemonic = "movsxd";
+        byte[] bt = assembly.Image.ReadBytes(instr.opcode_offset + 1, 4);
+        res = (UInt32)(
+              bt[0] +
+              bt[1]*256 +  
+              bt[2]*256*256 +  
+              bt[3]*256*256*256);
+        offset += res;
+
+        if ((instr.flags & INSTR_FLAG_MODRM)!=0)
+        {
+            res++;
+            offset++;
+        }
+        if ((instr.flags & INSTR_FLAG_SIB)!=0)
+        {
+            res++;
+            offset++;
+        }
+        instr.ops[0].value.imm.imm64 = 0;
+        instr.ops[1].value.imm.imm64 = 0;
+        instr.ops[0].flags = OPERAND_FLAG_PRESENT;
+        instr.ops[1].flags = OPERAND_FLAG_PRESENT;
+
+        sq_dqp(ref opsize, ref instr, idata, mode);
+        res += tq_G(origin_offset, offset, ref instr, 0, opsize, idata, mode);
+        sq_d(ref opsize, ref instr, idata, mode);
+        res += tq_E(origin_offset, offset, ref instr, 1, opsize, idata, mode);
+    }
+
+    return res;
+}
+
+static UInt32 post_proc_nop_pause(long origin_offset, long offset, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if (idata.prefixes[PREF_REP_INDEX] == PREF_REPNZ_ID)
+    {
+        instr.id = ID_PAUSE;
+        instr.groups = GRP_CACHECT | GRP_SSE2;
+        idata.prefixes[PREF_REP_INDEX] = 0xFF;
+        instr.mnemonic ="pause";
+    }
+
+    return 0;
+}
+
+static UInt32 post_proc_multinop(long origin_offset, long offset, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    instr.ops[0].flags &= (byte)~OPERAND_FLAG_PRESENT;
+    instr.ops[1].flags &= (byte)~OPERAND_FLAG_PRESENT;
+    instr.ops[2].flags &= (byte)~OPERAND_FLAG_PRESENT;
+    return 0;
+}
+
+static UInt32 post_proc_cmpxchg8b(long  origin_offset, long offset, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode)
+{
+    if ((idata.prefixes[PREF_REX_INDEX] != 0xFF) && ((instr.rex & PREFIX_REX_W)!=0))
+    {
+        idata.is_rex_used = 1;
+        instr.mnemonic = "cmpxchg16b";
+        instr.ops[0].size = (ushort)OP_SIZE.OPERAND_SIZE_128;
+    }
+
+    return 0;
+}
+
 /***************************************
 * Postprocessing functions's prototypes.
 ****************************************
 */
 
-public delegate UInt32 PP(long origin_offset, long offset, INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode);
+public delegate UInt32 PP(long origin_offset, long offset, ref INSTRUCTION instr, INTERNAL_DATA idata, DISMODE mode);
 
-public static PP[] postprocs;
-
-public PP
+public static PP[] postprocs = 
+{
     post_proc_arpl_movsxd,
     post_proc_nop_pause,
     post_proc_multinop,
-    post_proc_cmpxchg8b;
+    post_proc_cmpxchg8b
+};
 
 public enum OP_TYPE
 {
@@ -3386,8 +3506,8 @@ new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV,
 new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV, new MULTI_MNEMONIC("mov"), ID_MOV, new[] {new INTERNAL_OPERAND(TQ_Z, SQ_vqp),new INTERNAL_OPERAND(TQ_I, SQ_vqp),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
 new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_C0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
 new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_C1, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
-new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("retn"), ID_RETN, new[] {new INTERNAL_OPERAND(TQ_I, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
-new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("retn"), ID_RETN, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("ret"), ID_RETN, new[] {new INTERNAL_OPERAND(TQ_I, SQ_w),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
+new OPCODE_DESCRIPTOR( GRP_GEN | GRP_BRANCH | GRP_STACK, new MULTI_MNEMONIC("ret"), ID_RETN, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, 0, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
 new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_SEGREG, new MULTI_MNEMONIC("les"), ID_LES, new[] {new INTERNAL_OPERAND(TQ_G, SQ_v),new INTERNAL_OPERAND(TQ_M, SQ_p),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_MODRM | PROP_I64), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
 new OPCODE_DESCRIPTOR( GRP_GEN | GRP_DATAMOV | GRP_SEGREG, new MULTI_MNEMONIC("lds"), ID_LDS, new[] {new INTERNAL_OPERAND(TQ_G, SQ_v),new INTERNAL_OPERAND(TQ_M, SQ_p),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, (ushort)(PROP_MODRM | PROP_I64), 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
 new OPCODE_DESCRIPTOR( GRP_SWITCH, new MULTI_MNEMONIC(""), ID_NULL, new[] {new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL),new INTERNAL_OPERAND(TQ_NULL, SQ_NULL) }, IDX_C6, 0x0, 0x0, 0x0, 0x0, 0x0, ARCH_COMMON ),
@@ -6610,7 +6730,7 @@ static void convert_prefixes(INSTRUCTION instr, byte[] prefixes)
     //Do postprocessing if necessary.
     if ((opcode.props & PROP_POST_PROC)!=0)
     {
-        res = postprocs[opcode.props >> POST_PROC_SHIFT](offset, offset, instr, idata, param.mode);
+        res = postprocs[opcode.props >> POST_PROC_SHIFT](offset, offset, ref instr, idata, param.mode);
         if (idata.severe_err != ERRS.ERR_OK)
         {
             param.errcode = idata.severe_err;

@@ -19,6 +19,7 @@ namespace GNIDA
         GNIDA MyGNIDA;
         List<string> IncludedFiles = new List<string>();
         int VarLine = 0;
+        string sss = "123";
         DynamicFileByteProvider dynamicFileByteProvider;
         TextStyle blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
         TextStyle funcStyle = new TextStyle(Brushes.LightSeaGreen, null, FontStyle.Regular);
@@ -161,6 +162,7 @@ namespace GNIDA
             IncludedFiles.Add("Windows.h");
             IncludedFiles.Add("msvcrt.h--");
             fastColoredTextBox1.Text += "#jumptomain NONE\n";
+            fastColoredTextBox1.Text += sss;
             foreach (string s in IncludedFiles)
             {
                 fastColoredTextBox1.Text += "#include \"" + s + "\";\n";
@@ -233,7 +235,21 @@ namespace GNIDA
 
         private void renameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //fastColoredTextBox1
+            if (listView3.SelectedItems.Count == 1)
+            {
+                char c;
+                Form2 Fm = new Form2();
+                Fm.NName = (listView3.SelectedItems[0].Tag as TFunc).FName;
+                string on = Fm.NName;
+                if (Fm.ShowDialog() == DialogResult.OK)
+                {
+                    (listView3.SelectedItems[0].Tag as TFunc).FName = Fm.NName;
+                    listView3.SelectedItems[0].Text = Fm.NName;
+                    fastColoredTextBox1.BeginUpdate();
+                    fastColoredTextBox1.Text = fastColoredTextBox1.Text.Replace(on, Fm.NName);
+                    fastColoredTextBox1.EndUpdate();
+                }
+            };
         }
     }
 
