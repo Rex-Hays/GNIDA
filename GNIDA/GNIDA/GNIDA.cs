@@ -101,17 +101,16 @@ namespace GNIDA
         public PEDirectory info;
         public Flirt flirt;
         MyDictionary NewSubs = new MyDictionary();
-        public GNIDA()
+        public GNIDA(string FlirtCfg)
         {
-            flirt = new Flirt();
+
+            flirt = new Flirt(FlirtCfg);
             FullProcList.Parent = this;
             VarDict.Parent = this;
         }
-        public int RenameFunction(long addr, string NName)
+        public int RenameFunction(TFunc f, string NName)
         {
-            TFunc func;
-            FullProcList.TryGetValue(addr, out func);
-            if (func != null) { func.FName = NName; RaiseFuncChanged(this, func); return 1; }
+            if (f != null) { f.FName = NName; RaiseFuncChanged(this, f); return 1; }
             return 0;
         }
         public class Stroka

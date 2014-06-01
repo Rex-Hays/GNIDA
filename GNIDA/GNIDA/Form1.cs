@@ -142,7 +142,7 @@ namespace GNIDA
         {
             listView3.Clear();
             IncludedFiles.Clear();
-            MyGNIDA = new GNIDA();
+            MyGNIDA = new GNIDA(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\flirt.xml");
             MyGNIDA.OnLogEvent += OnLogEvent1;
             MyGNIDA.OnAddFunc += AddFuncEvent1;
             MyGNIDA.OnAddStr += AddText;
@@ -203,11 +203,11 @@ namespace GNIDA
         {
             if (fastColoredTextBox1.Text.Length > 1)
             {
-                fastColoredTextBox1.SaveToFile("..\\..\\cmm\\tmp.cmm", Encoding.ASCII);
+                fastColoredTextBox1.SaveToFile("cmm\\tmp.cmm", Encoding.ASCII);
 
                 System.Diagnostics.Process proc = new System.Diagnostics.Process();
-                proc.StartInfo.FileName = "..\\..\\cmm\\c--.exe";
-                proc.StartInfo.Arguments = "..\\..\\cmm\\tmp.cmm";
+                proc.StartInfo.FileName = "cmm\\c--.exe";
+                proc.StartInfo.Arguments = "cmm\\tmp.cmm";
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.Start();
@@ -253,37 +253,55 @@ namespace GNIDA
                 Form2 Fm = new Form2();
                 Fm.NName = (listView3.SelectedItems[0].Tag as TFunc).FName;
                 if (Fm.ShowDialog() == DialogResult.OK)
-                    MyGNIDA.RenameFunction((listView3.SelectedItems[0].Tag as TFunc).Addr, Fm.NName);
+                    MyGNIDA.RenameFunction((listView3.SelectedItems[0].Tag as TFunc), Fm.NName);
             };
         }
 
         private void renameToolStripMenuItem1_Click(object sender, EventArgs e)
         {
 
-            Place place = fastColoredTextBox1.Selection.Start;
-            var r = new Range(fastColoredTextBox1, place, place);
-            string hoveredWord = r.GetFragment("[_a-zA-Z0-9]").Text;
-            ListViewItem itm = listView3.FindItemWithText(hoveredWord);
-            if (itm != null)
+            TFunc f = GetSelectedFunction();
+            if (f != null) 
             {
                 Form2 Fm = new Form2();
-                Fm.NName = (itm.Tag as TFunc).FName;
+                Fm.NName = f.FName;
                 if (Fm.ShowDialog() == DialogResult.OK)
-                    MyGNIDA.RenameFunction((itm.Tag as TFunc).Addr, Fm.NName);
+                    MyGNIDA.RenameFunction(f, Fm.NName);
             }
         }
 
         private void fastColoredTextBox1_DoubleClick(object sender, EventArgs e)
         {
-            Place place = fastColoredTextBox1.Selection.Start;
-            var r = new Range(fastColoredTextBox1, place, place);
-            string hoveredWord = r.GetFragment("[_a-zA-Z0-9]").Text;
-            ListViewItem itm = listView3.FindItemWithText(hoveredWord);
-            if (itm != null)
+            TFunc f = GetSelectedFunction();
+            if (f!= null)
             {
                 //foreach(Line L in fastColoredTextBox1.Lines)
                 //Console.WriteLine(hoveredWord);
             }
+        }
+
+        private void fastColoredTextBox1_Click(object sender, EventArgs e)
+        {
+            TFunc f = GetSelectedFunction();
+            if (f != null) renameToolStripMenuItem1.Text = f.FName;
+            renameToolStripMenuItem1.Enabled = f!= null;
+        }
+
+        private TFunc GetSelectedFunction()
+        {
+            Place place = fastColoredTextBox1.Selection.Start;
+            var r = new Range(fastColoredTextBox1, place, place);
+            string hoveredWord = r.GetFragment("[_a-zA-Z0-9]").Text;
+            ListViewItem itm = listView3.FindItemWithText(hoveredWord);
+            if (itm != null) return (itm.Tag as TFunc);
+            return null;
+        }
+        private void sendToFLIRTToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form3 FForm = new Form3();
+            FForm.flrt = MyGNIDA.flirt;
+            FForm.Func = GetSelectedFunction();
+            FForm.ShowDialog();
         }
     }
 }
