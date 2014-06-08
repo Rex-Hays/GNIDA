@@ -1,0 +1,14 @@
+<Functions_Table>
+  <function>
+    <Name>cmmStub</Name>
+    <result>void</result>
+    <Mask>FC 6A 00 FF 15 A0 20 40 00 A3 00 10 40 00 FF 15 A8 20 40 00 A3 04 10 40 00 E8 12 00 00 00 50 FF 15 A4 20 40 00</Mask>
+    <params>void</params>
+  </function>
+  <function>
+    <Name>cmmStub2</Name>
+    <result>void</result>
+    <Mask>FC 6A 00 FF 15 A0 20 40 00 A3 00 10 40 00 FF 15 A8 20 40 00 A3 04 10 40 00 E8 12 00 00 00 50 FF 15 A4 20 40 00</Mask>
+    <params>void</params>
+  </function>
+</Functions_Table>

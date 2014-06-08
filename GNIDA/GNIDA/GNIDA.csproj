@@ -17,7 +17,7 @@
     <SccProvider>SAK</SccProvider>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
+    <Install>false</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
@@ -58,6 +58,15 @@
   <PropertyGroup>
     <StartupObject>GNIDA.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.4.6.13072, Culture=neutral, PublicKeyToken=e0e5adf0ebc99863, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -72,7 +81,9 @@
       <HintPath>PEReader\PEReader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -395,11 +406,11 @@
     </Compile>
     <Compile Include="AsmRes\TUP.AsmResolver\WritingParameters.cs" />
     <Compile Include="Flirt.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="WIDE.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="WIDE.Designer.cs">
+      <DependentUpon>WIDE.cs</DependentUpon>
     </Compile>
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
@@ -437,8 +448,8 @@
     <EmbeddedResource Include="AsmRes\AsmResolver\PropertyGridDlg.resx">
       <DependentUpon>PropertyGridDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="WIDE.resx">
+      <DependentUpon>WIDE.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
@@ -465,6 +476,7 @@
     <None Include="AsmRes\TUP.AsmResolver\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="AsmRes\TUP.AsmResolver\PE\Writers\Plan .NET Rebuilder" />
     <None Include="cmm\STARTUP.H--" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\GNIDA.Stroka.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
